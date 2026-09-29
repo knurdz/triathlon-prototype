@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Warehouse Dock Supervisor</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=9">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <!-- Persistent Left Sidebar Navigation (250px) -->
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+
+        <nav class="wp-sidebar-nav" aria-label="Main Navigation">
+          <div class="wp-sidebar-nav-group-title">Overview</div>
+          <a href="index.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="home"></i>
+            <span>Mission Control</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Dispatch &amp; Planning</div>
+          <a href="dispatcher-allocation.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="layout-grid"></i>
+            <span>Fleet Allocation</span>
+          </a>
+          <a href="dispatcher-queue.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="list-ordered"></i>
+            <span>Order Queue</span>
+          </a>
+          <a href="dispatcher-exceptions.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="alert-circle"></i>
+            <span>Exceptions</span>
+            <span class="nav-badge">3</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Field Operations</div>
+          <a href="loader-dock.html" data-wp-nav class="wp-sidebar-nav-item active">
+            <i data-lucide="package-check"></i>
+            <span>Warehouse Dock</span>
+          </a>
+          <a href="driver-route.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="truck"></i>
+            <span>Driver Route</span>
+          </a>
+          <a href="store-portal.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="store"></i>
+            <span>Store Portal</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%">
+          <span class="wp-avatar" style="background:#EBF5FF;color:var(--wp-info)">PF</span>
+          <div style="overflow:hidden">
+            <div class="wp-title-md" style="font-size:0.8rem;white-space:nowrap;text-overflow:ellipsis;overflow:hidden">Priya Fernando</div>
+            <div class="wp-subtext" style="font-size:0.7rem">Dock Supervisor</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Stage -->
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Warehouse Dock</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right">
+          <a href="dispatcher-exceptions.html" class="wp-icon-btn" title="System alerts" aria-label="Notifications" style="position:relative">
+            <i data-lucide="bell"></i>
+            <span style="position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--wp-error);border-radius:50%"></span>
+          </a>
+        </div>
+      </header>
+
+      <main class="wp-main dock-main">
+        <div class="store-page-header">
+          <div>
+            <div class="store-page-meta">
+              <span class="wp-state wp-state-success">Cold Seal Active</span>
+              <span class="font-mono store-outlet-id">VEH004</span>
+            </div>
+            <h1 class="wp-headline-md store-page-title">Bay 04 Load Sequence</h1>
+            <p class="wp-subtext store-page-subtitle">Peliyagoda · Trip 1 · reverse LIFO · window 05:00–07:30</p>
+          </div>
+          <div class="dock-page-actions">
+            <button type="button" class="wp-btn wp-btn-outline" id="btn-simulate-scan">
+              <i data-lucide="scan-barcode"></i>
+              <span>Scan Barcode</span>
+            </button>
+            <details class="wp-more">
+              <summary>More</summary>
+              <div class="wp-more-panel">
+                <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-open="bay-layout-drawer">
+                  <i data-lucide="layout-grid"></i>
+                  <span>Bay Layout</span>
+                </button>
+                <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-open="gate-signoff-drawer">
+                  <i data-lucide="clipboard-check"></i>
+                  <span>Gate Sign-Off</span>
+                </button>
+                <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-open="shortfall-drawer">
+                  <i data-lucide="alert-triangle"></i>
+                  <span>Report Shortfall</span>
+                </button>
+                <a href="loader-shortfall.html" class="wp-btn wp-btn-outline">
+                  <i data-lucide="file-warning"></i>
+                  <span>Shortfall form</span>
+                </a>
+              </div>
+            </details>
+            <a href="loader-signoff.html" class="wp-btn wp-btn-primary">
+              <i data-lucide="badge-check"></i>
+              <span>Departure sign-off</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="wp-kpi-row store-kpi-row">
+          <div class="wp-kpi">
+            <span class="wp-label">Verified</span>
+            <p class="wp-kpi-value" id="load-progress-text">0/6</p>
+            <div class="wp-meter dock-progress-meter"><div class="wp-meter-fill" id="load-progress-bar" style="width:0%"></div></div>
+            <span class="wp-subtext store-kpi-caption">Lines checked on this trip</span>
+          </div>
+          <div class="wp-kpi">
+            <span class="wp-label">Shortfall</span>
+            <p class="wp-kpi-value" style="color:var(--wp-error)">−3</p>
+            <span class="wp-subtext store-kpi-caption">Milk cases · Stop 2</span>
+          </div>
+          <div class="wp-kpi">
+            <span class="wp-label">Stops</span>
+            <p class="wp-kpi-value">4</p>
+            <span class="wp-subtext store-kpi-caption">Load last stop first</span>
+          </div>
+          <div class="wp-kpi">
+            <span class="wp-label">Window</span>
+            <p class="wp-kpi-value" style="font-size:1.45rem">05:00</p>
+            <span class="wp-subtext store-kpi-caption">Closes 07:30 SLST</span>
+          </div>
+        </div>
+
+        <div class="dock-layout">
+          <section class="dock-sequence-panel" aria-label="Load sequence">
+            <div class="store-panel-head">
+              <div>
+                <span class="wp-label">Reverse Load</span>
+                <h2 class="wp-headline-sm store-panel-title">Stops in LIFO order</h2>
+              </div>
+              <span class="wp-subtext store-panel-count">6 lines</span>
+            </div>
+
+            <div id="dock-load-list" class="dock-load-list">
+              <article class="dock-stop">
+                <header class="dock-stop-header">
+                  <span class="dock-step">1</span>
+                  <div class="dock-stop-copy">
+                    <span class="wp-label">Load first</span>
+                    <strong>Stop 4 · OUT010 Fresh Colombo 03</strong>
+                  </div>
+                  <span class="wp-window-pill"><i data-lucide="clock"></i> 05:00 – 07:30</span>
+                </header>
+                <div class="dock-load-line">
+                  <input type="checkbox" id="s4-1" aria-label="Verify Frozen Farm Vegetables">
+                  <img src="assets/products/frozen-veg.jpg" class="wp-product-thumb" alt="Frozen Veg">
+                  <div class="dock-load-copy">
+                    <span class="dock-load-name">Frozen Farm Vegetables 1kg</span>
+                    <span class="font-mono dock-load-sku">SKU-FZ-VEG-01</span>
+                  </div>
+                  <div class="dock-load-meta">
+                    <span class="font-mono dock-load-qty">12 Cases</span>
+                    <span class="wp-badge wp-badge-info">−18°C Frozen</span>
+                  </div>
+                </div>
+                <div class="dock-load-line">
+                  <input type="checkbox" id="s4-2" aria-label="Verify Greek Yogurt">
+                  <img src="assets/products/greek-yogurt.jpg" class="wp-product-thumb" alt="Greek Yogurt">
+                  <div class="dock-load-copy">
+                    <span class="dock-load-name">Chilled Greek Yogurt 500g</span>
+                    <span class="font-mono dock-load-sku">SKU-CH-YOG-02</span>
+                  </div>
+                  <div class="dock-load-meta">
+                    <span class="font-mono dock-load-qty">8 Cases</span>
+                    <span class="wp-badge wp-badge-success">+4°C Chilled</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="dock-stop">
+                <header class="dock-stop-header">
+                  <span class="dock-step">2</span>
+                  <div class="dock-stop-copy">
+                    <span class="wp-label">Mid compartment</span>
+                    <strong>Stop 3 · OUT008 Fresh Colombo 04</strong>
+                  </div>
+                  <span class="wp-window-pill"><i data-lucide="clock"></i> 05:00 – 07:30</span>
+                </header>
+                <div class="dock-load-line">
+                  <input type="checkbox" id="s3-1" aria-label="Verify Organic Rice">
+                  <img src="assets/products/organic-rice.jpg" class="wp-product-thumb" alt="Rice">
+                  <div class="dock-load-copy">
+                    <span class="dock-load-name">Ambient Organic Brown Rice 5kg</span>
+                    <span class="font-mono dock-load-sku">SKU-AM-RICE-05</span>
+                  </div>
+                  <div class="dock-load-meta">
+                    <span class="font-mono dock-load-qty">20 Sacks</span>
+                    <span class="wp-badge">Ambient</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="dock-stop is-alert">
+                <header class="dock-stop-header">
+                  <span class="dock-step">3</span>
+                  <div class="dock-stop-copy">
+                    <span class="wp-label">Forward · short</span>
+                    <strong>Stop 2 · OUT004 Fresh Colombo 07</strong>
+                  </div>
+                  <span class="wp-window-pill"><i data-lucide="clock"></i> 05:00 – 07:30</span>
+                </header>
+                <div class="dock-load-line is-short">
+                  <input type="checkbox" id="s2-1" aria-label="Verify Pasteurized Milk">
+                  <img src="assets/products/milk-bottle.jpg" class="wp-product-thumb" alt="Milk">
+                  <div class="dock-load-copy">
+                    <span class="dock-load-name">Pasteurized Fresh Milk 1L</span>
+                    <span class="font-mono dock-load-sku">SKU-CH-MILK-1L</span>
+                  </div>
+                  <div class="dock-load-meta">
+                    <span class="font-mono dock-load-qty">12 / 15 Cases</span>
+                    <span class="wp-flag wp-flag-error">Short −3</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="dock-stop">
+                <header class="dock-stop-header">
+                  <span class="dock-step">4</span>
+                  <div class="dock-stop-copy">
+                    <span class="wp-label">Load last</span>
+                    <strong>Stop 1 · OUT001 Fresh Galle Rd</strong>
+                  </div>
+                  <span class="wp-window-pill"><i data-lucide="clock"></i> 05:00 – 07:30</span>
+                </header>
+                <div class="dock-load-line">
+                  <input type="checkbox" id="s1-1" aria-label="Verify Chilled Meat">
+                  <img src="assets/products/chilled-meat.jpg" class="wp-product-thumb" alt="Meat">
+                  <div class="dock-load-copy">
+                    <span class="dock-load-name">Chilled Dairy &amp; Meat Selection</span>
+                    <span class="font-mono dock-load-sku">DEL-88401</span>
+                  </div>
+                  <div class="dock-load-meta">
+                    <span class="font-mono dock-load-qty">4,850 kg</span>
+                    <span class="wp-badge wp-badge-info">Reefer</span>
+                  </div>
+                </div>
+                <div class="dock-load-line">
+                  <input type="checkbox" id="s1-2" aria-label="Verify Bakery Carts">
+                  <img src="assets/products/bakery-bread.jpg" class="wp-product-thumb" alt="Bread">
+                  <div class="dock-load-copy">
+                    <span class="dock-load-name">Ambient Bakery Carts</span>
+                    <span class="font-mono dock-load-sku">DEL-88402</span>
+                  </div>
+                  <div class="dock-load-meta">
+                    <span class="font-mono dock-load-qty">2,100 kg</span>
+                    <span class="wp-badge">Ambient</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <aside class="dock-side" aria-label="Bay notes">
+            <div class="dock-side-card">
+              <span class="wp-label">Open issue</span>
+              <h2 class="wp-headline-sm store-panel-title">3 milk cases missing</h2>
+              <p class="wp-subtext dock-side-copy">Stop 2, OUT004 Colombo 07. Chilled bay count is 12 of 15 cases.</p>
+              <button type="button" class="wp-btn wp-btn-primary" data-wp-drawer-open="shortfall-drawer">
+                <i data-lucide="alert-triangle"></i>
+                <span>Report Shortfall</span>
+              </button>
+            </div>
+            <div class="dock-side-card">
+              <span class="wp-label">Compartments</span>
+              <h2 class="wp-headline-sm store-panel-title">Hino 700 · 16T</h2>
+              <ul class="dock-temp-list">
+                <li><span>Frozen</span><strong>12 cases</strong></li>
+                <li><span>Chilled</span><strong>20 cases + 4,850 kg</strong></li>
+                <li><span>Ambient</span><strong>20 sacks + 2,100 kg</strong></li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </main>
+
+
+      <!-- Stage Footer -->
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up Gate Sign-Off Drawer -->
+  <div class="wp-drawer-backdrop" id="gate-signoff-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Departure Authorization</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Gate Sign-Off &amp; Telemetry</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="gate-signoff-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="wp-drawer-body">
+        <div class="wp-split">
+          <div class="wp-panel" style="padding:1.5rem">
+            <div class="wp-flex-between" style="margin-bottom:1rem">
+              <span class="wp-label">Bay 04 Reefer Telemetry</span>
+              <span class="wp-state wp-state-success">Sensor Live</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem;background:var(--wp-subpanel);border-radius:var(--radius-sm);margin-bottom:1rem">
+              <div>
+                <span class="wp-label" style="font-size:0.65rem">Chamber Temperature</span>
+                <p class="font-mono" style="font-size:2rem;font-weight:700;color:var(--wp-primary);margin:0.2rem 0 0">-18.4°C</p>
+                <span class="wp-subtext" style="font-size:0.75rem">Setpoint: -18.0°C (±1.5°C)</span>
+              </div>
+              <div style="text-align:right">
+                <span class="wp-label" style="font-size:0.65rem">Pre-Cool Timer</span>
+                <p class="font-mono" style="font-size:1.15rem;font-weight:700;margin:0.2rem 0 0">42 min</p>
+                <span class="wp-state-text wp-state-success">Compliant</span>
+              </div>
+            </div>
+            <p class="wp-subtext" style="font-size:0.75rem;margin:0">Continuous telemetry attached to dispatch manifest WP-88401.</p>
+          </div>
+
+          <div class="wp-panel" style="padding:1.5rem">
+            <div class="wp-flex-between" style="margin-bottom:1rem">
+              <span class="wp-label">Gate Departure Sign-Off</span>
+              <span class="font-mono wp-subtext" style="font-size:0.75rem">Seal #WP-884920</span>
+            </div>
+            <dl class="wp-spec-grid" style="margin-bottom:1.25rem">
+              <dt>Dock Bay</dt><dd>Bay 04 (Peliyagoda)</dd>
+              <dt>Vehicle ID</dt><dd>VEH004 (Hino 700)</dd>
+              <dt>Trip Run</dt><dd>Trip 1 (4 Stops)</dd>
+              <dt>Supervisor</dt><dd>Priya Fernando</dd>
+            </dl>
+
+            <div class="wp-field">
+              <label for="signature-pad">Supervisor Digital Sign-Off</label>
+              <canvas class="wp-signature-pad" id="signature-pad" style="height:90px"></canvas>
+              <button type="button" class="wp-btn wp-btn-ghost" id="clear-signature" style="font-size:0.75rem;padding:0.25rem 0.65rem;margin-top:0.35rem">Clear Signature</button>
+            </div>
+
+            <button type="button" class="wp-btn wp-btn-primary" id="departure-signoff" style="width:100%" disabled>
+              <i data-lucide="check-circle-2"></i>
+              <span>Authorize Gate Departure</span>
+            </button>
+            <p class="wp-subtext" style="font-size:0.75rem;text-align:center;margin-top:0.75rem;margin-bottom:0">
+              Verify all load lines before authorizing departure.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="wp-drawer-footer">
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="gate-signoff-drawer">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up Bay Layout Drawer -->
+  <div class="wp-drawer-backdrop" id="bay-layout-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Physical Cargo Bay</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Top-Down LIFO Pallet Grid: VEH004</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="bay-layout-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="wp-drawer-body">
+        <div class="wp-cargo-bay-diagram">
+          <div class="wp-cargo-bay-header">
+            <span class="wp-label">Physical Cargo Bay Cross-Section</span>
+            <h2 class="wp-headline-sm" style="font-size:1.1rem;margin:0.2rem 0 0">
+              Top-Down LIFO Pallet Grid (VEH004 16T Trailer Floor)
+            </h2>
+            <div class="wp-cargo-bay-legend">
+              <div class="wp-cargo-bay-legend-item">
+                <span style="width:10px;height:10px;border-radius:50%;background:var(--wp-success)"></span>
+                <span>Loaded &amp; Verified</span>
+              </div>
+              <div class="wp-cargo-bay-legend-item">
+                <span style="width:10px;height:10px;border-radius:50%;background:var(--wp-primary)"></span>
+                <span>Active Bay Staging</span>
+              </div>
+              <div class="wp-cargo-bay-legend-item">
+                <span style="width:10px;height:10px;border-radius:50%;border:1px dashed #999"></span>
+                <span>Pending Pick Face</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cab Nose Schematic Label (above grid) -->
+          <div class="wp-subtext font-mono" style="font-size:0.75rem;padding:0.25rem 0.5rem;text-align:center">
+            ▲ FRONT CAB / NOSE: Stop 4 Loaded 1st (Slots 1 &amp; 2)
+          </div>
+
+          <!-- 6-Pallet Slots Grid -->
+          <div class="wp-cargo-slots-grid">
+            <!-- Slot 1 (Stop 4 Front-Left) -->
+            <div class="wp-cargo-slot pending" id="slot-1">
+              <div class="wp-flex-between" style="margin-bottom:0.35rem">
+                <span class="wp-label" style="font-size:0.65rem">Slot 1 · Nose L</span>
+                <span class="wp-meta-inline">Stop 4</span>
+              </div>
+              <div class="wp-cargo-slot-body">
+                <img src="assets/products/frozen-veg.jpg" class="wp-product-thumb-lg" alt="Frozen Veg">
+                <div class="wp-cargo-slot-info">
+                  <strong>Frozen Farm Veg</strong>
+                  <span class="font-mono wp-subtext">12 Cases · -18°C</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slot 2 (Stop 4 Front-Right) -->
+            <div class="wp-cargo-slot pending" id="slot-2">
+              <div class="wp-flex-between" style="margin-bottom:0.35rem">
+                <span class="wp-label" style="font-size:0.65rem">Slot 2 · Nose R</span>
+                <span class="wp-meta-inline">Stop 4</span>
+              </div>
+              <div class="wp-cargo-slot-body">
+                <img src="assets/products/greek-yogurt.jpg" class="wp-product-thumb-lg" alt="Greek Yogurt">
+                <div class="wp-cargo-slot-info">
+                  <strong>Greek Yogurt 500g</strong>
+                  <span class="font-mono wp-subtext">8 Cases · +4°C</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slot 3 (Stop 3 Mid-Left) -->
+            <div class="wp-cargo-slot pending" id="slot-3">
+              <div class="wp-flex-between" style="margin-bottom:0.35rem">
+                <span class="wp-label" style="font-size:0.65rem">Slot 3 · Mid L</span>
+                <span class="wp-meta-inline">Stop 3</span>
+              </div>
+              <div class="wp-cargo-slot-body">
+                <img src="assets/products/organic-rice.jpg" class="wp-product-thumb-lg" alt="Rice">
+                <div class="wp-cargo-slot-info">
+                  <strong>Organic Brown Rice</strong>
+                  <span class="font-mono wp-subtext">20 Sacks · Ambient</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slot 4 (Stop 2 Mid-Right) -->
+            <div class="wp-cargo-slot pending" id="slot-4">
+              <div class="wp-flex-between" style="margin-bottom:0.35rem">
+                <span class="wp-label" style="font-size:0.65rem">Slot 4 · Mid R</span>
+                <span class="wp-meta-inline" style="color:var(--wp-warning);font-weight:600">Stop 2</span>
+              </div>
+              <div class="wp-cargo-slot-body">
+                <img src="assets/products/milk-bottle.jpg" class="wp-product-thumb-lg" alt="Milk">
+                <div class="wp-cargo-slot-info">
+                  <strong>Pasteurized Milk 1L</strong>
+                  <span class="font-mono wp-subtext">12 Cases · Short -3</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slot 5 (Stop 1 Door-Left) -->
+            <div class="wp-cargo-slot pending" id="slot-5">
+              <div class="wp-flex-between" style="margin-bottom:0.35rem">
+                <span class="wp-label" style="font-size:0.65rem">Slot 5 · Door L</span>
+                <span class="wp-meta-inline" style="color:var(--wp-info)">Stop 1</span>
+              </div>
+              <div class="wp-cargo-slot-body">
+                <img src="assets/products/chilled-meat.jpg" class="wp-product-thumb-lg" alt="Meat">
+                <div class="wp-cargo-slot-info">
+                  <strong>Dairy &amp; Meat Selection</strong>
+                  <span class="font-mono wp-subtext">DEL-88401 Reefer</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slot 6 (Stop 1 Door-Right) -->
+            <div class="wp-cargo-slot pending" id="slot-6">
+              <div class="wp-flex-between" style="margin-bottom:0.35rem">
+                <span class="wp-label" style="font-size:0.65rem">Slot 6 · Door R</span>
+                <span class="wp-meta-inline">Stop 1</span>
+              </div>
+              <div class="wp-cargo-slot-body">
+                <img src="assets/products/bakery-bread.jpg" class="wp-product-thumb-lg" alt="Bread">
+                <div class="wp-cargo-slot-info">
+                  <strong>Bakery Bread Carts</strong>
+                  <span class="font-mono wp-subtext">DEL-88402 Ambient</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rear Doors Schematic Label (below grid) -->
+          <div class="wp-subtext font-mono" style="font-size:0.75rem;padding:0.25rem 0.5rem;text-align:center">
+            ▼ REAR ROLLUP DOORS: Stop 1 Loaded Last (Slots 5 &amp; 6)
+          </div>
+        </div>
+      </div>
+      <div class="wp-drawer-footer">
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="bay-layout-drawer">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up Shortfall Drawer (Offset from Left Nav) -->
+  <div class="wp-drawer-backdrop" id="shortfall-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Warehouse Pick Discrepancy</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Report Shortfall or Damage</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="shortfall-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="wp-drawer-body">
+        <p class="wp-subtext" style="margin:0 0 1.25rem">
+          Any variance from the planned pick list alerts dispatcher Nimal Perera before the vehicle seals.
+        </p>
+
+        <div class="wp-split">
+          <div>
+            <div class="wp-field">
+              <label for="shortfall-stop-select">Affected Stop</label>
+              <select class="wp-select" id="shortfall-stop-select">
+                <option>Stop 2: OUT004 Fresh Colombo 07</option>
+                <option>Stop 1: OUT001 Fresh Galle Rd</option>
+                <option>Stop 3: OUT008 Fresh Colombo 04</option>
+                <option>Stop 4: OUT010 Fresh Colombo 03</option>
+              </select>
+            </div>
+
+            <div class="wp-field">
+              <label for="shortfall-sku-select">Flagged SKU</label>
+              <select class="wp-select" id="shortfall-sku-select">
+                <option>SKU-CH-MILK-1L: Pasteurized Fresh Milk 1L</option>
+                <option>SKU-FZ-VEG-01: Frozen Farm Vegetables 1kg</option>
+                <option>SKU-CH-YOG-02: Chilled Greek Yogurt 500g</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <div class="wp-field">
+              <label for="shortfall-qty">Quantity Discrepancy (Missing / Damaged Units)</label>
+              <input class="wp-input font-mono" id="shortfall-qty" type="number" value="3">
+            </div>
+
+            <div class="wp-field">
+              <label for="shortfall-comment">Pick Face Physical Observation</label>
+              <textarea class="wp-textarea" id="shortfall-comment" rows="3">Pallet bin only had 12 cases remaining in pick face A-04. Notified forklift operator to check cold reserve.</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wp-drawer-footer">
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="shortfall-drawer">Cancel</button>
+        <button type="button" class="wp-btn wp-btn-primary" data-wp-drawer-close="shortfall-drawer">Transmit Alert to Dispatcher</button>
+      </div>
+    </div>
+  </div>
+
+<div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="wp-command-dialog">
+    <div class="wp-command-input-wrap">
+      <i data-lucide="search"></i>
+      <span class="wp-command-query">pay</span>
+    </div>
+    <div class="wp-command-hint">Search for pay</div>
+    <div class="wp-command-results">
+      <div class="wp-command-group-label">Pages</div>
+      <div class="wp-command-item selected">
+        <i data-lucide="home"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Mission Control</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="layout-grid"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Fleet Allocation</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gfa</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="list-ordered"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Order Queue</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">goq</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-circle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Exceptions</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gex</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="package-check"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Warehouse Dock</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gwd</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="truck"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Driver Route</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdr</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="store"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Store Portal</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsp</kbd>
+        </div>
+      </div>
+      <div class="wp-command-group-label">Actions</div>
+      <div class="wp-command-item">
+        <i data-lucide="check-circle-2"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Publish Daily Plan</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="plus"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">New Order</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gno</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="scan-barcode"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Scan Barcode</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsb</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="clock"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Deferral Rules</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdf</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-triangle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Report Shortfall</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grs</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="refresh-cw"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Refresh Telemetry</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grt</kbd>
+        </div>
+      </div>
+    </div>
+    <div class="wp-command-footer">
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↵</kbd> to select</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↑</kbd> <kbd class="wp-kbd">↓</kbd> to navigate</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+    </div>
+  </div>
+</div>
+  <script src="assets/site.js?v=9"></script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Outlet Detail</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=15">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+        <nav class="wp-sidebar-nav" data-wp-nav-root aria-label="Main Navigation"></nav>
+      </div>
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%"></div>
+      </div>
+    </aside>
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Outlet Detail</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right"><a href="dispatcher-allocation.html" class="wp-btn wp-btn-primary" style="padding:0.45rem 0.85rem;font-size:0.75rem">Assign on board</a></div>
+      </header>
+      <main class="wp-main" id="outlet-detail-root" data-outlet-type="van_only">
+
+        <div class="screen-page-header">
+          <div>
+            <span class="wp-label">DISP-09 · OUT001</span>
+            <h1 class="wp-headline-md" style="margin:0.35rem 0 0">Fresh Galle Rd · Colombo 03</h1>
+            <span class="wp-access-chip wp-access-chip--van_only" style="margin-top:0.5rem"><i data-lucide="truck"></i> van_only</span>
+          </div>
+        </div>
+
+        <div class="wp-outlet-switcher" role="tablist" aria-label="Outlet access type">
+          <button type="button" class="wp-outlet-type-btn active" data-outlet-type="van_only" aria-pressed="true"><i data-lucide="truck"></i> van_only</button>
+          <button type="button" class="wp-outlet-type-btn" data-outlet-type="mall_dock" aria-pressed="false"><i data-lucide="building-2"></i> mall_dock</button>
+          <button type="button" class="wp-outlet-type-btn" data-outlet-type="rear_dock" aria-pressed="false"><i data-lucide="container"></i> rear_dock</button>
+          <button type="button" class="wp-outlet-type-btn" data-outlet-type="street" aria-pressed="false"><i data-lucide="map-pin"></i> street</button>
+        </div>
+
+        <div class="screen-grid-2">
+          <section class="wp-panel screen-panel">
+            <div class="wp-outlet-panel active" data-outlet-type="van_only">
+              <h2 class="wp-headline-sm">van_only · Curb unload</h2>
+              <dl class="wp-specs-list" style="margin-top:0.75rem">
+                <dt>Brand</dt><dd>Fresh</dd>
+                <dt>Temp</dt><dd>Chilled · reefer only</dd>
+                <dt>Vehicle</dt><dd>Reefer van only, no rigid truck</dd>
+                <dt>Clearance</dt><dd>3.2 m curb bay</dd>
+                <dt>Window</dt><dd>05:00–07:30</dd>
+                <dt>District</dt><dd>Colombo</dd>
+              </dl>
+              <div class="wp-outlet-diagram">
+                <svg viewBox="0 0 200 80" width="200" aria-hidden="true">
+                  <rect x="10" y="40" width="50" height="28" rx="4" fill="#377a8b"/>
+                  <rect x="70" y="50" width="120" height="8" fill="#cbd5e1"/>
+                  <text x="35" y="58" fill="#fff" font-size="8" text-anchor="middle" font-weight="700">VAN</text>
+                  <text x="130" y="45" fill="#64748b" font-size="7" text-anchor="middle">3.2m curb</text>
+                </svg>
+                <p class="wp-subtext" style="margin:0">Narrow street, assign VEH037 or VEH002 only</p>
+              </div>
+            </div>
+
+            <div class="wp-outlet-panel" data-outlet-type="mall_dock">
+              <h2 class="wp-headline-sm">mall_dock · Fixed bay window</h2>
+              <dl class="wp-specs-list" style="margin-top:0.75rem">
+                <dt>Brand</dt><dd>Style / Tech</dd>
+                <dt>Mall window</dt><dd>09:00–11:00 SLST (fixed)</dd>
+                <dt>Dock door</dt><dd>Basement B2 · lift required</dd>
+                <dt>Vehicle</dt><dd>Any chassis with mall permit</dd>
+                <dt>Penalty</dt><dd>Miss window → defer to next day</dd>
+              </dl>
+              <div class="wp-outlet-diagram">
+                <svg viewBox="0 0 200 80" width="200" aria-hidden="true">
+                  <rect x="60" y="15" width="80" height="50" rx="4" fill="#e2e8f0" stroke="#94a3b8"/>
+                  <rect x="75" y="45" width="50" height="20" fill="#6d28d9" opacity="0.3"/>
+                  <text x="100" y="38" fill="#6d28d9" font-size="8" text-anchor="middle" font-weight="700">DOCK B2</text>
+                  <text x="100" y="72" fill="#64748b" font-size="7" text-anchor="middle">09:00–11:00</text>
+                </svg>
+                <p class="wp-subtext" style="margin:0">Arrive within mall dock window, no early queue</p>
+              </div>
+            </div>
+
+            <div class="wp-outlet-panel" data-outlet-type="rear_dock">
+              <h2 class="wp-headline-sm">rear_dock · Reverse load</h2>
+              <dl class="wp-specs-list" style="margin-top:0.75rem">
+                <dt>Brand</dt><dd>Fresh</dd>
+                <dt>Dock type</dt><dd>Rear roll-up bay</dd>
+                <dt>Load sequence</dt><dd>Reverse load, last stop first</dd>
+                <dt>Vehicle</dt><dd>Truck or reefer truck</dd>
+                <dt>Window</dt><dd>05:30–08:00</dd>
+              </dl>
+              <div class="wp-outlet-diagram">
+                <svg viewBox="0 0 200 80" width="200" aria-hidden="true">
+                  <rect x="20" y="25" width="100" height="40" rx="4" fill="#b45309" opacity="0.2" stroke="#b45309"/>
+                  <rect x="120" y="35" width="60" height="20" rx="2" fill="#475569"/>
+                  <path d="M130,45 L150,45 L145,40 M150,45 L145,50" stroke="#fff" stroke-width="2" fill="none"/>
+                  <text x="70" y="48" fill="#b45309" font-size="7" text-anchor="middle" font-weight="700">REAR BAY</text>
+                </svg>
+                <p class="wp-subtext" style="margin:0">Loader reverse sequence applies at this dock</p>
+              </div>
+            </div>
+
+            <div class="wp-outlet-panel" data-outlet-type="street">
+              <h2 class="wp-headline-sm">street · Open parking</h2>
+              <dl class="wp-specs-list" style="margin-top:0.75rem">
+                <dt>Brand</dt><dd>Fresh</dd>
+                <dt>Access</dt><dd>Street parking · no van restriction</dd>
+                <dt>Vehicle</dt><dd>Truck, reefer truck, or van</dd>
+                <dt>Parking</dt><dd>Parallel · 15 min unload</dd>
+                <dt>Window</dt><dd>05:30–08:00</dd>
+              </dl>
+              <div class="wp-outlet-diagram">
+                <svg viewBox="0 0 200 80" width="200" aria-hidden="true">
+                  <rect x="10" y="52" width="180" height="6" fill="#cbd5e1"/>
+                  <rect x="40" y="38" width="70" height="22" rx="3" fill="#64748b"/>
+                  <rect x="120" y="38" width="50" height="22" rx="3" fill="#377a8b"/>
+                  <text x="100" y="30" fill="#475569" font-size="7" text-anchor="middle">Street · any chassis</text>
+                </svg>
+                <p class="wp-subtext" style="margin:0">No van_only flag, full fleet eligible</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="wp-panel screen-panel">
+            <h2 class="wp-headline-sm">Unload time</h2>
+            <p class="wp-subtext" style="margin:0.35rem 0 0">Learned dwell at this curb affects tomorrow&rsquo;s plan.</p>
+            <div class="decision-dwell-stats">
+              <div class="decision-dwell-stat">
+                <span class="wp-label">Plan uses</span>
+                <strong>15</strong>
+                <span class="wp-subtext" style="font-size:0.68rem">min unload</span>
+              </div>
+              <div class="decision-dwell-stat">
+                <span class="wp-label">Last 6 visits</span>
+                <strong>22</strong>
+                <span class="wp-subtext" style="font-size:0.68rem">min average</span>
+              </div>
+              <div class="decision-dwell-stat">
+                <span class="wp-label">Plan gap</span>
+                <strong style="color:var(--wp-warning)">+7</strong>
+                <span class="wp-subtext" style="font-size:0.68rem">min under-estimate</span>
+              </div>
+            </div>
+            <p class="decision-note" style="margin-top:0.75rem;margin-bottom:0">Use 22 min for the next Fresh coastal sequence · van_only curb unload.</p>
+            <h2 class="wp-headline-sm" style="margin-top:1.25rem">Defer history</h2>
+            <div class="screen-list" style="margin-top:0.75rem">
+              <div class="screen-list-item"><span>Sat 27 Sep · REEFER_CAPACITY</span><span class="wp-subtext">Next run Mon</span></div>
+              <div class="screen-list-item"><span>Wed 17 Sep · VAN_ONLY</span><span class="wp-subtext">Reassigned VEH037</span></div>
+            </div>
+            <a href="store-deferral.html" class="mc-link" style="display:inline-block;margin-top:1rem">Store deferral notice →</a>
+          </section>
+        </div>
+      </main>
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+  <div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="wp-command-dialog">
+      <div class="wp-command-input-wrap">
+        <i data-lucide="search"></i>
+        <span class="wp-command-query">Search</span>
+      </div>
+      <div class="wp-command-hint">Jump to any screen</div>
+      <div class="wp-command-results" data-wp-command-results></div>
+      <div class="wp-command-footer">
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+      </div>
+    </div>
+  </div>
+  
+  <script src="assets/site.js?v=15"></script>
+</body>
+</html>

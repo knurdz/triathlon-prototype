@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Store Manager Portal</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=9">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <!-- Persistent Left Sidebar Navigation (250px) -->
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+
+        <nav class="wp-sidebar-nav" aria-label="Main Navigation">
+          <div class="wp-sidebar-nav-group-title">Overview</div>
+          <a href="index.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="home"></i>
+            <span>Mission Control</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Dispatch &amp; Planning</div>
+          <a href="dispatcher-allocation.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="layout-grid"></i>
+            <span>Fleet Allocation</span>
+          </a>
+          <a href="dispatcher-queue.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="list-ordered"></i>
+            <span>Order Queue</span>
+          </a>
+          <a href="dispatcher-exceptions.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="alert-circle"></i>
+            <span>Exceptions</span>
+            <span class="nav-badge">3</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Field Operations</div>
+          <a href="loader-dock.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="package-check"></i>
+            <span>Warehouse Dock</span>
+          </a>
+          <a href="driver-route.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="truck"></i>
+            <span>Driver Route</span>
+          </a>
+          <a href="store-portal.html" data-wp-nav class="wp-sidebar-nav-item active">
+            <i data-lucide="store"></i>
+            <span>Store Portal</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%">
+          <span class="wp-avatar" style="background:#FAF5FF;color:#7C3AED">AJ</span>
+          <div style="overflow:hidden">
+            <div class="wp-title-md" style="font-size:0.8rem;white-space:nowrap;text-overflow:ellipsis;overflow:hidden">Anjali Jayawardena</div>
+            <div class="wp-subtext" style="font-size:0.7rem">OUT001 Fresh Galle Rd</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Stage -->
+    <div class="wp-stage store-track-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Store Portal</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right">
+          <a href="dispatcher-exceptions.html" class="wp-icon-btn" title="System alerts" aria-label="Notifications" style="position:relative">
+            <i data-lucide="bell"></i>
+            <span style="position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--wp-error);border-radius:50%"></span>
+          </a>
+          <a href="store-order.html" class="wp-btn wp-btn-outline" style="padding:0.45rem 0.85rem;font-size:0.75rem">
+            <i data-lucide="file-plus"></i>
+            <span>Full order form</span>
+          </a>
+          <button type="button" class="wp-btn wp-btn-primary" style="padding:0.45rem 0.85rem;font-size:0.75rem" data-wp-drawer-open="order-drawer">
+            <i data-lucide="plus"></i>
+            <span>New Order</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="wp-main store-portal-main">
+        <div class="store-page-header">
+          <div>
+            <div class="store-page-meta">
+              <span class="wp-state wp-state-success">Outlet Online</span>
+              <span class="font-mono store-outlet-id">OUT001</span>
+            </div>
+            <h1 class="wp-headline-md store-page-title">OUT001 Fresh Galle Rd</h1>
+            <p class="wp-subtext store-page-subtitle">Colombo 03 · van-only curb · next window 05:00–07:30</p>
+          </div>
+        </div>
+
+        <div class="wp-kpi-row store-kpi-row">
+          <div class="wp-kpi">
+            <span class="wp-label">Coolroom</span>
+            <p class="wp-kpi-value" style="color:var(--wp-info)">74%</p>
+            <div class="wp-meter" style="height:4px;margin-top:0.35rem"><div class="wp-meter-fill ok" style="width:74%"></div></div>
+            <span class="wp-subtext store-kpi-caption">1,820 / 2,500 kg</span>
+          </div>
+          <div class="wp-kpi">
+            <span class="wp-label">Next Van</span>
+            <p class="wp-kpi-value" style="color:var(--wp-primary)">14 min</p>
+            <span class="wp-subtext store-kpi-caption">VEH037 · 3.8 km</span>
+          </div>
+          <div class="wp-kpi">
+            <span class="wp-label">Dock</span>
+            <p class="wp-kpi-value" style="color:var(--wp-success)">Clear</p>
+            <span class="wp-subtext store-kpi-caption">Van only · 3.2 m</span>
+          </div>
+          <div class="wp-kpi">
+            <span class="wp-label">Today</span>
+            <p class="wp-kpi-value">2 open</p>
+            <span class="wp-subtext store-kpi-caption">1 awaiting receipt</span>
+          </div>
+        </div>
+
+        <div class="store-portal-layout">
+          <section class="store-delivery-panel" aria-label="Today's deliveries">
+            <div class="store-panel-head">
+              <div>
+                <span class="wp-label">Today's Deliveries</span>
+                <h2 class="wp-headline-sm store-panel-title">Order runs for OUT001</h2>
+              </div>
+              <span class="wp-subtext store-panel-count">4 recent</span>
+            </div>
+
+            <div class="store-delivery-list">
+              <article class="store-delivery-row is-active">
+                <a href="store-tracking.html" class="store-delivery-main" style="text-decoration:none;color:inherit">
+                  <strong class="font-mono store-delivery-id">DEL-88401</strong>
+                  <span class="wp-meta-stack-primary is-chilled"><i data-lucide="snowflake"></i> Chilled</span>
+                  <span class="store-delivery-goods">Dairy cases, curd, ice cream</span>
+                  <span class="font-mono store-delivery-metric">4,850 kg</span>
+                </a>
+                <div class="store-delivery-side">
+                  <span class="wp-badge wp-badge-info">In Transit · 14m</span>
+                  <a href="store-tracking.html" class="wp-subtext store-delivery-action-label">ETA 06:18 · Track</a>
+                </div>
+              </article>
+
+              <article class="store-delivery-row">
+                <div class="store-delivery-main">
+                  <strong class="font-mono store-delivery-id">DEL-88390</strong>
+                  <span class="wp-meta-stack-primary is-ambient">Ambient</span>
+                  <span class="store-delivery-goods">Bread loaves, organic rice</span>
+                  <span class="font-mono store-delivery-metric">2,100 kg</span>
+                </div>
+                <div class="store-delivery-side">
+                  <span class="wp-badge wp-badge-success">Delivered</span>
+                  <button type="button" class="wp-btn wp-btn-primary store-delivery-btn" data-wp-drawer-open="receipt-drawer">
+                    <i data-lucide="check-square"></i>
+                    <span>Confirm Receipt</span>
+                  </button>
+                  <a href="store-receipt.html" class="wp-subtext store-delivery-action-label" style="margin-top:0.35rem">Full receipt →</a>
+                </div>
+              </article>
+
+              <article class="store-delivery-row">
+                <div class="store-delivery-main">
+                  <strong class="font-mono store-delivery-id">DEL-88210</strong>
+                  <span class="wp-meta-stack-primary is-chilled"><i data-lucide="snowflake"></i> Chilled</span>
+                  <span class="store-delivery-goods">Dairy selection × 150 cases</span>
+                  <span class="font-mono store-delivery-metric">5,200 kg</span>
+                </div>
+                <div class="store-delivery-side">
+                  <span class="wp-badge wp-badge-success">Verified</span>
+                  <span class="wp-subtext store-delivery-action-label store-delivery-action-success">Receipt signed</span>
+                </div>
+              </article>
+
+              <article class="store-delivery-row">
+                <div class="store-delivery-main">
+                  <strong class="font-mono store-delivery-id">DEL-88155</strong>
+                  <span class="wp-meta-stack-primary is-chilled"><i data-lucide="snowflake"></i> Chilled</span>
+                  <span class="store-delivery-goods">Yogurt &amp; butter totes</span>
+                  <span class="font-mono store-delivery-metric">3,800 kg</span>
+                </div>
+                <div class="store-delivery-side">
+                  <span class="wp-flag wp-flag-warning">Deferred</span>
+                  <span class="wp-subtext store-delivery-action-label">REEFER_CAPACITY</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="route-map-stage store-map-stage" aria-label="Approaching delivery">
+            <div class="route-map-stage-header">
+              <div>
+                <span class="wp-label">Live Approach</span>
+                <h2 class="wp-headline-sm store-panel-title">DEL-88401 en route</h2>
+              </div>
+              <div class="route-map-meta-row">
+                <span class="route-map-meta route-map-meta-info">
+                  <i data-lucide="navigation"></i>
+                  <span>ETA 06:18 SLST</span>
+                </span>
+                <span class="wp-state-text wp-state-success">Dock clear</span>
+              </div>
+            </div>
+
+            <div class="route-map-canvas-wrap">
+              <div class="wp-vector-map route-map-canvas store-map-canvas">
+                <svg viewBox="0 0 600 260" class="wp-map-svg" preserveAspectRatio="none">
+                  <path class="wp-map-water" d="M0,0 L200,0 Q240,130 260,260 L0,260 Z" />
+                  <path class="wp-map-land" d="M200,0 L600,0 L600,260 L260,260 Q240,130 200,0 Z" />
+                  <line x1="300" y1="10" x2="300" y2="250" class="wp-map-road" stroke-width="6" />
+                  <line x1="420" y1="10" x2="420" y2="250" class="wp-map-road" stroke-width="4" stroke-dasharray="6 3" />
+                  <line x1="300" y1="30" x2="520" y2="30" class="wp-map-road" stroke-width="3" />
+                  <polyline points="480,30 300,30 300,180" class="wp-map-route" />
+                  <g class="wp-map-pin" transform="translate(300, 180)">
+                    <circle cx="0" cy="0" r="12" fill="#16A34A" />
+                    <circle cx="0" cy="0" r="6" fill="#FFFFFF" />
+                    <text x="18" y="4" fill="#16A34A" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="bold">OUT001 Fresh (Store)</text>
+                  </g>
+                  <g transform="translate(300, 95)">
+                    <circle cx="0" cy="0" r="9" fill="var(--wp-primary-marker)" class="wp-map-vehicle-marker" />
+                    <circle cx="0" cy="0" r="5" fill="var(--wp-primary)" />
+                    <rect x="-30" y="-22" width="60" height="16" rx="3" fill="#1A1C1C" />
+                    <text x="0" y="-11" fill="#FFFFFF" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="bold" text-anchor="middle">VEH037 (14m)</text>
+                  </g>
+                </svg>
+              </div>
+
+              <div class="route-live-card wp-panel">
+                <div class="route-live-card-header">
+                  <div class="route-live-title">
+                    <i data-lucide="radio"></i>
+                    <span>Live Van Tracking</span>
+                  </div>
+                  <div class="route-live-id">
+                    <span class="font-mono">DEL-88401</span>
+                  </div>
+                  <span class="wp-badge wp-badge-info">In Transit</span>
+                </div>
+
+                <div class="route-live-progress">
+                  <div class="route-live-ends">
+                    <div>
+                      <span class="wp-label">Driver</span>
+                      <p>Kamal Silva · VEH037</p>
+                    </div>
+                    <div style="text-align:right">
+                      <span class="wp-label">Chamber</span>
+                      <p class="font-mono" style="color:var(--wp-info)">+3.8°C</p>
+                    </div>
+                  </div>
+                  <div class="route-progress-track" aria-hidden="true">
+                    <div class="route-progress-fill" style="width:72%"></div>
+                    <span class="route-progress-truck" style="left:72%"><i data-lucide="truck"></i></span>
+                  </div>
+                  <div class="route-live-times">
+                    <div>
+                      <span class="wp-label">Distance</span>
+                      <p class="font-mono">3.8 km</p>
+                    </div>
+                    <div style="text-align:right">
+                      <span class="wp-label">Arrival</span>
+                      <p class="font-mono">06:18 SLST</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <!-- Stage Footer -->
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up New Order Drawer -->
+  <div class="wp-drawer-backdrop" id="order-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Store Replenishment</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Dual-Order Placement</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="order-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="wp-drawer-body">
+        <p class="wp-subtext store-order-intro">
+          Submit up to two orders per delivery date: chilled reefer and ambient dry goods.
+        </p>
+
+        <form id="dual-order-form" class="store-order-form">
+          <div class="wp-field store-order-date">
+            <label for="delivery-date-input">Delivery Date</label>
+            <input class="wp-input font-mono" id="delivery-date-input" type="date" value="2026-09-29">
+          </div>
+
+          <div class="store-order-lanes">
+            <div class="store-order-lane store-order-lane-chilled">
+              <div class="store-order-lane-head">
+                <strong><i data-lucide="snowflake"></i> Order A: Chilled Reefer</strong>
+                <span class="wp-subtext">05:00–07:30 · -18°C to +4°C</span>
+              </div>
+              <p class="store-order-selected" id="cat-a-label">Pasteurized Dairy &amp; Curd</p>
+              <div class="wp-cat-selector-grid store-cat-grid" data-cat-target="cat-a-label">
+                <div class="wp-cat-card active" data-category="Pasteurized Dairy &amp; Curd" onclick="storeSelectCategory(this)">
+                  <img src="assets/products/milk-bottle.jpg" class="wp-product-thumb-sm" alt="Dairy">
+                  <div>
+                    <strong>Dairy &amp; Curd</strong>
+                    <span class="wp-subtext font-mono">+4°C</span>
+                  </div>
+                </div>
+                <div class="wp-cat-card" data-category="Chilled Cheeses &amp; Butter" onclick="storeSelectCategory(this)">
+                  <img src="assets/products/butter-cheese.jpg" class="wp-product-thumb-sm" alt="Butter">
+                  <div>
+                    <strong>Butter &amp; Cheese</strong>
+                    <span class="wp-subtext font-mono">+4°C</span>
+                  </div>
+                </div>
+                <div class="wp-cat-card" data-category="Frozen Meats &amp; Poultry" onclick="storeSelectCategory(this)">
+                  <img src="assets/products/chilled-meat.jpg" class="wp-product-thumb-sm" alt="Meat">
+                  <div>
+                    <strong>Frozen Meats</strong>
+                    <span class="wp-subtext font-mono">-18°C</span>
+                  </div>
+                </div>
+                <div class="wp-cat-card" data-category="Greek Yogurt 500g" onclick="storeSelectCategory(this)">
+                  <img src="assets/products/greek-yogurt.jpg" class="wp-product-thumb-sm" alt="Yogurt">
+                  <div>
+                    <strong>Greek Yogurt</strong>
+                    <span class="wp-subtext font-mono">+4°C</span>
+                  </div>
+                </div>
+              </div>
+              <div class="store-order-metrics">
+                <div>
+                  <label class="wp-label">Payload (kg)</label>
+                  <input class="wp-input font-mono" type="number" value="4850">
+                </div>
+                <div>
+                  <label class="wp-label">Volume (m³)</label>
+                  <input class="wp-input font-mono" type="number" step="0.1" value="8.2">
+                </div>
+              </div>
+            </div>
+
+            <div class="store-order-lane store-order-lane-ambient">
+              <div class="store-order-lane-head">
+                <strong><i data-lucide="package"></i> Order B: Ambient Goods</strong>
+                <span class="wp-subtext">05:30–08:00 · Dry van</span>
+              </div>
+              <p class="store-order-selected" id="cat-b-label">Bakery Breads &amp; Buns</p>
+              <div class="wp-cat-selector-grid store-cat-grid" data-cat-target="cat-b-label">
+                <div class="wp-cat-card active" data-category="Bakery Breads &amp; Buns" onclick="storeSelectCategory(this)">
+                  <img src="assets/products/bakery-bread.jpg" class="wp-product-thumb-sm" alt="Bakery">
+                  <div>
+                    <strong>Bakery Breads</strong>
+                    <span class="wp-subtext font-mono">Ambient</span>
+                  </div>
+                </div>
+                <div class="wp-cat-card" data-category="Organic Brown Rice 5kg" onclick="storeSelectCategory(this)">
+                  <img src="assets/products/organic-rice.jpg" class="wp-product-thumb-sm" alt="Rice">
+                  <div>
+                    <strong>Organic Rice</strong>
+                    <span class="wp-subtext font-mono">Dry</span>
+                  </div>
+                </div>
+                <div class="wp-cat-card" data-category="Fresh Produce &amp; Fruits" onclick="storeSelectCategory(this)">
+                  <img src="assets/products/fresh-produce.jpg" class="wp-product-thumb-sm" alt="Produce">
+                  <div>
+                    <strong>Fresh Produce</strong>
+                    <span class="wp-subtext font-mono">Crates</span>
+                  </div>
+                </div>
+              </div>
+              <div class="store-order-metrics">
+                <div>
+                  <label class="wp-label">Payload (kg)</label>
+                  <input class="wp-input font-mono" type="number" value="2100">
+                </div>
+                <div>
+                  <label class="wp-label">Volume (m³)</label>
+                  <input class="wp-input font-mono" type="number" step="0.1" value="5.4">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="wp-drawer-footer">
+        <span class="wp-subtext store-order-total">Combined: <strong>6,950 kg</strong> · <strong>13.6 m³</strong> · van_only compliant</span>
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="order-drawer">Cancel</button>
+        <a href="store-confirm.html" class="wp-btn wp-btn-primary" data-wp-drawer-close="order-drawer">
+          <i data-lucide="send"></i>
+          <span>Submit Orders</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up Receipt Confirmation Drawer (Offset from Left Nav) -->
+  <div class="wp-drawer-backdrop" id="receipt-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Store Delivery Handover</span>
+          <h2 class="wp-headline-sm font-mono" style="margin:0.25rem 0 0">Receipt Sign-Off: DEL-88390</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="receipt-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="wp-drawer-body">
+        <p class="wp-subtext" style="margin:0 0 1.25rem">
+          Verify physical goods unloaded by Driver Kamal Silva against the digital delivery manifest.
+        </p>
+
+        <div class="wp-split">
+          <div>
+            <div class="wp-subpanel" style="padding:1.25rem;margin-bottom:1.25rem">
+              <span class="wp-label" style="font-size:0.65rem;margin-bottom:0.75rem;display:block">Manifest Checkoff</span>
+              <div class="wp-check-row" style="padding:0.4rem 0">
+                <input type="checkbox" checked id="chk-item-1" style="width:1.1rem;height:1.1rem;accent-color:var(--wp-primary)">
+                <img src="assets/products/bakery-bread.jpg" class="wp-product-thumb-sm" alt="Bread">
+                <label for="chk-item-1" style="flex:1;cursor:pointer;font-size:0.85rem">Bakery Bread Loaves × 80 Bundles</label>
+                <span class="wp-state-text wp-state-success">Matched</span>
+              </div>
+              <div class="wp-check-row" style="padding:0.4rem 0;border:none">
+                <input type="checkbox" checked id="chk-item-2" style="width:1.1rem;height:1.1rem;accent-color:var(--wp-primary)">
+                <img src="assets/products/organic-rice.jpg" class="wp-product-thumb-sm" alt="Rice">
+                <label for="chk-item-2" style="flex:1;cursor:pointer;font-size:0.85rem">Organic Brown Rice × 45 Bags</label>
+                <span class="wp-state-text wp-state-success">Matched</span>
+              </div>
+            </div>
+
+            <div class="wp-subpanel wp-switch-row" style="padding:1rem">
+              <label class="wp-switch">
+                <input type="checkbox" checked id="all-ok-check" role="switch" aria-label="Confirm items inspected and received into store inventory">
+                <span class="wp-switch-ui" aria-hidden="true"></span>
+              </label>
+              <label for="all-ok-check" class="wp-switch-label">
+                I confirm that items were inspected and received into store inventory.
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <div class="wp-field">
+              <label for="discrepancy-notes">Damage / Shortfall Notes (Optional)</label>
+              <textarea class="wp-textarea" id="discrepancy-notes" rows="4" placeholder="Record any damaged packaging or discrepancies..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wp-drawer-footer">
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="receipt-drawer">Cancel</button>
+        <button type="button" class="wp-btn wp-btn-primary" data-wp-drawer-close="receipt-drawer">
+          <i data-lucide="check-circle-2"></i>
+          <span>Confirm &amp; Sign Receipt</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function storeSelectCategory(card) {
+      const grid = card.closest('.wp-cat-selector-grid');
+      grid.querySelectorAll('.wp-cat-card').forEach((item) => item.classList.remove('active'));
+      card.classList.add('active');
+      const targetId = grid.getAttribute('data-cat-target');
+      const label = document.getElementById(targetId);
+      if (label) label.textContent = card.getAttribute('data-category');
+    }
+  </script>
+<div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="wp-command-dialog">
+    <div class="wp-command-input-wrap">
+      <i data-lucide="search"></i>
+      <span class="wp-command-query">pay</span>
+    </div>
+    <div class="wp-command-hint">Search for pay</div>
+    <div class="wp-command-results">
+      <div class="wp-command-group-label">Pages</div>
+      <div class="wp-command-item selected">
+        <i data-lucide="home"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Mission Control</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="layout-grid"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Fleet Allocation</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gfa</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="list-ordered"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Order Queue</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">goq</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-circle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Exceptions</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gex</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="package-check"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Warehouse Dock</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gwd</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="truck"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Driver Route</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdr</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="store"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Store Portal</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsp</kbd>
+        </div>
+      </div>
+      <div class="wp-command-group-label">Actions</div>
+      <div class="wp-command-item">
+        <i data-lucide="check-circle-2"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Publish Daily Plan</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="plus"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">New Order</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gno</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="scan-barcode"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Scan Barcode</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsb</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="clock"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Deferral Rules</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdf</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-triangle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Report Shortfall</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grs</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="refresh-cw"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Refresh Telemetry</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grt</kbd>
+        </div>
+      </div>
+    </div>
+    <div class="wp-command-footer">
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↵</kbd> to select</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↑</kbd> <kbd class="wp-kbd">↓</kbd> to navigate</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+    </div>
+  </div>
+</div>
+  <script src="assets/site.js?v=9"></script>
+</body>
+</html>

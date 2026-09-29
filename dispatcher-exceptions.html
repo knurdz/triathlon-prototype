@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Exception &amp; Sync Triage</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=15">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <!-- Persistent Left Sidebar Navigation (250px) -->
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+
+        <nav class="wp-sidebar-nav" aria-label="Main Navigation">
+          <div class="wp-sidebar-nav-group-title">Overview</div>
+          <a href="index.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="home"></i>
+            <span>Mission Control</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Dispatch &amp; Planning</div>
+          <a href="dispatcher-allocation.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="layout-grid"></i>
+            <span>Fleet Allocation</span>
+          </a>
+          <a href="dispatcher-queue.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="list-ordered"></i>
+            <span>Order Queue</span>
+          </a>
+          <a href="dispatcher-exceptions.html" data-wp-nav class="wp-sidebar-nav-item active">
+            <i data-lucide="alert-circle"></i>
+            <span>Exceptions</span>
+            <span class="nav-badge">3</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Field Operations</div>
+          <a href="loader-dock.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="package-check"></i>
+            <span>Warehouse Dock</span>
+          </a>
+          <a href="driver-route.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="truck"></i>
+            <span>Driver Route</span>
+          </a>
+          <a href="store-portal.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="store"></i>
+            <span>Store Portal</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%">
+          <span class="wp-avatar">OP</span>
+          <div style="overflow:hidden">
+            <div class="wp-title-md" style="font-size:0.8rem;white-space:nowrap;text-overflow:ellipsis;overflow:hidden">Exceptions Desk</div>
+            <div class="wp-subtext" style="font-size:0.7rem">Incident Desk</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Stage -->
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Exceptions</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right">
+          <a href="dispatcher-exceptions.html" class="wp-icon-btn" title="System alerts" aria-label="Notifications" style="position:relative">
+            <i data-lucide="bell"></i>
+            <span style="position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--wp-error);border-radius:50%"></span>
+          </a>
+          <a href="dispatcher-allocation.html" class="wp-btn wp-btn-primary" style="padding:0.45rem 0.85rem;font-size:0.75rem">
+            <i data-lucide="layout-grid"></i>
+            <span>Return to Allocation</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="wp-main">
+        <!-- Cutoff Banner -->
+        <div class="wp-cutoff-banner" style="margin-bottom:1.75rem">
+          <div>
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.35rem">
+              <span class="wp-state wp-state-warning">Triage Active</span>
+              <span class="wp-subtext" style="font-size:0.8rem">Warehouse dock, field driver sync, and cold chain telemetry</span>
+            </div>
+            <h1 class="wp-headline-md" style="margin:0">Exception &amp; Synchronization Triage</h1>
+          </div>
+          <div style="display:flex;align-items:center;gap:1.5rem">
+            <div style="text-align:right">
+              <span class="wp-label" style="font-size:0.7rem">Open Incidents</span>
+              <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-error)">3 / 3</div>
+            </div>
+            <div class="wp-subpanel" style="padding:0.4rem 0.85rem;display:flex;align-items:center;gap:0.75rem">
+              <span class="wp-label" style="font-size:0.7rem;margin:0">Daily Cutoff:</span>
+              <span class="font-mono" style="font-weight:700;color:var(--wp-primary);font-size:0.85rem" data-wp-cutoff>00:00:00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Summary Row -->
+        <div class="wp-kpi-row" style="margin-bottom:1.75rem">
+          <div class="wp-kpi">
+            <span class="wp-label">Open Incidents</span>
+            <p class="wp-kpi-value" style="color:var(--wp-error)">3</p>
+            <span class="wp-subtext" style="font-size:0.75rem;margin-top:0.4rem">Action items pending resolution</span>
+          </div>
+          <div class="wp-kpi">
+            <span class="wp-label">Gate Holds</span>
+            <p class="wp-kpi-value" style="color:var(--wp-warning)">1</p>
+            <span class="wp-subtext" style="font-size:0.75rem;margin-top:0.4rem">Departure blocked at dock</span>
+          </div>
+          <div class="wp-kpi">
+            <span class="wp-label">Sync Conflicts</span>
+            <p class="wp-kpi-value" style="color:var(--wp-info)">1</p>
+            <span class="wp-subtext" style="font-size:0.75rem;margin-top:0.4rem">Offline vs server state mismatch</span>
+          </div>
+          <div class="wp-kpi">
+            <span class="wp-label">Window Risks</span>
+            <p class="wp-kpi-value">1</p>
+            <span class="wp-subtext" style="font-size:0.75rem;margin-top:0.4rem">Mall dock ETA breach projected</span>
+          </div>
+        </div>
+
+        <!-- Primary degradation strip: offline sync (Section 8) -->
+        <section class="deg-strip" aria-label="Offline sync degradation states">
+          <div class="deg-strip-head">
+            <div>
+              <span class="wp-label">DISP-07 · Degradation hi-fi</span>
+              <h2 class="wp-headline-sm" style="margin:0.35rem 0 0">Kandy hill-country blackout · VEH037 · R025229</h2>
+              <p class="wp-subtext" style="font-size:0.78rem;margin:0.35rem 0 0">Server deferred OUT003 at 6:00 AM while Kamal Silva delivered offline at 6:35 AM.</p>
+            </div>
+            <a href="degradation.html" class="wp-btn wp-btn-outline" style="font-size:0.75rem">All scenarios</a>
+          </div>
+          <div class="screen-sync-states" role="tablist" aria-label="Sync states">
+            <button type="button" class="screen-sync-state" data-deg-state="offline" role="tab">1 Offline</button>
+            <button type="button" class="screen-sync-state" data-deg-state="queued" role="tab">2 Queued</button>
+            <button type="button" class="screen-sync-state" data-deg-state="syncing" role="tab">3 Syncing</button>
+            <button type="button" class="screen-sync-state" data-deg-state="synced" role="tab">4 Synced</button>
+            <button type="button" class="screen-sync-state" data-deg-state="conflict" role="tab">5 Conflict</button>
+          </div>
+          <div class="screen-grid-2" style="margin-top:0.5rem">
+            <div class="deg-dispatcher-route">
+              <div data-deg-panel="offline">
+                <p class="wp-subtext" style="margin:0;font-size:0.8rem"><strong>Last sync 6:12 AM</strong> · route R025229 · stops 2–3 pending</p>
+                <div class="deg-route-stops">
+                  <div class="deg-route-stop is-done"><span>Stop 1 · OUT001</span><span class="mc-status-chip mc-status-chip-ok">Delivered</span></div>
+                  <div class="deg-route-stop is-pending"><span>Stop 2 · OUT003</span><span class="mc-status-chip mc-status-chip-muted">Pending</span></div>
+                  <div class="deg-route-stop is-pending"><span>Stop 3 · OUT004</span><span class="mc-status-chip mc-status-chip-muted">Pending</span></div>
+                </div>
+              </div>
+              <div data-deg-panel="queued" hidden>
+                <p class="wp-subtext" style="margin:0;font-size:0.8rem">Driver reconnect pending · no dispatcher action yet</p>
+              </div>
+              <div data-deg-panel="syncing" hidden>
+                <p class="wp-subtext" style="margin:0;font-size:0.8rem;display:flex;align-items:center;gap:0.5rem">
+                  <i data-lucide="loader-2" style="width:1rem;height:1rem"></i>
+                  Live refresh spinner on route R025229
+                </p>
+                <div class="deg-route-stops">
+                  <div class="deg-route-stop is-done"><span>Stop 1 · OUT001</span><span class="mc-status-chip mc-status-chip-ok">Delivered</span></div>
+                  <div class="deg-route-stop is-syncing"><span>Stop 2 · OUT003</span><span class="mc-status-chip mc-status-chip-info">Syncing</span></div>
+                  <div class="deg-route-stop is-syncing"><span>Stop 3 · OUT004</span><span class="mc-status-chip mc-status-chip-info">Syncing</span></div>
+                </div>
+              </div>
+              <div data-deg-panel="synced" hidden>
+                <p class="wp-subtext" style="margin:0;font-size:0.8rem">Stops 2–3 checkmarked · timestamps updated</p>
+                <div class="deg-route-stops">
+                  <div class="deg-route-stop is-done"><span>Stop 1 · OUT001</span><span class="mc-status-chip mc-status-chip-ok">Delivered</span></div>
+                  <div class="deg-route-stop is-done"><span>Stop 2 · OUT003</span><span class="mc-status-chip mc-status-chip-ok">Delivered 6:37 AM</span></div>
+                  <div class="deg-route-stop is-done"><span>Stop 3 · OUT004</span><span class="mc-status-chip mc-status-chip-ok">Delivered 6:38 AM</span></div>
+                </div>
+              </div>
+              <div data-deg-panel="conflict" hidden>
+                <div class="deg-conflict-card">
+                  <strong style="font-size:0.9rem">Conflict: OUT003, deferred at 6:00 AM, driver POD at 6:35 AM offline</strong>
+                  <p class="wp-subtext" style="font-size:0.78rem;margin:0.5rem 0 0">Kamal Silva · VEH037 · digital POD with receiver signature evidence</p>
+                  <div class="deg-conflict-actions">
+                    <a href="store-tracking.html?state=resolved" class="wp-btn wp-btn-primary" style="font-size:0.75rem">Accept delivery as served</a>
+                    <button type="button" class="wp-btn wp-btn-outline" style="font-size:0.75rem" data-wp-drawer-open="reconcile-drawer">Escalate</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <aside class="wp-subpanel" style="padding:1rem">
+              <span class="wp-label">Store impact · SM-07</span>
+              <p class="wp-subtext" id="disp-deg-store" style="font-size:0.8rem;margin:0.35rem 0 0">ETA frozen, driver offline, last update 6:12 AM</p>
+              <a href="driver-sync.html" class="mc-link" style="display:inline-block;margin-top:0.75rem;font-size:0.78rem">Driver sync view →</a>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Filter Controls & View Switcher -->
+        <div class="wp-panel" style="padding:1.25rem 1.5rem;margin-bottom:1.5rem">
+          <div class="wp-flex-between" style="gap:1rem;flex-wrap:wrap">
+            <div class="wp-filter-row__group">
+              <div style="position:relative;width:100%;max-width:300px">
+                <i data-lucide="search" style="position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);width:0.95rem;height:0.95rem;color:var(--wp-muted)"></i>
+                <input type="text" id="exception-filter-search" class="wp-input" placeholder="Search incident, outlet, vehicle..." style="padding-left:2.4rem">
+              </div>
+              <details class="wp-more wp-more--filters">
+                <summary>Filters</summary>
+                <div class="wp-more-panel">
+                  <select id="exception-filter-type" class="wp-select" aria-label="Exception Type Filter">
+                    <option value="">All Types</option>
+                    <option value="shortfall">Shortfall</option>
+                    <option value="sync">Sync Conflict</option>
+                    <option value="window">Window Risk</option>
+                  </select>
+                  <select id="exception-filter-severity" class="wp-select" aria-label="Severity Filter">
+                    <option value="">All Severity</option>
+                    <option value="critical">Critical</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                  </select>
+                </div>
+              </details>
+            </div>
+            <div class="wp-view-switcher" id="exception-view-switcher">
+              <button type="button" class="wp-view-btn active" data-view="table">
+                <i data-lucide="table"></i>
+                <span>Table</span>
+              </button>
+              <button type="button" class="wp-view-btn" data-view="cards">
+                <i data-lucide="layout-grid"></i>
+                <span>Incident Cards</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- View 1: Exception Data Table -->
+        <div id="exception-table-view" class="wp-table-wrap">
+          <table class="wp-table" id="exception-table">
+            <thead>
+              <tr>
+                <th>Incident</th>
+                <th>Type</th>
+                <th>Asset</th>
+                <th>Opened</th>
+                <th>Severity</th>
+                <th>Status</th>
+                <th style="width:160px">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-exception-id="EX-0042" data-type="shortfall" data-severity="critical" data-drawer="shortfall-drawer">
+                <td>
+                  <strong class="font-mono exception-id" style="display:block;font-size:0.8rem">EX-0042</strong>
+                  <span class="exception-title" style="display:block;font-size:0.8rem;font-weight:600;margin-top:0.15rem">Pre-Departure Shortfall</span>
+                  <span class="font-mono wp-subtext exception-outlet" style="display:block;font-size:0.75rem;margin-top:0.15rem">OUT004 Fresh Cinnamon Gardens</span>
+                </td>
+                <td>
+                  <span class="wp-flag wp-flag-error"><i data-lucide="package-x"></i> Shortfall</span>
+                </td>
+                <td>
+                  <span class="font-mono" style="display:block;font-size:0.75rem;font-weight:600">VEH004</span>
+                  <span class="wp-subtext" style="font-size:0.7rem">Bay 04 · Priya Fernando</span>
+                </td>
+                <td><span class="wp-window-pill"><i data-lucide="clock"></i> 04:42 AM</span></td>
+                <td><span class="wp-flag wp-flag-error">Critical</span></td>
+                <td><span class="wp-flag wp-flag-warning">Gate Hold</span></td>
+                <td>
+                  <button type="button" class="wp-btn wp-btn-primary exception-action" data-wp-drawer-open="shortfall-drawer" style="font-size:0.7rem;padding:0.35rem 0.65rem">
+                    Resolve
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-exception-id="EX-4092" data-type="sync" data-severity="high" data-drawer="reconcile-drawer">
+                <td>
+                  <strong class="font-mono exception-id" style="display:block;font-size:0.8rem">EX-4092</strong>
+                  <span class="exception-title" style="display:block;font-size:0.8rem;font-weight:600;margin-top:0.15rem">Offline POD vs. Server Replan</span>
+                  <span class="font-mono wp-subtext exception-outlet" style="display:block;font-size:0.75rem;margin-top:0.15rem">OUT003 Fresh Marine Drive</span>
+                </td>
+                <td>
+                  <span class="wp-flag wp-flag-warning"><i data-lucide="wifi-off"></i> Sync Conflict</span>
+                </td>
+                <td>
+                  <span class="font-mono" style="display:block;font-size:0.75rem;font-weight:600">VEH037</span>
+                  <span class="wp-subtext" style="font-size:0.7rem">Route R025229 · Kamal Silva</span>
+                </td>
+                <td><span class="wp-window-pill"><i data-lucide="clock"></i> 06:14 AM</span></td>
+                <td><span class="wp-state-text wp-state-warning">High</span></td>
+                <td><span class="font-mono" style="font-size:0.75rem;font-weight:600;color:var(--wp-info)">Conflict #4092</span></td>
+                <td>
+                  <button type="button" class="wp-btn wp-btn-primary exception-action" data-wp-drawer-open="reconcile-drawer" style="font-size:0.7rem;padding:0.35rem 0.65rem">
+                    Reconcile
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-exception-id="EX-0015" data-type="window" data-severity="medium" data-drawer="window-drawer">
+                <td>
+                  <strong class="font-mono exception-id" style="display:block;font-size:0.8rem">EX-0015</strong>
+                  <span class="exception-title" style="display:block;font-size:0.8rem;font-weight:600;margin-top:0.15rem">Mall Dock Window Breach</span>
+                  <span class="font-mono wp-subtext exception-outlet" style="display:block;font-size:0.75rem;margin-top:0.15rem">OUT015 Style One Galle Face</span>
+                </td>
+                <td>
+                  <span class="wp-flag wp-flag-info"><i data-lucide="clock"></i> Window Risk</span>
+                </td>
+                <td>
+                  <span class="font-mono" style="display:block;font-size:0.75rem;font-weight:600">Mall Dock A003</span>
+                  <span class="wp-subtext" style="font-size:0.7rem">Window 09:00 – 11:00</span>
+                </td>
+                <td><span class="wp-window-pill"><i data-lucide="clock"></i> 07:15 AM</span></td>
+                <td><span class="wp-state-text wp-state-muted">Medium</span></td>
+                <td><span class="font-mono" style="font-size:0.75rem;font-weight:600;color:var(--wp-warning)">ETA +22 min</span></td>
+                <td>
+                  <button type="button" class="wp-btn wp-btn-primary exception-action" data-wp-drawer-open="window-drawer" style="font-size:0.7rem;padding:0.35rem 0.65rem">
+                    Review Window
+                  </button>
+                </td>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- View 2: Incident Cluster Cards -->
+        <div id="exception-cards-view" class="wp-corridor-grid wp-hidden">
+          <div class="wp-corridor-card" data-exception-id="EX-0042" data-type="shortfall" data-severity="critical" data-drawer="shortfall-drawer">
+            <div>
+              <div class="wp-eyebrow-row" style="margin-bottom:0.5rem">
+                <span class="wp-flag wp-flag-error"><i data-lucide="package-x"></i> Shortfall</span>
+                <span class="wp-flag wp-flag-warning">Gate Hold</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem">
+                <img src="assets/products/milk-bottle.jpg" class="wp-product-thumb" alt="Milk">
+                <div>
+                  <h3 class="wp-headline-sm font-mono" style="margin:0 0 0.15rem">EX-0042</h3>
+                  <p class="wp-subtext font-mono" style="margin:0;font-size:0.75rem">OUT004 Fresh · Bay 04</p>
+                </div>
+              </div>
+              <p class="wp-subtext" style="font-size:0.8rem;margin:0 0 0.75rem">
+                <strong>Pre-Departure Shortfall</strong>: 3 chilled cases (<span class="font-mono">SKU-CH-MILK-1L</span>) missing at pick face. Loader Priya Fernando · <span class="font-mono">VEH004</span>.
+              </p>
+              <div class="wp-payload-cell" style="margin-bottom:0.75rem">
+                <div class="wp-flex-between font-mono" style="font-size:0.75rem">
+                  <span>137 / 140 loaded</span>
+                  <span style="color:var(--wp-error);font-weight:700">3 short</span>
+                </div>
+                <div class="wp-payload-bar-track"><div class="wp-payload-bar-fill" style="width:97.8%;background:var(--wp-success)"></div></div>
+              </div>
+            </div>
+            <div class="wp-flex-between" style="padding-top:0.75rem;border-top:1px solid var(--wp-border-sub);font-size:0.75rem">
+              <span class="wp-window-pill"><i data-lucide="clock"></i> 04:42 AM</span>
+              <button type="button" class="wp-btn wp-btn-primary exception-action" data-wp-drawer-open="shortfall-drawer" style="font-size:0.7rem;padding:0.35rem 0.65rem">Resolve</button>
+            </div>
+          </div>
+
+          <div class="wp-corridor-card" data-exception-id="EX-4092" data-type="sync" data-severity="high" data-drawer="reconcile-drawer">
+            <div>
+              <div class="wp-eyebrow-row" style="margin-bottom:0.5rem">
+                <span class="wp-flag wp-flag-warning"><i data-lucide="wifi-off"></i> Sync Conflict</span>
+                <span class="font-mono" style="font-size:0.75rem;font-weight:600;color:var(--wp-info)">Conflict #4092</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem">
+                <span class="wp-avatar" style="width:2.5rem;height:2.5rem;font-size:0.75rem">KS</span>
+                <div>
+                  <h3 class="wp-headline-sm font-mono" style="margin:0 0 0.15rem">EX-4092</h3>
+                  <p class="wp-subtext font-mono" style="margin:0;font-size:0.75rem">OUT003 Fresh · VEH037</p>
+                </div>
+              </div>
+              <p class="wp-subtext" style="font-size:0.8rem;margin:0 0 0.75rem">
+                <strong>Offline POD vs. Server Replan</strong>: Driver Kamal Silva signed digital POD at OUT003 while offline; server had already automated a re-route.
+              </p>
+            </div>
+            <div class="wp-flex-between" style="padding-top:0.75rem;border-top:1px solid var(--wp-border-sub);font-size:0.75rem">
+              <span class="wp-window-pill"><i data-lucide="clock"></i> 06:14 AM</span>
+              <button type="button" class="wp-btn wp-btn-primary exception-action" data-wp-drawer-open="reconcile-drawer" style="font-size:0.7rem;padding:0.35rem 0.65rem">Reconcile</button>
+            </div>
+          </div>
+
+          <div class="wp-corridor-card" data-exception-id="EX-0015" data-type="window" data-severity="medium" data-drawer="window-drawer">
+            <div>
+              <div class="wp-eyebrow-row" style="margin-bottom:0.5rem">
+                <span class="wp-flag wp-flag-info"><i data-lucide="clock"></i> Window Risk</span>
+                <span class="font-mono" style="font-size:0.75rem;font-weight:600;color:var(--wp-warning)">ETA +22 min</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem">
+                <img src="assets/products/retail-apparel.jpg" class="wp-product-thumb" alt="Apparel">
+                <div>
+                  <h3 class="wp-headline-sm font-mono" style="margin:0 0 0.15rem">EX-0015</h3>
+                  <p class="wp-subtext font-mono" style="margin:0;font-size:0.75rem">OUT015 Style · Mall Dock</p>
+                </div>
+              </div>
+              <p class="wp-subtext" style="font-size:0.8rem;margin:0 0 0.75rem">
+                <strong>Mall Dock Window Breach</strong>: One Galle Face Mall Dock · window <span class="font-mono">09:00 – 11:00</span>. A003 corridor congestion projects arrival at 11:08 AM.
+              </p>
+            </div>
+            <div class="wp-flex-between" style="padding-top:0.75rem;border-top:1px solid var(--wp-border-sub);font-size:0.75rem">
+              <span class="wp-window-pill"><i data-lucide="clock"></i> 07:15 AM</span>
+              <button type="button" class="wp-btn wp-btn-primary exception-action" data-wp-drawer-open="window-drawer" style="font-size:0.7rem;padding:0.35rem 0.65rem">Review Window</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="wp-flex-between" style="margin-top:1.5rem">
+          <span class="wp-subtext font-mono" style="font-size:0.8rem">Showing 3 open incidents · Click any row or card to open resolution drawer</span>
+          <a href="dispatcher-allocation.html" class="wp-btn wp-btn-primary">
+            <span>Return to Allocation Board</span>
+            <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+      </main>
+
+      <!-- Stage Footer -->
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up Reconciliation Drawer (Offset from Left Nav) -->
+  <div class="wp-drawer-backdrop" id="reconcile-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Sync Reconciliation Bottom Sheet</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Stop 3 · OUT003 Fresh Colombo</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="reconcile-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="wp-drawer-body">
+        <p class="wp-subtext" style="margin:0 0 1.25rem">
+          Side-by-side reconciliation between Driver Kamal's offline signed proof of delivery and the remote server replan.
+        </p>
+
+        <div class="wp-split wp-split--mb">
+          <!-- Driver Local Device Record -->
+          <div class="wp-subpanel" style="padding:1.25rem;border-color:rgba(22, 163, 74, 0.4);background:#FAFCFA">
+            <div class="wp-flex-between" style="margin-bottom:0.5rem">
+              <span class="wp-label" style="color:var(--wp-success)">Driver Device Record (Offline)</span>
+              <span class="font-mono wp-subtext" style="font-size:0.75rem">06:14 SLST</span>
+            </div>
+            <strong style="font-size:1rem;color:var(--wp-heading)">Stop 3 Delivered &amp; Signed</strong>
+            <p class="wp-subtext" style="font-size:0.8rem;margin:0.25rem 0 0.75rem">
+              Receiver signed by: <strong>S. Perera (Store Lead)</strong> · 45/45 Items verified
+            </p>
+            <div class="font-mono wp-subpanel" style="padding:0.6rem;background:#FFFFFF;font-size:0.7rem;text-align:center">
+              DIGITAL SIGNATURE HASH: SHA256-88a4b29c
+            </div>
+          </div>
+
+          <!-- Dispatcher Server Record -->
+          <div class="wp-subpanel" style="padding:1.25rem;border-color:rgba(220, 38, 38, 0.3);background:#FCFAFA">
+            <div class="wp-flex-between" style="margin-bottom:0.5rem">
+              <span class="wp-label" style="color:var(--wp-error)">Central Server Dispatch State</span>
+              <span class="font-mono wp-subtext" style="font-size:0.75rem">06:02 SLST</span>
+            </div>
+            <strong style="font-size:1rem;color:var(--wp-heading)">Stop Unassigned (Simulated Replan)</strong>
+            <p class="wp-subtext" style="font-size:0.8rem;margin:0.25rem 0 0.75rem">
+              Automated replan suggested deferral to Trip 2 due to coastal route delay.
+            </p>
+            <div class="font-mono wp-subpanel" style="padding:0.6rem;background:#FFFFFF;font-size:0.7rem;text-align:center">
+              SERVER QUEUE: PENDING RE-ALLOCATION
+            </div>
+          </div>
+        </div>
+
+        <div class="wp-panel" style="padding:1rem;background:#F9F9F8;margin-bottom:1.25rem">
+          <span class="wp-label" style="display:block;margin-bottom:0.25rem">Recommended Dispatcher Decision</span>
+          <p class="wp-subtext" style="font-size:0.8rem;margin:0">
+            Field delivery was executed physically and verified by customer. Accepting driver POD updates central ERP inventory.
+          </p>
+        </div>
+
+        <div class="wp-subpanel" style="padding:1rem;margin-bottom:1.25rem;border-color:rgba(220, 38, 38, 0.25)">
+          <div class="wp-flex-between" style="margin-bottom:0.5rem">
+            <span class="wp-label" style="color:var(--wp-error)">Cold-Chain Reefer Sensor #VEH037</span>
+            <span class="wp-flag wp-flag-error"><i data-lucide="thermometer-snowflake"></i> +7.2°C Peak</span>
+          </div>
+          <p class="wp-subtext" style="font-size:0.8rem;margin:0">
+            Temperature breach at 05:42 SLST (peak +7.2°C). Sensor recovered to +3.8°C at 06:18 SLST after door reseal. Cargo quarantine review recommended.
+          </p>
+        </div>
+
+        <div class="wp-subpanel" style="padding:0.85rem 1rem;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <strong style="font-size:0.9rem">Kamal Silva</strong>
+            <p class="wp-subtext" style="font-size:0.75rem;margin:0.15rem 0 0">Driver · VEH037 (R025229)</p>
+          </div>
+          <button type="button" class="wp-btn wp-btn-ghost" style="padding:0.35rem 0.75rem;font-size:0.75rem">Call In-Cab</button>
+        </div>
+      </div>
+
+      <div class="wp-drawer-footer">
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="reconcile-drawer">Maintain Server Replan</button>
+        <button type="button" class="wp-btn wp-btn-primary" data-wp-drawer-close="reconcile-drawer">Accept Driver POD &amp; Commit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up Shortfall Drawer -->
+  <div class="wp-drawer-backdrop" id="shortfall-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Warehouse Discrepancy</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Shortfall Resolution: Stop 2</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="shortfall-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="wp-drawer-body">
+        <p class="wp-subtext" style="margin:0 0 1.25rem">
+          Loader Priya flagged 3 cases of Fresh Milk missing at dock pick face. Confirm departure policy before sealing vehicle.
+        </p>
+
+        <div class="wp-subpanel" style="padding:1rem;margin-bottom:1.25rem">
+          <div class="wp-flex-between" style="margin-bottom:0.75rem">
+            <span class="wp-label">Bay 04 Loading Discrepancy</span>
+            <span class="wp-flag wp-flag-warning">3 Cases Missing</span>
+          </div>
+          <div class="wp-flex-between font-mono" style="font-size:0.8rem;margin-bottom:0.4rem">
+            <span>137 Verified Loaded</span>
+            <span style="color:var(--wp-error);font-weight:700">3 Shortfall (140 Planned)</span>
+          </div>
+          <div style="height:10px;border-radius:var(--radius-pill);display:flex;overflow:hidden;background:#F0F0EE">
+            <div style="width:97.8%;background:var(--wp-success)"></div>
+            <div style="width:2.2%;background:var(--wp-error)"></div>
+          </div>
+        </div>
+
+        <div class="wp-split">
+          <div>
+            <div class="wp-subpanel" style="padding:1.25rem;border-color:rgba(220, 38, 38, 0.3)">
+              <div class="wp-flex-between">
+                <div style="display:flex;align-items:center;gap:0.75rem">
+                  <img src="assets/products/milk-bottle.jpg" class="wp-product-thumb" alt="Milk">
+                  <div>
+                    <span class="wp-label" style="color:var(--wp-error)">Reported Item</span>
+                    <div style="font-size:0.95rem;font-weight:700">Pasteurized Fresh Milk 1L</div>
+                    <div class="font-mono wp-subtext" style="font-size:0.75rem">SKU-CH-MILK-1L</div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div class="font-mono" style="font-size:1.25rem;font-weight:700;color:var(--wp-error)">-3 Cases</div>
+                  <span class="wp-subtext" style="font-size:0.75rem">117 / 120 loaded</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <span class="wp-label" style="display:block;margin-bottom:0.5rem">Select Resolution Action</span>
+            <div style="display:flex;flex-direction:column;gap:0.75rem">
+              <label class="wp-subpanel" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem;cursor:pointer">
+                <input type="radio" name="shortfall-action" value="dispatch_short" checked>
+                <div>
+                  <strong style="font-size:0.85rem">Dispatch with Shortage Note</strong>
+                  <p class="wp-subtext" style="font-size:0.75rem;margin:0">Store invoice automatically credit-adjusted for 3 missing cases.</p>
+                  <p class="wp-subtext" style="font-size:0.72rem;margin:0.35rem 0 0;color:var(--wp-muted)">Impact: leave now, 3 cases short · mall window for OUT015 holds · store receipt is short.</p>
+                </div>
+              </label>
+              <label class="wp-subpanel" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem;cursor:pointer">
+                <input type="radio" name="shortfall-action" value="pull_reserve">
+                <div>
+                  <strong style="font-size:0.85rem">Pull from Reserve Cold Buffer (10m delay)</strong>
+                  <p class="wp-subtext" style="font-size:0.75rem;margin:0">Forklift retrieves 3 cases from overflow reefer chamber.</p>
+                  <p class="wp-subtext" style="font-size:0.72rem;margin:0.35rem 0 0;color:var(--wp-muted)">Impact: hold Bay 04 ~12 min · keeps OUT004 whole · pushes OUT015 dock A003 past 09:00.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="wp-subpanel" style="padding:0.85rem 1rem;margin-top:1.25rem;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <strong style="font-size:0.9rem">Priya Fernando</strong>
+            <p class="wp-subtext" style="font-size:0.75rem;margin:0.15rem 0 0">Dock Bay 04 · Peliyagoda</p>
+          </div>
+          <button type="button" class="wp-btn wp-btn-ghost" style="padding:0.35rem 0.75rem;font-size:0.75rem">Radio Bay</button>
+        </div>
+      </div>
+
+      <div class="wp-drawer-footer">
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="shortfall-drawer">Cancel</button>
+        <button type="button" class="wp-btn wp-btn-primary" data-wp-drawer-close="shortfall-drawer">Confirm &amp; Issue Gate Pass</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Window Risk Drawer -->
+  <div class="wp-drawer-backdrop" id="window-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Mall Dock Window</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">EX-0015 · Window Breach Risk</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="window-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="wp-drawer-body">
+        <p class="wp-subtext" style="margin:0 0 1rem">
+          OUT015 Style One Galle Face · Mall Dock A003 · allowed window <span class="font-mono">09:00 – 11:00</span>. Corridor congestion projects arrival at <span class="font-mono">11:08</span> (+22 min).
+        </p>
+      </div>
+      <div class="wp-drawer-footer">
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="window-drawer">Maintain Sequence</button>
+        <a href="dispatcher-allocation.html" class="wp-btn wp-btn-primary">Re-sequence Route</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="wp-command-dialog">
+    <div class="wp-command-input-wrap">
+      <i data-lucide="search"></i>
+      <span class="wp-command-query">pay</span>
+    </div>
+    <div class="wp-command-hint">Search for pay</div>
+    <div class="wp-command-results">
+      <div class="wp-command-group-label">Pages</div>
+      <div class="wp-command-item selected">
+        <i data-lucide="home"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Mission Control</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="layout-grid"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Fleet Allocation</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gfa</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="list-ordered"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Order Queue</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">goq</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-circle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Exceptions</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gex</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="package-check"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Warehouse Dock</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gwd</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="truck"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Driver Route</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdr</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="store"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Store Portal</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsp</kbd>
+        </div>
+      </div>
+      <div class="wp-command-group-label">Actions</div>
+      <div class="wp-command-item">
+        <i data-lucide="check-circle-2"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Publish Daily Plan</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="plus"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">New Order</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gno</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="scan-barcode"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Scan Barcode</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsb</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="clock"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Deferral Rules</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdf</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-triangle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Report Shortfall</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grs</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="refresh-cw"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Refresh Telemetry</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grt</kbd>
+        </div>
+      </div>
+    </div>
+    <div class="wp-command-footer">
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↵</kbd> to select</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↑</kbd> <kbd class="wp-kbd">↓</kbd> to navigate</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+    </div>
+  </div>
+</div>
+  <script src="assets/degradation-sync.js"></script>
+  <script>
+(function () {
+  var storeEl = document.getElementById('disp-deg-store');
+  var storeCopy = {
+    offline: 'ETA frozen, driver offline, last update 6:12 AM',
+    queued: 'ETA frozen, driver offline, last update 6:12 AM',
+    syncing: 'Updating delivery status…',
+    synced: 'Delivered 6:38 AM',
+    conflict: 'Delivery completed, planning record pending update'
+  };
+  DegSync.init({
+    defaultState: 'offline',
+    onStateChange: function (state) {
+      if (storeEl && storeCopy[state]) storeEl.textContent = storeCopy[state];
+    }
+  });
+})();
+  </script>
+  <script src="assets/site.js?v=15"></script>
+</body>
+</html>

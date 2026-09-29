@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Agent</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=14">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+        <nav class="wp-sidebar-nav" data-wp-nav-root aria-label="Main Navigation"></nav>
+      </div>
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%"></div>
+      </div>
+    </aside>
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Waypoint Agent</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right"></div>
+      </header>
+      <main class="wp-main wp-agent-page">
+        <div class="wp-agent-shell">
+          <div class="screen-sync-states wp-agent-deg-states" data-wp-agent-deg-tabs aria-label="Agent degradation states">
+            <a href="agent.html" class="screen-sync-state" data-agent-deg="ready">Ready</a>
+            <a href="agent.html?state=offline" class="screen-sync-state" data-agent-deg="offline">Offline</a>
+            <a href="agent.html?state=unavailable" class="screen-sync-state" data-agent-deg="unavailable">Model unavailable</a>
+          </div>
+          <section class="wp-agent-chat" data-wp-agent-chat aria-label="Agent conversation">
+            <header class="wp-agent-chat-head">
+              <div class="wp-agent-chat-avatar" aria-hidden="true">
+                <i data-lucide="bot"></i>
+              </div>
+              <div>
+                <h1 class="wp-agent-chat-title">Waypoint Agent</h1>
+                <p class="wp-agent-chat-status" data-wp-agent-page-status>Ready to help with chat or voice</p>
+              </div>
+            </header>
+            <div class="wp-agent-thread" data-wp-agent-thread aria-live="polite"></div>
+            <form class="wp-agent-composer" data-wp-agent-composer>
+              <input
+                class="wp-input"
+                type="text"
+                data-wp-agent-input
+                placeholder="Message Waypoint Agent…"
+                autocomplete="off"
+                aria-label="Message the agent"
+              >
+              <button type="button" class="wp-btn wp-btn-outline wp-agent-mic" data-wp-agent-mic aria-label="Ask with voice" aria-pressed="false">
+                <i data-lucide="mic"></i>
+              </button>
+              <button type="submit" class="wp-btn wp-btn-primary" aria-label="Send message">
+                <i data-lucide="arrow-up"></i>
+              </button>
+            </form>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+  <div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="wp-command-dialog">
+      <div class="wp-command-input-wrap">
+        <i data-lucide="search"></i>
+        <span class="wp-command-query">Search</span>
+      </div>
+      <div class="wp-command-hint">Jump to any screen</div>
+      <div class="wp-command-results" data-wp-command-results></div>
+      <div class="wp-command-footer">
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+      </div>
+    </div>
+  </div>
+  <script src="assets/site.js?v=14"></script>
+</body>
+</html>

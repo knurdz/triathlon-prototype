@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Delivery Tracking</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=11">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+        <nav class="wp-sidebar-nav" data-wp-nav-root aria-label="Main Navigation"></nav>
+      </div>
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%"></div>
+      </div>
+    </aside>
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Delivery Tracking</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right">
+          <a href="degradation.html" class="wp-btn wp-btn-outline" style="padding:0.45rem 0.85rem;font-size:0.75rem">Degradation hub</a>
+          <a href="store-receipt.html" class="wp-btn wp-btn-primary" style="padding:0.45rem 0.85rem;font-size:0.75rem">Confirm receipt</a>
+        </div>
+      </header>
+      <main class="wp-main">
+        <div class="screen-page-header">
+          <div>
+            <span class="wp-label">SM-07 · DEL-88401 · OUT003</span>
+            <h1 class="wp-headline-md" style="margin:0.35rem 0 0">Delivery tracking</h1>
+            <p class="wp-subtext">Anjali Jayawardena · Fresh Galle Rd · VEH037</p>
+          </div>
+          <span class="mc-pill mc-pill-info" id="store-status-pill">Driver ~12 min away</span>
+        </div>
+
+        <div class="screen-sync-states" role="tablist" aria-label="Delivery states">
+          <button type="button" class="screen-sync-state" data-deg-state="offline" role="tab">1 Offline</button>
+          <button type="button" class="screen-sync-state" data-deg-state="queued" role="tab">2 Queued</button>
+          <button type="button" class="screen-sync-state" data-deg-state="syncing" role="tab">3 Syncing</button>
+          <button type="button" class="screen-sync-state" data-deg-state="synced" role="tab">4 Synced</button>
+          <button type="button" class="screen-sync-state" data-deg-state="resolved" role="tab">5 Resolved</button>
+        </div>
+
+        <div class="deg-store-dual">
+          <section class="wp-panel screen-panel" aria-label="Desktop store view">
+            <span class="wp-label">Desktop 1280</span>
+            <div id="store-desktop-panel">
+              <div data-deg-panel="offline">
+                <div class="wp-corridor-map wp-corridor-map--compact" style="margin:0.75rem 0 1rem;opacity:0.65">
+                  <svg viewBox="0 0 600 280" class="wp-corridor-map__svg" role="img" aria-label="VEH037 last known position">
+                    <rect width="600" height="280" fill="#EEF3F6"/>
+                    <path d="M40,180 Q200,160 360,170 T560,185" fill="none" stroke="#C5D0D8" stroke-width="5"/>
+                    <circle cx="280" cy="175" r="10" fill="#94A3B8"/>
+                    <text x="280" y="158" fill="#64748B" font-family="JetBrains Mono" font-size="9" font-weight="700" text-anchor="middle">VEH037</text>
+                    <text x="480" y="165" fill="#1A1C1C" font-family="JetBrains Mono" font-size="9" font-weight="700" text-anchor="middle">OUT003</text>
+                  </svg>
+                </div>
+                <div class="screen-timeline">
+                  <div class="screen-timeline-step is-done"><strong>Order confirmed</strong><p class="wp-subtext">Mon 29 Sep · 14:22 SLST</p></div>
+                  <div class="screen-timeline-step is-done"><strong>Loaded at depot</strong><p class="wp-subtext">Tue 30 Sep · 04:48 AM</p></div>
+                  <div class="screen-timeline-step is-now"><strong>In transit · VEH037</strong><p class="wp-subtext">ETA frozen · last update 6:12 AM</p></div>
+                  <div class="screen-timeline-step"><strong>Delivered</strong><p class="wp-subtext">Pending POD</p></div>
+                </div>
+                <p class="deg-status-note is-offline">Driver offline, last update 6:12 AM. ETA frozen while Kamal reconnects in Kandy corridor.</p>
+              </div>
+              <div data-deg-panel="queued" hidden>
+                <div class="screen-timeline" style="margin-top:0.75rem">
+                  <div class="screen-timeline-step is-done"><strong>Order confirmed</strong><p class="wp-subtext">Mon 29 Sep · 14:22 SLST</p></div>
+                  <div class="screen-timeline-step is-done"><strong>Loaded at depot</strong><p class="wp-subtext">Tue 30 Sep · 04:48 AM</p></div>
+                  <div class="screen-timeline-step is-now"><strong>In transit · VEH037</strong><p class="wp-subtext">ETA frozen · last update 6:12 AM</p></div>
+                  <div class="screen-timeline-step"><strong>Delivered</strong><p class="wp-subtext">Pending POD</p></div>
+                </div>
+                <p class="deg-status-note is-offline">No store change, driver actions queued locally.</p>
+              </div>
+              <div data-deg-panel="syncing" hidden>
+                <div class="screen-timeline" style="margin-top:0.75rem">
+                  <div class="screen-timeline-step is-done"><strong>Order confirmed</strong><p class="wp-subtext">Mon 29 Sep · 14:22 SLST</p></div>
+                  <div class="screen-timeline-step is-done"><strong>Loaded at depot</strong><p class="wp-subtext">Tue 30 Sep · 04:48 AM</p></div>
+                  <div class="screen-timeline-step is-now"><strong>Updating…</strong><p class="wp-subtext">Sync in progress from driver device</p></div>
+                  <div class="screen-timeline-step"><strong>Delivered</strong><p class="wp-subtext">Pending confirmation</p></div>
+                </div>
+                <p class="deg-status-note is-syncing">Updating delivery status…</p>
+              </div>
+              <div data-deg-panel="synced" hidden>
+                <div class="screen-timeline" style="margin-top:0.75rem">
+                  <div class="screen-timeline-step is-done"><strong>Order confirmed</strong><p class="wp-subtext">Mon 29 Sep · 14:22 SLST</p></div>
+                  <div class="screen-timeline-step is-done"><strong>Loaded at depot</strong><p class="wp-subtext">Tue 30 Sep · 04:48 AM</p></div>
+                  <div class="screen-timeline-step is-done"><strong>In transit · VEH037</strong><p class="wp-subtext">Arrived 6:35 AM</p></div>
+                  <div class="screen-timeline-step is-now"><strong>Delivered</strong><p class="wp-subtext">Delivered 6:38 AM · POD received</p></div>
+                </div>
+                <p class="deg-status-note is-delivered">Delivered 6:38 AM</p>
+              </div>
+              <div data-deg-panel="resolved" hidden>
+                <div class="screen-timeline" style="margin-top:0.75rem">
+                  <div class="screen-timeline-step is-done"><strong>Order confirmed</strong><p class="wp-subtext">Mon 29 Sep · 14:22 SLST</p></div>
+                  <div class="screen-timeline-step is-done"><strong>Loaded at depot</strong><p class="wp-subtext">Tue 30 Sep · 04:48 AM</p></div>
+                  <div class="screen-timeline-step is-done"><strong>Delivered</strong><p class="wp-subtext">Delivered 6:38 AM · POD accepted</p></div>
+                  <div class="screen-timeline-step is-now"><strong>Planning updated</strong><p class="wp-subtext">Dispatcher accepted delivery as served</p></div>
+                </div>
+                <p class="deg-status-note is-resolved">Your order was delivered. Planning was updated after sync.</p>
+              </div>
+            </div>
+            <div class="screen-list" style="margin-top:1rem">
+              <div class="screen-list-item"><span>Dairy cases</span><span class="font-mono">42</span></div>
+              <div class="screen-list-item"><span>Curd trays</span><span class="font-mono">18</span></div>
+            </div>
+          </section>
+
+          <section aria-label="Mobile store view">
+            <p class="deg-store-mobile-label">Mobile 375</p>
+            <div class="deg-phone-frame">
+              <div class="deg-phone-screen" id="store-mobile-panel">
+                <div class="deg-phone-notch" aria-hidden="true"></div>
+                <div data-deg-panel="offline">
+                  <span class="wp-offline-banner stale" style="width:100%;justify-content:center;margin-bottom:0.75rem;font-size:0.7rem">
+                    <i data-lucide="wifi-off"></i>
+                    Driver offline
+                  </span>
+                  <h2 class="wp-headline-sm" style="margin:0">DEL-88401</h2>
+                  <p class="wp-subtext" style="font-size:0.75rem;margin:0.25rem 0 0">ETA frozen · 6:12 AM</p>
+                  <p class="deg-status-note is-offline" style="margin-top:1rem">Driver offline, last update 6:12 AM</p>
+                </div>
+                <div data-deg-panel="queued" hidden>
+                  <h2 class="wp-headline-sm" style="margin:0">DEL-88401</h2>
+                  <p class="wp-subtext" style="font-size:0.75rem;margin:0.25rem 0 0">ETA frozen · 6:12 AM</p>
+                  <p class="deg-status-note is-offline" style="margin-top:1rem">No change while driver queues actions</p>
+                </div>
+                <div data-deg-panel="syncing" hidden>
+                  <span class="wp-offline-banner syncing" style="width:100%;justify-content:center;margin-bottom:0.75rem;font-size:0.7rem">
+                    <i data-lucide="refresh-cw"></i>
+                    Updating…
+                  </span>
+                  <h2 class="wp-headline-sm" style="margin:0">DEL-88401</h2>
+                  <p class="deg-status-note is-syncing" style="margin-top:1rem">Syncing delivery status</p>
+                </div>
+                <div data-deg-panel="synced" hidden>
+                  <span class="wp-offline-banner synced" style="width:100%;justify-content:center;margin-bottom:0.75rem;font-size:0.7rem">
+                    <i data-lucide="check-circle"></i>
+                    Delivered
+                  </span>
+                  <h2 class="wp-headline-sm" style="margin:0">DEL-88401</h2>
+                  <p class="deg-status-note is-delivered" style="margin-top:1rem">Delivered 6:38 AM</p>
+                </div>
+                <div data-deg-panel="resolved" hidden>
+                  <span class="wp-offline-banner synced" style="width:100%;justify-content:center;margin-bottom:0.75rem;font-size:0.7rem">
+                    <i data-lucide="check-circle"></i>
+                    Delivered
+                  </span>
+                  <h2 class="wp-headline-sm" style="margin:0">DEL-88401</h2>
+                  <p class="deg-status-note is-resolved" style="margin-top:1rem">Your order was delivered. Planning was updated after sync.</p>
+                  <a href="store-receipt.html" class="wp-btn wp-btn-primary" style="width:100%;margin-top:0.75rem;justify-content:center;font-size:0.75rem">Confirm receipt</a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <p style="margin-top:1.25rem">
+          <a href="driver-sync.html" class="mc-link">Driver sync view →</a>
+          <span class="wp-subtext" style="margin:0 0.5rem">·</span>
+          <a href="dispatcher-exceptions.html?state=conflict" class="mc-link">Dispatcher conflict →</a>
+        </p>
+      </main>
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+  <div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="wp-command-dialog">
+      <div class="wp-command-input-wrap">
+        <i data-lucide="search"></i>
+        <span class="wp-command-query">Search</span>
+      </div>
+      <div class="wp-command-hint">Jump to any screen</div>
+      <div class="wp-command-results" data-wp-command-results></div>
+      <div class="wp-command-footer">
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+      </div>
+    </div>
+  </div>
+  <script src="assets/degradation-sync.js"></script>
+  <script>
+(function () {
+  var pill = document.getElementById('store-status-pill');
+  var pillCopy = {
+    offline: 'ETA frozen',
+    queued: 'ETA frozen',
+    syncing: 'Updating…',
+    synced: 'Delivered 6:38 AM',
+    resolved: 'Delivered · planning updated'
+  };
+  var pillClass = {
+    offline: 'mc-pill mc-pill-muted',
+    queued: 'mc-pill mc-pill-muted',
+    syncing: 'mc-pill mc-pill-info',
+    synced: 'mc-pill mc-pill-ok',
+    resolved: 'mc-pill mc-pill-ok'
+  };
+  function syncMobilePanels(state) {
+    document.querySelectorAll('#store-mobile-panel [data-deg-panel]').forEach(function (panel) {
+      panel.hidden = panel.getAttribute('data-deg-panel') !== state;
+    });
+  }
+  DegSync.init({
+    defaultState: 'offline',
+    onStateChange: function (state) {
+      if (pill && pillCopy[state]) {
+        pill.textContent = pillCopy[state];
+        pill.className = pillClass[state] || 'mc-pill';
+      }
+      syncMobilePanels(state);
+    }
+  });
+})();
+  </script>
+  <script src="assets/site.js?v=11"></script>
+</body>
+</html>

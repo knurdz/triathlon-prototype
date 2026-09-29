@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Offline & Sync</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=11">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+        <nav class="wp-sidebar-nav" data-wp-nav-root aria-label="Main Navigation"></nav>
+      </div>
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%"></div>
+      </div>
+    </aside>
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Offline & Sync</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right">
+          <a href="degradation.html" class="wp-btn wp-btn-outline" style="padding:0.45rem 0.85rem;font-size:0.75rem">All scenarios</a>
+          <a href="dispatcher-exceptions.html?state=conflict" class="wp-btn wp-btn-primary" style="padding:0.45rem 0.85rem;font-size:0.75rem">Conflict inbox</a>
+        </div>
+      </header>
+      <main class="wp-main">
+        <div class="screen-page-header">
+          <div>
+            <span class="wp-label">DRV-06 · Degradation hi-fi</span>
+            <h1 class="wp-headline-md" style="margin:0.35rem 0 0">Kandy hill-country blackout</h1>
+            <p class="wp-subtext">Kamal Silva · VEH037 · Route R025229 · OUT003 stop 2</p>
+          </div>
+        </div>
+
+        <div class="screen-sync-states" role="tablist" aria-label="Sync states">
+          <button type="button" class="screen-sync-state" data-deg-state="offline" role="tab" aria-pressed="false">1 Offline</button>
+          <button type="button" class="screen-sync-state" data-deg-state="queued" role="tab" aria-pressed="false">2 Queued</button>
+          <button type="button" class="screen-sync-state" data-deg-state="syncing" role="tab" aria-pressed="false">3 Syncing</button>
+          <button type="button" class="screen-sync-state" data-deg-state="synced" role="tab" aria-pressed="false">4 Synced</button>
+          <button type="button" class="screen-sync-state" data-deg-state="conflict" role="tab" aria-pressed="false">5 Conflict</button>
+        </div>
+
+        <div class="screen-grid-2">
+          <section class="wp-panel screen-panel">
+            <span class="wp-label">Mobile 375 · Driver device</span>
+            <div class="deg-phone-frame" style="margin-top:0.75rem">
+              <div class="deg-phone-screen">
+                <div class="deg-phone-notch" aria-hidden="true"></div>
+
+                <div data-deg-panel="offline">
+                  <span class="wp-offline-banner stale" style="width:100%;justify-content:center;margin-bottom:0.75rem">
+                    <i data-lucide="wifi-off"></i>
+                    You're offline. Deliveries will sync when signal returns.
+                  </span>
+                  <h2 class="wp-headline-sm" style="margin:0">Route R025229</h2>
+                  <p class="wp-subtext" style="font-size:0.75rem;margin:0.25rem 0 0">Last sync 6:12 AM · 2 stops remaining</p>
+                  <div class="deg-route-mini">
+                    <div class="deg-route-stop is-done"><span>Stop 1 · OUT001</span><span class="mc-status-chip mc-status-chip-ok">Delivered</span></div>
+                    <div class="deg-route-stop is-active"><span>Stop 2 · OUT003</span><span class="mc-status-chip mc-status-chip-muted">In progress</span></div>
+                    <div class="deg-route-stop"><span>Stop 3 · OUT004</span><span class="mc-status-chip mc-status-chip-muted">Pending</span></div>
+                  </div>
+                  <p class="wp-subtext" style="margin-top:1rem;font-size:0.75rem">Stops remain completable offline. POD and issues queue locally.</p>
+                  <a href="driver-pod.html" class="wp-btn wp-btn-primary" style="width:100%;margin-top:0.75rem;justify-content:center">Complete stop · Capture POD</a>
+                </div>
+
+                <div data-deg-panel="queued" hidden>
+                  <span class="wp-offline-banner stale" style="width:100%;justify-content:center;margin-bottom:0.75rem">
+                    <i data-lucide="wifi-off"></i>
+                    Offline: 3 actions queued
+                  </span>
+                  <h2 class="wp-headline-sm" style="margin:0">Sync queue</h2>
+                  <div class="screen-list" style="margin-top:0.75rem">
+                    <div class="screen-list-item"><span>POD · OUT003 · 6:18 AM</span><span class="mc-status-chip mc-status-chip-muted">Queued</span></div>
+                    <div class="screen-list-item"><span>POD · OUT001 · 6:35 AM</span><span class="mc-status-chip mc-status-chip-muted">Queued</span></div>
+                    <div class="screen-list-item"><span>Issue · OUT004 · 6:40 AM</span><span class="mc-status-chip mc-status-chip-muted">Queued</span></div>
+                  </div>
+                </div>
+
+                <div data-deg-panel="syncing" hidden>
+                  <span class="wp-offline-banner syncing" style="width:100%;justify-content:center;margin-bottom:0.75rem">
+                    <i data-lucide="refresh-cw"></i>
+                    Syncing 2 of 3…
+                  </span>
+                  <h2 class="wp-headline-sm" style="margin:0">Uploading actions</h2>
+                  <div class="screen-list" style="margin-top:0.75rem">
+                    <div class="screen-list-item"><span>POD · OUT003 · 6:18 AM</span><span class="mc-status-chip mc-status-chip-info">Syncing</span></div>
+                    <div class="screen-list-item"><span>POD · OUT001 · 6:35 AM</span><span class="mc-status-chip mc-status-chip-info">Syncing</span></div>
+                    <div class="screen-list-item"><span>Issue · OUT004 · 6:40 AM</span><span class="mc-status-chip mc-status-chip-muted">Waiting</span></div>
+                  </div>
+                </div>
+
+                <div data-deg-panel="synced" hidden>
+                  <span class="wp-offline-banner synced" style="width:100%;justify-content:center;margin-bottom:0.75rem">
+                    <i data-lucide="check-circle"></i>
+                    Synced · all timestamps updated
+                  </span>
+                  <h2 class="wp-headline-sm" style="margin:0">Sync complete</h2>
+                  <div class="screen-list" style="margin-top:0.75rem">
+                    <div class="screen-list-item"><span>POD · OUT003 · 6:18 AM</span><span class="mc-status-chip mc-status-chip-ok">Synced 6:37 AM</span></div>
+                    <div class="screen-list-item"><span>POD · OUT001 · 6:35 AM</span><span class="mc-status-chip mc-status-chip-ok">Synced 6:37 AM</span></div>
+                    <div class="screen-list-item"><span>Issue · OUT004 · 6:40 AM</span><span class="mc-status-chip mc-status-chip-ok">Synced 6:38 AM</span></div>
+                  </div>
+                </div>
+
+                <div data-deg-panel="conflict" hidden>
+                  <span class="wp-offline-banner conflict" style="width:100%;justify-content:center;margin-bottom:0.75rem">
+                    <i data-lucide="alert-triangle"></i>
+                    Conflict on stop 2, dispatcher deferred while you were offline
+                  </span>
+                  <h2 class="wp-headline-sm" style="margin:0">OUT003 needs review</h2>
+                  <p class="wp-subtext" style="font-size:0.78rem;margin:0.5rem 0 0">Server deferred at 6:00 AM. Your POD at 6:35 AM is queued for dispatcher decision.</p>
+                  <div class="deg-conflict-card">
+                    <strong style="font-size:0.85rem">Conflict: OUT003</strong>
+                    <p class="wp-subtext" style="font-size:0.75rem;margin:0.35rem 0 0">Deferred 6:00 AM server · driver POD 6:35 AM offline</p>
+                    <div class="deg-conflict-actions">
+                      <a href="dispatcher-exceptions.html?state=conflict" class="wp-btn wp-btn-primary" style="font-size:0.75rem">Open dispatcher card</a>
+                      <a href="store-tracking.html?state=resolved" class="wp-btn wp-btn-outline" style="font-size:0.75rem">Store view</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="wp-panel screen-panel">
+            <span class="wp-label">Cross-role context</span>
+            <h2 class="wp-headline-sm" style="margin-top:0.5rem">Dispatcher · DISP-07</h2>
+            <div id="driver-context-disp" class="deg-dispatcher-route">
+              <p class="wp-subtext" style="margin:0;font-size:0.8rem">Last sync 6:12 AM · pending stops on route R025229</p>
+              <div class="deg-route-stops">
+                <div class="deg-route-stop is-done"><span>Stop 1 · OUT001</span><span class="mc-status-chip mc-status-chip-ok">Delivered</span></div>
+                <div class="deg-route-stop is-pending"><span>Stop 2 · OUT003</span><span class="mc-status-chip mc-status-chip-muted">Pending</span></div>
+                <div class="deg-route-stop is-pending"><span>Stop 3 · OUT004</span><span class="mc-status-chip mc-status-chip-muted">Pending</span></div>
+              </div>
+            </div>
+            <h2 class="wp-headline-sm" style="margin-top:1.25rem">Store · SM-07</h2>
+            <p class="wp-subtext" id="driver-context-store" style="font-size:0.8rem">ETA frozen, driver offline, last update 6:12 AM</p>
+            <a href="degradation.html" class="mc-link" style="display:inline-block;margin-top:1rem">Degradation hub →</a>
+          </section>
+        </div>
+      </main>
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+  <div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="wp-command-dialog">
+      <div class="wp-command-input-wrap">
+        <i data-lucide="search"></i>
+        <span class="wp-command-query">Search</span>
+      </div>
+      <div class="wp-command-hint">Jump to any screen</div>
+      <div class="wp-command-results" data-wp-command-results></div>
+      <div class="wp-command-footer">
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+      </div>
+    </div>
+  </div>
+  <script src="assets/degradation-sync.js"></script>
+  <script>
+(function () {
+  var disp = document.getElementById('driver-context-disp');
+  var store = document.getElementById('driver-context-store');
+  var context = {
+    offline: {
+      disp: '<p class="wp-subtext" style="margin:0;font-size:0.8rem">Last sync 6:12 AM · stops 2–3 pending on R025229</p><div class="deg-route-stops"><div class="deg-route-stop is-done"><span>Stop 1 · OUT001</span><span class="mc-status-chip mc-status-chip-ok">Delivered</span></div><div class="deg-route-stop is-pending"><span>Stop 2 · OUT003</span><span class="mc-status-chip mc-status-chip-muted">Pending</span></div><div class="deg-route-stop is-pending"><span>Stop 3 · OUT004</span><span class="mc-status-chip mc-status-chip-muted">Pending</span></div></div>',
+      store: 'ETA frozen, driver offline, last update 6:12 AM'
+    },
+    queued: {
+      disp: '<p class="wp-subtext" style="margin:0;font-size:0.8rem">Awaiting reconnect · inbox idle</p>',
+      store: 'ETA frozen, driver offline, last update 6:12 AM'
+    },
+    syncing: {
+      disp: '<p class="wp-subtext" style="margin:0;font-size:0.8rem">Spinner on route R025229</p><div class="deg-route-stops"><div class="deg-route-stop is-done"><span>Stop 1 · OUT001</span><span class="mc-status-chip mc-status-chip-ok">Delivered</span></div><div class="deg-route-stop is-syncing"><span>Stop 2 · OUT003</span><span class="mc-status-chip mc-status-chip-info">Syncing</span></div><div class="deg-route-stop is-syncing"><span>Stop 3 · OUT004</span><span class="mc-status-chip mc-status-chip-info">Syncing</span></div></div>',
+      store: 'Updating delivery status…'
+    },
+    synced: {
+      disp: '<p class="wp-subtext" style="margin:0;font-size:0.8rem">Stops 2–3 checkmarked</p><div class="deg-route-stops"><div class="deg-route-stop is-done"><span>Stop 1 · OUT001</span><span class="mc-status-chip mc-status-chip-ok">Delivered</span></div><div class="deg-route-stop is-done"><span>Stop 2 · OUT003</span><span class="mc-status-chip mc-status-chip-ok">Delivered</span></div><div class="deg-route-stop is-done"><span>Stop 3 · OUT004</span><span class="mc-status-chip mc-status-chip-ok">Delivered</span></div></div>',
+      store: 'Delivered 6:38 AM'
+    },
+    conflict: {
+      disp: '<p class="wp-subtext" style="margin:0;font-size:0.8rem">OUT003: Accept delivery or escalate</p><div class="deg-conflict-card"><strong style="font-size:0.85rem">Conflict: OUT003</strong><p class="wp-subtext" style="font-size:0.75rem;margin:0.35rem 0 0">Deferred at 6:00 AM, driver POD at 6:35 AM offline</p><a href="dispatcher-exceptions.html?state=conflict" class="wp-btn wp-btn-primary" style="font-size:0.75rem;margin-top:0.5rem">Accept delivery</a></div>',
+      store: 'Delivery completed, planning record pending update'
+    }
+  };
+  DegSync.init({
+    defaultState: 'offline',
+    onStateChange: function (state) {
+      if (context[state] && disp) disp.innerHTML = context[state].disp;
+      if (context[state] && store) store.textContent = context[state].store;
+    }
+  });
+})();
+  </script>
+  <script src="assets/site.js?v=11"></script>
+</body>
+</html>

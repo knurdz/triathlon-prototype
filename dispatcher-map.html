@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Fleet Live Map</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=15">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+        <nav class="wp-sidebar-nav" data-wp-nav-root aria-label="Main Navigation"></nav>
+      </div>
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%"></div>
+      </div>
+    </aside>
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Fleet Live Map</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right"><a href="driver-route.html" class="wp-btn wp-btn-outline" style="padding:0.45rem 0.85rem;font-size:0.75rem">Driver view</a></div>
+      </header>
+      <main class="wp-main" id="fleet-map-root">
+
+        <div class="screen-page-header">
+          <div>
+            <span class="wp-label">DISP-08 · Today only</span>
+            <h1 class="wp-headline-md" style="margin:0.35rem 0 0" data-fleet-selected-title>VEH037 · R025229 · 2 / 4 stops</h1>
+            <p class="wp-subtext">All vehicles on corridor · marker shape by chassis type</p>
+          </div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+            <span class="wp-chassis-chip wp-chassis-chip--truck">Dry truck</span>
+            <span class="wp-chassis-chip wp-chassis-chip--truck_freezer">Truck + freezer</span>
+            <span class="wp-chassis-chip wp-chassis-chip--van_freezer">Van + freezer</span>
+          </div>
+        </div>
+
+        <div class="wp-fleet-map-layout">
+          <section class="wp-panel screen-panel" style="padding:0;overflow:hidden">
+            <div class="wp-corridor-map">
+              <svg viewBox="0 0 800 420" class="wp-corridor-map__svg" role="img" aria-label="Fleet map showing all active vehicles on Colombo coastal corridor">
+                <defs>
+                  <pattern id="fleetGrid" width="32" height="32" patternUnits="userSpaceOnUse">
+                    <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#D7E2EA" stroke-width="0.75"/>
+                  </pattern>
+                </defs>
+                <rect width="800" height="420" fill="#EEF3F6"/>
+                <rect width="800" height="420" fill="url(#fleetGrid)" opacity="0.55"/>
+                <path d="M0,300 Q200,260 400,280 T800,310 L800,420 L0,420 Z" fill="#D5E6EE"/>
+                <path d="M60,200 Q280,180 520,195 T760,210" fill="none" stroke="#C5D0D8" stroke-width="6" stroke-linecap="round"/>
+                <path d="M80,200 L240,190" stroke="#16A34A" stroke-width="4" fill="none"/>
+                <path d="M240,190 Q400,185 560,200" stroke="#377a8b" stroke-width="4" fill="none"/>
+                <path d="M560,200 Q680,210 760,215" stroke="#CBD5E1" stroke-width="4" fill="none" stroke-dasharray="8 6"/>
+
+                <g class="wp-fleet-map-vehicle" data-vehicle="VEH004" transform="translate(96, 188)">
+                  <rect class="marker-bg" x="-14" y="-10" width="28" height="20" rx="4" fill="#377a8b"/>
+                  <text fill="#fff" font-family="JetBrains Mono" font-size="7" font-weight="700" text-anchor="middle" y="3">004</text>
+                </g>
+                <g class="wp-fleet-map-vehicle" data-vehicle="VEH002" transform="translate(176, 232)">
+                  <circle class="marker-bg" r="12" fill="#16a34a"/>
+                  <text fill="#fff" font-family="JetBrains Mono" font-size="7" font-weight="700" text-anchor="middle" y="3">002</text>
+                </g>
+                <g class="wp-fleet-map-vehicle is-selected" data-vehicle="VEH037" transform="translate(272, 186)">
+                  <circle class="marker-bg" r="16" fill="none" stroke="#377a8b" stroke-width="2" opacity="0.4"><animate attributeName="r" values="12;22;12" dur="2.2s" repeatCount="indefinite"/></circle>
+                  <circle class="marker-bg" r="11" fill="#16a34a"/>
+                  <text fill="#fff" font-family="JetBrains Mono" font-size="7" font-weight="700" text-anchor="middle" y="3">037</text>
+                </g>
+                <g class="wp-fleet-map-vehicle" data-vehicle="VEH001" transform="translate(416, 192)">
+                  <rect class="marker-bg" x="-14" y="-10" width="28" height="20" rx="4" fill="#64748b"/>
+                  <text fill="#fff" font-family="JetBrains Mono" font-size="7" font-weight="700" text-anchor="middle" y="3">001</text>
+                </g>
+                <g class="wp-fleet-map-vehicle" data-vehicle="VEH003" transform="translate(544, 198)">
+                  <rect class="marker-bg" x="-14" y="-10" width="28" height="20" rx="4" fill="#377a8b"/>
+                  <text fill="#fff" font-family="JetBrains Mono" font-size="7" font-weight="700" text-anchor="middle" y="3">003</text>
+                </g>
+                <g class="wp-fleet-map-vehicle" data-vehicle="VEH005" transform="translate(624, 128)">
+                  <rect class="marker-bg" x="-14" y="-10" width="28" height="20" rx="4" fill="#377a8b" opacity="0.5"/>
+                  <text fill="#fff" font-family="JetBrains Mono" font-size="7" font-weight="700" text-anchor="middle" y="3">005</text>
+                </g>
+              </svg>
+            </div>
+          </section>
+
+          <aside class="wp-panel screen-panel">
+            <h2 class="wp-headline-sm">Fleet roster</h2>
+            <p class="decision-note wp-subtext" style="margin:0.35rem 0 0;font-size:0.72rem;padding:0.5rem 0.65rem">Critical stop OUT003 · learned dwell 22 min · 6 min slack</p>
+            <div class="wp-fleet-list" style="margin-top:0.75rem">
+              <button type="button" class="wp-fleet-list-item active" data-vehicle="VEH037">
+                <span class="wp-fleet-list-marker wp-fleet-list-marker--van_freezer">V</span>
+                <span>
+                  <strong class="font-mono" style="font-size:0.8rem">VEH037</strong>
+                  <span class="wp-subtext" style="display:block;font-size:0.72rem">Kamal Silva · 2/4 stops</span>
+                </span>
+                <span class="wp-fleet-online-dot is-online" title="Online"></span>
+              </button>
+              <button type="button" class="wp-fleet-list-item" data-vehicle="VEH001">
+                <span class="wp-fleet-list-marker wp-fleet-list-marker--truck">T</span>
+                <span>
+                  <strong class="font-mono" style="font-size:0.8rem">VEH001</strong>
+                  <span class="wp-subtext" style="display:block;font-size:0.72rem">Sunil Mendis · 3/6 stops</span>
+                </span>
+                <span class="wp-fleet-online-dot is-online" title="Online"></span>
+              </button>
+              <button type="button" class="wp-fleet-list-item" data-vehicle="VEH003">
+                <span class="wp-fleet-list-marker wp-fleet-list-marker--truck_freezer">R</span>
+                <span>
+                  <strong class="font-mono" style="font-size:0.8rem">VEH003</strong>
+                  <span class="wp-subtext" style="display:block;font-size:0.72rem">Ruwan Dias · 1/5 stops</span>
+                </span>
+                <span class="wp-fleet-online-dot is-online" title="Online"></span>
+              </button>
+              <button type="button" class="wp-fleet-list-item" data-vehicle="VEH002">
+                <span class="wp-fleet-list-marker wp-fleet-list-marker--van_freezer">V</span>
+                <span>
+                  <strong class="font-mono" style="font-size:0.8rem">VEH002</strong>
+                  <span class="wp-subtext" style="display:block;font-size:0.72rem">Niroshan · 4/4 done</span>
+                </span>
+                <span class="wp-fleet-online-dot is-offline" title="Offline"></span>
+              </button>
+              <button type="button" class="wp-fleet-list-item" data-vehicle="VEH004">
+                <span class="wp-fleet-list-marker wp-fleet-list-marker--truck_freezer">R</span>
+                <span>
+                  <strong class="font-mono" style="font-size:0.8rem">VEH004</strong>
+                  <span class="wp-subtext" style="display:block;font-size:0.72rem">Loading · Bay 04</span>
+                </span>
+                <span class="wp-fleet-online-dot is-online" title="Online"></span>
+              </button>
+              <button type="button" class="wp-fleet-list-item" data-vehicle="VEH005">
+                <span class="wp-fleet-list-marker wp-fleet-list-marker--truck_freezer">R</span>
+                <span>
+                  <strong class="font-mono" style="font-size:0.8rem">VEH005</strong>
+                  <span class="wp-subtext" style="display:block;font-size:0.72rem">Planned · Trip 2</span>
+                </span>
+                <span class="wp-fleet-online-dot is-online" title="Online"></span>
+              </button>
+            </div>
+
+            <h3 class="wp-headline-sm" style="margin-top:1.25rem">Stop status</h3>
+            <div class="wp-fleet-stop-list screen-list"></div>
+            <a href="dispatcher-outlet.html" class="mc-link" style="display:inline-block;margin-top:1rem">Outlet detail →</a>
+          </aside>
+        </div>
+      </main>
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+  <div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="wp-command-dialog">
+      <div class="wp-command-input-wrap">
+        <i data-lucide="search"></i>
+        <span class="wp-command-query">Search</span>
+      </div>
+      <div class="wp-command-hint">Jump to any screen</div>
+      <div class="wp-command-results" data-wp-command-results></div>
+      <div class="wp-command-footer">
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+      </div>
+    </div>
+  </div>
+  
+  <script src="assets/site.js?v=15"></script>
+</body>
+</html>

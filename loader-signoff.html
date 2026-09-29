@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Departure Sign-off</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=9">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+        <nav class="wp-sidebar-nav" data-wp-nav-root aria-label="Main Navigation"></nav>
+      </div>
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%"></div>
+      </div>
+    </aside>
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Departure Sign-off</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right"><a href="driver-route.html" class="wp-btn wp-btn-primary" style="padding:0.45rem 0.85rem;font-size:0.75rem">Unlock driver route</a></div>
+      </header>
+      <main class="wp-main">
+
+        <div class="screen-page-header">
+          <div>
+            <span class="wp-label">LOAD-05</span>
+            <h1 class="wp-headline-md" style="margin:0.35rem 0 0">Ready for departure</h1>
+          </div>
+        </div>
+        <div class="screen-grid-2">
+        <section class="wp-panel screen-panel">
+          <dl class="wp-specs-list">
+            <dt>Vehicle</dt><dd class="font-mono">VEH037 · Trip 1</dd>
+            <dt>Loader</dt><dd>Priya Fernando</dd>
+            <dt>Stops loaded</dt><dd>4 / 4 reverse sequence complete</dd>
+            <dt>Timestamp</dt><dd class="font-mono">04:48 AM SLST</dd>
+          </dl>
+          <p class="wp-subtext" style="margin-top:1rem">Checklist locked after sign-off · driver route R025229 activated.</p>
+          <div style="display:flex;gap:0.5rem;margin-top:1.25rem">
+            <button type="button" class="wp-btn wp-btn-primary">Ready for departure</button>
+            <a href="loader-dock.html" class="wp-btn wp-btn-outline">Review checklist</a>
+          </div>
+        </section>
+          <aside class="wp-panel screen-panel">
+            <span class="wp-label">Unlocks next</span>
+            <h2 class="wp-headline-sm">Driver route R025229</h2>
+            <p class="wp-subtext">Sign-off locks the reverse checklist and releases Kamal Silva’s run sheet.</p>
+            <a href="driver-route.html" class="wp-btn wp-btn-primary" style="margin-top:1rem">Open driver route</a>
+          </aside>
+        </div>
+      </main>
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+  <div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="wp-command-dialog">
+      <div class="wp-command-input-wrap">
+        <i data-lucide="search"></i>
+        <span class="wp-command-query">Search</span>
+      </div>
+      <div class="wp-command-hint">Jump to any screen</div>
+      <div class="wp-command-results" data-wp-command-results></div>
+      <div class="wp-command-footer">
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+      </div>
+    </div>
+  </div>
+  
+  <script src="assets/site.js?v=9"></script>
+</body>
+</html>

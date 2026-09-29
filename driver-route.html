@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Driver In-Cab Console</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=15">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <!-- Persistent Left Sidebar Navigation (250px) -->
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+
+        <nav class="wp-sidebar-nav" aria-label="Main Navigation">
+          <div class="wp-sidebar-nav-group-title">Overview</div>
+          <a href="index.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="home"></i>
+            <span>Mission Control</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Dispatch &amp; Planning</div>
+          <a href="dispatcher-allocation.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="layout-grid"></i>
+            <span>Fleet Allocation</span>
+          </a>
+          <a href="dispatcher-queue.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="list-ordered"></i>
+            <span>Order Queue</span>
+          </a>
+          <a href="dispatcher-exceptions.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="alert-circle"></i>
+            <span>Exceptions</span>
+            <span class="nav-badge">3</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Field Operations</div>
+          <a href="loader-dock.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="package-check"></i>
+            <span>Warehouse Dock</span>
+          </a>
+          <a href="driver-route.html" data-wp-nav class="wp-sidebar-nav-item active">
+            <i data-lucide="truck"></i>
+            <span>Driver Route</span>
+          </a>
+          <a href="store-portal.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="store"></i>
+            <span>Store Portal</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%">
+          <span class="wp-avatar" style="background:#FEF3C7;color:var(--wp-warning)">KS</span>
+          <div style="overflow:hidden">
+            <div class="wp-title-md" style="font-size:0.8rem;white-space:nowrap;text-overflow:ellipsis;overflow:hidden">Kamal Silva</div>
+            <div class="wp-subtext" style="font-size:0.7rem">Fleet Driver · VEH037</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Stage -->
+    <div class="wp-stage route-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Driver Route</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right">
+          <a href="dispatcher-exceptions.html" class="wp-icon-btn" title="System alerts" aria-label="Notifications" style="position:relative">
+            <i data-lucide="bell"></i>
+            <span style="position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--wp-error);border-radius:50%"></span>
+          </a>
+        </div>
+      </header>
+
+      <main class="wp-main route-main">
+        <div class="store-page-header">
+          <div>
+            <div class="store-page-meta">
+              <span class="wp-state wp-state-success">Route Active</span>
+              <span class="font-mono store-outlet-id">VEH037</span>
+            </div>
+            <h1 class="wp-headline-md store-page-title">Route R025229</h1>
+            <p class="wp-subtext store-page-subtitle">Coastal corridor · Nissan Cabstar · 1 of 4 stops delivered</p>
+          </div>
+          <div class="route-tools">
+            <a href="driver-sync.html?state=offline" class="wp-offline-banner stale" id="network-banner" aria-live="polite" title="Open offline sync">
+              <i data-lucide="wifi-off"></i>
+              <span data-network-label>Offline: 3 queued</span>
+            </a>
+            <span class="cab-pill">
+              <i data-lucide="database"></i>
+              Sync <strong class="font-mono" id="sync-queue-count">3</strong>
+            </span>
+            <a href="driver-pod.html" class="wp-btn wp-btn-primary">Capture POD</a>
+            <details class="wp-more">
+              <summary>More</summary>
+              <div class="wp-more-panel">
+                <a href="driver-stop.html" class="wp-btn wp-btn-outline">Stop detail</a>
+                <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-open="stop-detail-drawer">Details</button>
+                <button type="button" class="wp-btn wp-btn-primary" data-wp-drawer-open="pod-drawer">POD drawer</button>
+                <a href="driver-issue.html" class="wp-btn wp-btn-outline">Report Issue</a>
+                <a href="driver-sync.html?state=offline" class="wp-btn wp-btn-outline">Offline sync</a>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <div class="route-layout">
+          <section class="dock-sequence-panel route-sheet" id="route-sheet" aria-label="Delivery run sheet">
+            <div class="store-panel-head">
+              <div>
+                <span class="wp-label">Run sheet</span>
+                <h2 class="wp-headline-sm store-panel-title">Stops on this corridor</h2>
+              </div>
+              <span class="wp-subtext store-panel-count">4 stops</span>
+            </div>
+
+            <div class="cab-search">
+              <i data-lucide="search"></i>
+              <input type="search" id="cab-search" class="wp-input" placeholder="Search delivery or outlet" aria-label="Search delivery or outlet">
+            </div>
+
+            <div class="cab-chips" role="group" aria-label="Filter stops">
+              <button type="button" class="cab-chip is-on" data-cab-filter="all" aria-pressed="true">All</button>
+              <button type="button" class="cab-chip" data-cab-filter="active" aria-pressed="false">Active</button>
+              <button type="button" class="cab-chip" data-cab-filter="done" aria-pressed="false">Done</button>
+              <button type="button" class="cab-chip" data-cab-filter="later" aria-pressed="false">Later</button>
+            </div>
+
+            <div class="cab-stops">
+              <article class="cab-stop is-done" data-status="done" data-query="del-88401 out001 fresh galle rd">
+                <button type="button" class="cab-stop-head" aria-expanded="false">
+                  <span class="cab-seq">1</span>
+                  <span class="cab-stop-copy">
+                    <span class="wp-label">DEL-88401</span>
+                    <strong>OUT001 · Fresh Galle Rd</strong>
+                    <span class="wp-access-chip wp-access-chip--van_only" style="margin-top:0.2rem"><i data-lucide="truck"></i> van_only</span>
+                    <span class="cab-stop-meta">POD signed 05:32 · 1,840 kg</span>
+                  </span>
+                  <span class="wp-badge wp-badge-success">Delivered</span>
+                </button>
+                <div class="cab-stop-body">
+                  <div class="cab-facts">
+                    <div class="cab-fact">
+                      <span class="wp-label">Receiver</span>
+                      <strong>Nimal Perera</strong>
+                    </div>
+                    <div class="cab-fact">
+                      <span class="wp-label">Handover</span>
+                      <strong>05:32 SLST</strong>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="cab-stop is-now is-open" data-status="active" data-query="del-88402 out002 duplication road colombo 03">
+                <button type="button" class="cab-stop-head" aria-expanded="true">
+                  <span class="cab-seq">2</span>
+                  <span class="cab-stop-copy">
+                    <span class="wp-label">DEL-88402</span>
+                    <strong>OUT002 · Duplication Rd</strong>
+                    <span class="wp-access-chip wp-access-chip--van_only" style="margin-top:0.2rem"><i data-lucide="truck"></i> van_only</span>
+                    <span class="cab-stop-meta">14 min · window closes 08:00</span>
+                  </span>
+                  <span class="wp-badge wp-badge-info">In Transit</span>
+                </button>
+                <div class="cab-stop-body">
+                  <div class="cab-cargo">
+                    <figure>
+                      <img src="assets/products/bakery-bread.jpg" alt="Bakery bread bundles">
+                      <figcaption><strong>Bread</strong>80 bundles · ambient</figcaption>
+                    </figure>
+                    <figure>
+                      <img src="assets/products/organic-rice.jpg" alt="Organic rice sacks">
+                      <figcaption><strong>Rice</strong>45 sacks · 2,100 kg</figcaption>
+                    </figure>
+                  </div>
+
+                  <div class="cab-slack">
+                    <div class="cab-slack-top">
+                      <span class="wp-label">Window slack</span>
+                      <strong class="font-mono">1h 42m</strong>
+                    </div>
+                    <div class="cab-meter" aria-hidden="true"><span style="width:68%"></span></div>
+                    <div class="cab-slack-ends">
+                      <span>Now 06:18</span>
+                      <span>Closes 08:00</span>
+                    </div>
+                  </div>
+
+                  <div class="cab-facts">
+                    <div class="cab-fact">
+                      <span class="wp-label">Access</span>
+                      <strong>Van bay · 3.2 m</strong>
+                    </div>
+                    <div class="cab-fact">
+                      <span class="wp-label">Volume</span>
+                      <strong>5.4 m³</strong>
+                    </div>
+                  </div>
+
+                  <div class="cab-receiver">
+                    <span class="wp-avatar" style="background:#E0F2FE;color:var(--wp-info)">AJ</span>
+                    <div>
+                      <span class="wp-label">Store receiver</span>
+                      <p>Anjali Jayawardena</p>
+                    </div>
+                    <div class="cab-receiver-actions">
+                      <button type="button" class="wp-icon-btn" aria-label="Call receiver"><i data-lucide="phone"></i></button>
+                      <button type="button" class="wp-icon-btn" aria-label="Message receiver"><i data-lucide="message-circle"></i></button>
+                    </div>
+                  </div>
+
+                </div>
+              </article>
+
+              <article class="cab-stop" data-status="later" data-query="del-88403 out003 marine drive">
+                <button type="button" class="cab-stop-head" aria-expanded="false">
+                  <span class="cab-seq">3</span>
+                  <span class="cab-stop-copy">
+                    <span class="wp-label">DEL-88403</span>
+                    <strong>OUT003 · Marine Drive</strong>
+                    <span class="wp-access-chip wp-access-chip--street" style="margin-top:0.2rem"><i data-lucide="map-pin"></i> street</span>
+                    <span class="cab-stop-meta">6.7 km after OUT002 · chilled</span>
+                    <span class="decision-critical-chip"><i data-lucide="alert-triangle"></i> Critical stop · 6 min slack</span>
+                  </span>
+                  <span class="wp-badge">Scheduled</span>
+                </button>
+                <div class="cab-stop-body">
+                  <p class="decision-note" style="margin:0 0 0.75rem;font-size:0.72rem">A slip here misses the dock window · learned dwell 22 min at this curb.</p>
+                  <div class="cab-cargo">
+                    <figure>
+                      <img src="assets/products/greek-yogurt.jpg" alt="Greek yogurt">
+                      <figcaption><strong>Yogurt</strong>Hold at +4°C</figcaption>
+                    </figure>
+                    <figure>
+                      <img src="assets/products/butter-cheese.jpg" alt="Butter and cheese">
+                      <figcaption><strong>Dairy</strong>Dock 09:30 window</figcaption>
+                    </figure>
+                  </div>
+                </div>
+              </article>
+
+              <article class="cab-stop" data-status="later" data-query="out010 colombo 03 fresh produce">
+                <button type="button" class="cab-stop-head" aria-expanded="false">
+                  <span class="cab-seq">4</span>
+                  <span class="cab-stop-copy">
+                    <span class="wp-label">OUT010</span>
+                    <strong>Colombo 03 · Produce</strong>
+                    <span class="cab-stop-meta">Last stop · 26.4 km from depot</span>
+                  </span>
+                  <span class="wp-badge">Scheduled</span>
+                </button>
+                <div class="cab-stop-body">
+                  <div class="cab-cargo">
+                    <figure>
+                      <img src="assets/products/fresh-produce.jpg" alt="Fresh produce">
+                      <figcaption><strong>Produce</strong>Ambient crates</figcaption>
+                    </figure>
+                    <figure>
+                      <img src="assets/products/milk-bottle.jpg" alt="Milk bottles">
+                      <figcaption><strong>Milk</strong>Chilled totes</figcaption>
+                    </figure>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <aside class="route-map-panel" aria-label="Live navigation">
+            <div class="store-panel-head">
+              <div>
+                <span class="wp-label">Colombo coastal corridor</span>
+                <h2 class="wp-headline-sm store-panel-title">Next turn · OUT002</h2>
+              </div>
+              <span class="wp-subtext store-panel-count">14 min</span>
+            </div>
+
+            <div class="wp-corridor-map cab-map">
+              <svg viewBox="0 0 1200 420" class="wp-corridor-map__svg cab-map-svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Coastal corridor map with vehicle VEH037 approaching OUT002">
+                <defs>
+                  <pattern id="cabGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#D7E2EA" stroke-width="0.75"></path>
+                  </pattern>
+                </defs>
+                <rect width="1200" height="420" fill="#EEF3F6"></rect>
+                <rect width="1200" height="420" fill="url(#cabGrid)" opacity="0.55"></rect>
+                <path d="M0,300 Q280,250 520,275 T1200,320 L1200,420 L0,420 Z" fill="#D5E6EE"></path>
+                <path d="M80,190 Q360,170 600,188 T1080,200" fill="none" stroke="#C5D0D8" stroke-width="8" stroke-linecap="round"></path>
+                <path d="M120,190 L300,182" stroke="#16A34A" stroke-width="6" fill="none" stroke-linecap="round"></path>
+                <path d="M300,182 Q410,174 520,168" stroke="#377a8b" stroke-width="6" fill="none" stroke-linecap="round"></path>
+                <path d="M520,168 Q720,178 950,198" stroke="#CBD5E1" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="8 6"></path>
+                <g transform="translate(120, 190)">
+                  <rect x="-16" y="-16" width="32" height="32" rx="6" fill="#1A1C1C"></rect>
+                  <text x="0" y="4" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" text-anchor="middle">DEP</text>
+                  <text x="0" y="-26" fill="#1A1C1C" font-family="Rubik, sans-serif" font-size="12" font-weight="700" text-anchor="middle">Peliyagoda Depot</text>
+                </g>
+                <g transform="translate(300, 182)">
+                  <circle r="12" fill="#16A34A"></circle>
+                  <path d="M-4,0 L-1,4 L5,-4" stroke="#FFF" stroke-width="2" fill="none"></path>
+                  <text x="0" y="-22" fill="#16A34A" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700" text-anchor="middle">OUT001 · Done</text>
+                </g>
+                <g transform="translate(410, 176)">
+                  <circle r="18" fill="#377a8b" opacity="0.16"></circle>
+                  <circle r="9" fill="#377a8b" stroke="#fff" stroke-width="2"></circle>
+                  <rect x="-30" y="-38" width="60" height="18" rx="4" fill="#1A1C1C"></rect>
+                  <text x="0" y="-26" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" text-anchor="middle">VEH037</text>
+                </g>
+                <g transform="translate(520, 168)">
+                  <circle r="18" fill="none" stroke="#377a8b" stroke-width="2" opacity="0.45">
+                    <animate attributeName="r" values="12;24;12" dur="2.2s" repeatCount="indefinite"></animate>
+                    <animate attributeName="opacity" values="0.55;0.1;0.55" dur="2.2s" repeatCount="indefinite"></animate>
+                  </circle>
+                  <circle r="12" fill="#377a8b"></circle>
+                  <circle r="5" fill="#FFFFFF"></circle>
+                  <text x="0" y="-28" fill="#377a8b" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" text-anchor="middle">OUT002 · Target</text>
+                  <text x="0" y="34" fill="#64748B" font-family="Nunito Sans, sans-serif" font-size="11" text-anchor="middle">Duplication Rd</text>
+                </g>
+                <g transform="translate(740, 182)">
+                  <circle r="9" fill="#94A3B8"></circle>
+                  <text x="0" y="-18" fill="#475569" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" text-anchor="middle">OUT003</text>
+                </g>
+                <g transform="translate(980, 200)">
+                  <circle r="9" fill="#94A3B8"></circle>
+                  <text x="0" y="-18" fill="#475569" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" text-anchor="middle">OUT010</text>
+                </g>
+              </svg>
+            </div>
+
+            <div class="route-next">
+              <span class="route-next-icon" aria-hidden="true"><i data-lucide="corner-up-right"></i></span>
+              <div>
+                <span class="wp-label">In 400 m</span>
+                <strong>Keep right onto Duplication Rd</strong>
+                <p>Van bay on the left · clearance 3.2 m</p>
+              </div>
+              <span class="route-next-eta">14 min</span>
+            </div>
+          </aside>
+        </div>
+      </main>
+
+      <!-- Stage Footer -->
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up Stop Detail Drawer -->
+  <div class="wp-drawer-backdrop" id="stop-detail-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Stop 2 · OUT002 Fresh Duplication Rd</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Current Stop Details</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="stop-detail-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="wp-drawer-body">
+        <div class="wp-split wp-split-subpanel">
+          <div>
+            <span class="wp-label" style="font-size:0.65rem">Window Deadline</span>
+            <p class="font-mono" style="font-size:1.15rem;font-weight:700;margin:0.2rem 0 0">08:00 AM SLST</p>
+            <span class="wp-subtext" style="font-size:0.75rem">1h 42m slack remaining</span>
+          </div>
+          <div>
+            <span class="wp-label" style="font-size:0.65rem">Road Access Rule</span>
+            <p class="wp-meta-inline" style="margin:0.2rem 0 0">Van only street loading</p>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;padding:0.75rem;background:#FDFCFB;border:1px solid var(--wp-border-sub);border-radius:var(--radius-sm)">
+          <div style="display:flex;gap:0.35rem">
+            <img src="assets/products/bakery-bread.jpg" class="wp-product-thumb" alt="Bread">
+            <img src="assets/products/organic-rice.jpg" class="wp-product-thumb" alt="Rice">
+          </div>
+          <div>
+            <strong style="font-size:0.85rem;display:block">Order DEL-88402 (2,100 kg · 5.4 m³)</strong>
+            <p class="wp-subtext" style="margin:0.15rem 0 0;font-size:0.8rem">
+              80 Bakery Bread Bundles &amp; 45 Dry Pulse Sacks · Ambient cargo ready for curbside offload
+            </p>
+          </div>
+        </div>
+
+        <div class="wp-panel" style="padding:1.75rem;margin-bottom:1.5rem">
+          <span class="wp-label" style="display:block;margin-bottom:0.75rem">Stop 2 Navigation Detail</span>
+          <h3 class="wp-title-md" style="margin:0 0 0.25rem">No. 42 Duplication Road, Colombo 03</h3>
+          <p class="wp-subtext" style="font-size:0.8rem;margin:0 0 1.25rem">Fresh Supermarket Retail Store Entrance</p>
+
+          <div class="wp-subpanel" style="padding:1rem;margin-bottom:1.25rem">
+            <span class="wp-label" style="font-size:0.65rem">Dock Constraints &amp; Access</span>
+            <ul style="margin:0.5rem 0 0;padding-left:1.15rem;font-size:0.8rem;line-height:1.5;color:var(--wp-subtext)">
+              <li>Street curb unloading bay restricted to vans only.</li>
+              <li>Clearance limitation: 3.2m height.</li>
+              <li>Store staff buzzer active at side door.</li>
+            </ul>
+          </div>
+
+          <div class="wp-subpanel" style="padding:1rem">
+            <div class="wp-flex-between">
+              <div>
+                <span class="wp-label" style="font-size:0.65rem">Store Receiver Contact</span>
+                <p class="font-laro" style="font-size:0.9rem;font-weight:700;margin:0.2rem 0 0">Anjali Jayawardena</p>
+              </div>
+              <button type="button" class="wp-btn wp-btn-ghost" style="padding:0.35rem 0.75rem;font-size:0.75rem">
+                <i data-lucide="phone"></i>
+                <span>Direct Dial</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="wp-panel" style="padding:1.5rem">
+          <div class="wp-flex-between" style="margin-bottom:0.75rem">
+            <span class="wp-label">In-Cab Reefer Telemetry</span>
+            <span class="wp-state wp-state-success">Stable</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <span class="wp-subtext" style="font-size:0.75rem">Chamber Temp</span>
+              <p class="font-mono" style="font-size:1.75rem;font-weight:700;color:var(--wp-primary);margin:0.2rem 0 0">+3.8°C</p>
+            </div>
+            <div style="text-align:right">
+              <span class="wp-subtext" style="font-size:0.75rem">Eco Fuel Telemetry</span>
+              <p class="font-mono" style="font-size:1.15rem;font-weight:700;margin:0.2rem 0 0">6.4 km/L</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up Proof of Delivery (POD) Drawer (Offset from Left Nav) -->
+  <div class="wp-drawer-backdrop" id="pod-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Delivery Handover</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Record POD: OUT002 Fresh Duplication Rd</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="pod-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="wp-drawer-body">
+        <p class="wp-subtext" style="margin:0 0 1.25rem">
+          Confirm item counts, capture dock handover photo, and collect receiver digital sign-off.
+        </p>
+
+        <div class="wp-split">
+          <div>
+            <div class="wp-subpanel" style="padding:0.85rem 1rem;margin-bottom:1.25rem">
+              <span class="wp-label" style="font-size:0.65rem;margin-bottom:0.5rem;display:block">Delivery Items Verification</span>
+              <div class="wp-check-row" style="border:none;padding:0.35rem 0;display:flex;align-items:center;gap:0.75rem">
+                <input type="checkbox" checked id="pod-qty-check" style="width:1.15rem;height:1.15rem;accent-color:var(--wp-primary)">
+                <img src="assets/products/bakery-bread.jpg" class="wp-product-thumb-sm" alt="Bread">
+                <label for="pod-qty-check" style="flex:1;cursor:pointer;font-size:0.825rem">
+                  <strong>Bakery Bread Loaves</strong> × 80 Bundles (Intact)
+                </label>
+              </div>
+              <div class="wp-check-row" style="border:none;padding:0.35rem 0;display:flex;align-items:center;gap:0.75rem">
+                <input type="checkbox" checked id="pod-qty-check-2" style="width:1.15rem;height:1.15rem;accent-color:var(--wp-primary)">
+                <img src="assets/products/organic-rice.jpg" class="wp-product-thumb-sm" alt="Rice">
+                <label for="pod-qty-check-2" style="flex:1;cursor:pointer;font-size:0.825rem">
+                  <strong>Organic Brown Rice</strong> × 45 Bags (Verified)
+                </label>
+              </div>
+            </div>
+
+            <div class="wp-field">
+              <label>Delivery Cargo Photo Capture</label>
+              <div class="wp-subpanel" style="padding:1.25rem;text-align:center;border-style:dashed;cursor:pointer">
+                <i data-lucide="camera" style="margin:0 auto 0.5rem;color:var(--wp-primary)"></i>
+                <p class="font-laro" style="font-size:0.85rem;font-weight:700;margin:0">Tap to capture outlet dock handover photo</p>
+                <span class="wp-subtext" style="font-size:0.75rem">Simulated camera attached · GPS stamped</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="wp-field">
+              <label for="receiver-name-input">Receiver Full Name</label>
+              <input type="text" id="receiver-name-input" class="wp-input" value="Anjali Jayawardena">
+            </div>
+
+            <div class="wp-field">
+              <label for="signature-pad">Store Receiver Digital Signature</label>
+              <canvas class="wp-signature-pad" id="signature-pad" style="height:90px"></canvas>
+              <button type="button" class="wp-btn wp-btn-ghost" id="clear-signature" style="font-size:0.75rem;padding:0.25rem 0.65rem;margin-top:0.35rem">Clear Signature</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wp-drawer-footer">
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="pod-drawer">Cancel</button>
+        <button type="button" class="wp-btn wp-btn-primary" data-wp-drawer-close="pod-drawer">
+          <i data-lucide="check-circle-2"></i>
+          <span>Submit &amp; Sign-Off POD</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up Issue Reporting Drawer (Offset from Left Nav) -->
+  <div class="wp-drawer-backdrop" id="issue-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Field Incident</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Report In-Transit Issue</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="issue-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="wp-drawer-body">
+        <div class="wp-split">
+          <div>
+            <div class="wp-field">
+              <label for="issue-type">Issue Category</label>
+              <select class="wp-select" id="issue-type">
+                <option>Traffic / Road Closure Delay</option>
+                <option>Store Dock Inaccessible</option>
+                <option>Receiver Not Present</option>
+                <option>Reefer Temperature Warning</option>
+              </select>
+            </div>
+
+            <div class="wp-subpanel" style="padding:1rem">
+              <span class="wp-label" style="display:block;margin-bottom:0.25rem">Dispatcher Link</span>
+              <p class="wp-subtext" style="font-size:0.75rem;margin:0">
+                Transmits high-priority event directly to Central Dispatcher Exception triage board.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <div class="wp-field">
+              <label for="issue-notes">Driver Observations</label>
+              <textarea class="wp-textarea" id="issue-notes" rows="4" placeholder="Detail cause of delay or barrier..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wp-drawer-footer">
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="issue-drawer">Cancel</button>
+        <button type="button" class="wp-btn wp-btn-primary" data-wp-drawer-close="issue-drawer">Transmit to Dispatcher</button>
+      </div>
+    </div>
+  </div>
+
+<div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="wp-command-dialog">
+    <div class="wp-command-input-wrap">
+      <i data-lucide="search"></i>
+      <span class="wp-command-query">pay</span>
+    </div>
+    <div class="wp-command-hint">Search for pay</div>
+    <div class="wp-command-results">
+      <div class="wp-command-group-label">Pages</div>
+      <div class="wp-command-item selected">
+        <i data-lucide="home"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Mission Control</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="layout-grid"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Fleet Allocation</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gfa</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="list-ordered"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Order Queue</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">goq</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-circle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Exceptions</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gex</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="package-check"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Warehouse Dock</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gwd</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="truck"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Driver Route</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdr</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="store"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Store Portal</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsp</kbd>
+        </div>
+      </div>
+      <div class="wp-command-group-label">Actions</div>
+      <div class="wp-command-item">
+        <i data-lucide="check-circle-2"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Publish Daily Plan</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="plus"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">New Order</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gno</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="scan-barcode"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Scan Barcode</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsb</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="clock"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Deferral Rules</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdf</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-triangle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Report Shortfall</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grs</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="refresh-cw"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Refresh Telemetry</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grt</kbd>
+        </div>
+      </div>
+    </div>
+    <div class="wp-command-footer">
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↵</kbd> to select</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↑</kbd> <kbd class="wp-kbd">↓</kbd> to navigate</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+    </div>
+  </div>
+</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sheet = document.querySelector('.cab-sheet');
+      if (!sheet) return;
+      const stops = () => sheet.querySelectorAll('.cab-stop');
+      const search = document.getElementById('cab-search');
+      let filter = 'all';
+
+      function apply() {
+        const query = (search && search.value ? search.value : '').trim().toLowerCase();
+        stops().forEach((stop) => {
+          const statusOk = filter === 'all' || stop.dataset.status === filter;
+          const text = (stop.dataset.query || '').toLowerCase();
+          stop.hidden = !(statusOk && text.includes(query));
+        });
+      }
+
+      sheet.querySelectorAll('[data-cab-filter]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          filter = btn.dataset.cabFilter;
+          sheet.querySelectorAll('[data-cab-filter]').forEach((chip) => {
+            const on = chip === btn;
+            chip.classList.toggle('is-on', on);
+            chip.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
+          apply();
+        });
+      });
+
+      if (search) search.addEventListener('input', apply);
+
+      sheet.querySelectorAll('.cab-stop-head').forEach((head) => {
+        head.addEventListener('click', () => {
+          const stop = head.closest('.cab-stop');
+          const willOpen = !stop.classList.contains('is-open');
+          stops().forEach((item) => {
+            item.classList.remove('is-open');
+            const button = item.querySelector('.cab-stop-head');
+            if (button) button.setAttribute('aria-expanded', 'false');
+          });
+          if (willOpen) {
+            stop.classList.add('is-open');
+            head.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    });
+  </script>
+  <script src="assets/site.js?v=15"></script>
+</body>
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Dispatcher Allocation Board</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=15">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <!-- Persistent Left Sidebar Navigation (250px) -->
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+
+        <nav class="wp-sidebar-nav" aria-label="Main Navigation">
+          <div class="wp-sidebar-nav-group-title">Overview</div>
+          <a href="index.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="home"></i>
+            <span>Mission Control</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Dispatch &amp; Planning</div>
+          <a href="dispatcher-allocation.html" data-wp-nav class="wp-sidebar-nav-item active">
+            <i data-lucide="layout-grid"></i>
+            <span>Fleet Allocation</span>
+          </a>
+          <a href="dispatcher-queue.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="list-ordered"></i>
+            <span>Order Queue</span>
+          </a>
+          <a href="dispatcher-exceptions.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="alert-circle"></i>
+            <span>Exceptions</span>
+            <span class="nav-badge">3</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Field Operations</div>
+          <a href="loader-dock.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="package-check"></i>
+            <span>Warehouse Dock</span>
+          </a>
+          <a href="driver-route.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="truck"></i>
+            <span>Driver Route</span>
+          </a>
+          <a href="store-portal.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="store"></i>
+            <span>Store Portal</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%">
+          <span class="wp-avatar">NP</span>
+          <div style="overflow:hidden">
+            <div class="wp-title-md" style="font-size:0.8rem;white-space:nowrap;text-overflow:ellipsis;overflow:hidden">Nimal Perera</div>
+            <div class="wp-subtext" style="font-size:0.7rem">Senior Dispatcher</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Stage -->
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Fleet Allocation</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right">
+          <a href="dispatcher-exceptions.html" class="wp-icon-btn" title="System alerts" aria-label="Notifications" style="position:relative">
+            <i data-lucide="bell"></i>
+            <span style="position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--wp-error);border-radius:50%"></span>
+          </a>
+          <button type="button" class="wp-btn wp-btn-primary" style="padding:0.45rem 0.85rem;font-size:0.75rem">
+            <i data-lucide="check-circle-2"></i>
+            <span>Publish Daily Plan</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="wp-main" id="allocation-board" data-wp-day-scope>
+        <!-- Action Header -->
+        <div class="wp-action-row">
+          <div class="wp-action-row__main">
+            <div class="wp-eyebrow-row" style="margin-bottom:0.25rem">
+              <span class="wp-label">Chassis Inspection</span>
+              <span class="wp-state wp-state-success">Operational</span>
+            </div>
+            <h1 class="wp-headline-md" id="veh-title" style="margin:0">VEH004: 16T Reefer Truck</h1>
+            <div class="wp-day-switcher" data-wp-day-switcher style="margin-top:0.75rem">
+              <button type="button" class="wp-day-btn active" data-day="today" aria-pressed="true">Today</button>
+              <button type="button" class="wp-day-btn" data-day="tomorrow" aria-pressed="false">Tomorrow planning <span class="wp-day-badge">142 orders</span></button>
+            </div>
+          </div>
+          <div class="wp-action-row__actions">
+            <details class="wp-more">
+              <summary>More</summary>
+              <div class="wp-more-panel">
+                <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-open="vehicle-specs-drawer" style="padding:0.45rem 0.85rem;font-size:0.75rem">
+                  <i data-lucide="settings-2"></i>
+                  <span>Vehicle Specs &amp; Constraints</span>
+                </button>
+              </div>
+            </details>
+            <div class="wp-subpanel" style="padding:0.4rem 0.85rem;display:flex;align-items:center;gap:0.75rem">
+              <span class="wp-label" style="font-size:0.7rem;margin:0">Next Dispatch Cycle:</span>
+              <span class="font-mono" style="font-weight:700;color:var(--wp-primary);font-size:0.85rem" data-wp-cutoff>00:00:00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fleet Allocation Status Tray -->
+        <div class="wp-panel wp-fleet-tray" style="margin-bottom:1.5rem;padding:1.25rem 1.5rem">
+          <div class="wp-flex-between" style="margin-bottom:1rem">
+            <div>
+              <span class="wp-label">Fleet Allocation Status</span>
+              <p class="wp-subtext" style="margin:0.25rem 0 0;font-size:0.8rem">Select vehicle chassis to inspect payload and constraints</p>
+            </div>
+            <div class="wp-flex-between wp-gap-sm">
+              <button type="button" class="wp-icon-btn" style="width:2rem;height:2rem" title="Search Fleet"><i data-lucide="search"></i></button>
+              <button type="button" class="wp-icon-btn" style="width:2rem;height:2rem" title="Filter Fleet"><i data-lucide="filter"></i></button>
+            </div>
+          </div>
+
+          <div class="wp-fleet-scroll">
+            <div class="wp-fleet-card" data-vehicle="VEH001" data-chassis="truck">
+              <div class="wp-flex-between"><span class="font-mono wp-label">S616</span><span class="wp-meta-inline">Trip 1</span></div>
+              <span class="wp-chassis-chip wp-chassis-chip--truck">Dry Truck</span>
+              <div class="mini-rail"><div class="mini-box"></div></div>
+              <div class="wp-flex-between"><span class="font-mono" style="font-size:0.75rem;font-weight:700">VEH001</span><span class="wp-subtext" style="font-size:0.7rem">68%</span></div>
+            </div>
+            <div class="wp-fleet-card" data-vehicle="VEH002" data-chassis="van_freezer">
+              <div class="wp-flex-between"><span class="font-mono wp-label">S617</span><span class="wp-meta-inline">Trip 1</span></div>
+              <span class="wp-chassis-chip wp-chassis-chip--van_freezer">Van + Freezer</span>
+              <div class="mini-rail"></div>
+              <div class="wp-flex-between"><span class="font-mono" style="font-size:0.75rem;font-weight:700">VEH002</span><span class="wp-subtext" style="font-size:0.7rem">54%</span></div>
+            </div>
+            <div class="wp-fleet-card" data-vehicle="VEH003" data-chassis="truck_freezer">
+              <div class="wp-flex-between"><span class="font-mono wp-label">S618</span><span class="wp-meta-inline">Trip 1</span></div>
+              <span class="wp-chassis-chip wp-chassis-chip--truck_freezer">Truck + Freezer</span>
+              <div class="mini-rail"><div class="mini-box" style="left:20%"></div></div>
+              <div class="wp-flex-between"><span class="font-mono" style="font-size:0.75rem;font-weight:700">VEH003</span><span class="wp-subtext" style="font-size:0.7rem">72%</span></div>
+            </div>
+            <div class="wp-fleet-card active" data-vehicle="VEH004" data-chassis="truck_freezer">
+              <div class="wp-flex-between"><span class="font-mono wp-label">S619</span><span class="wp-state-text wp-state-info">Active</span></div>
+              <span class="wp-chassis-chip wp-chassis-chip--truck_freezer">Truck + Freezer</span>
+              <div class="mini-rail"><div class="mini-box"></div></div>
+              <div class="wp-flex-between"><span class="font-mono" style="font-size:0.75rem;font-weight:700">VEH004</span><span class="wp-subtext" style="font-size:0.7rem;font-weight:700;color:var(--wp-primary)">82%</span></div>
+            </div>
+            <div class="wp-fleet-card" data-vehicle="VEH005" data-chassis="truck_freezer">
+              <div class="wp-flex-between"><span class="font-mono wp-label">S620</span><span class="wp-meta-inline">Trip 2</span></div>
+              <span class="wp-chassis-chip wp-chassis-chip--truck_freezer">Truck + Freezer</span>
+              <div class="mini-rail"><div class="mini-box" style="width:55%"></div></div>
+              <div class="wp-flex-between"><span class="font-mono" style="font-size:0.75rem;font-weight:700">VEH005</span><span class="wp-subtext" style="font-size:0.7rem">76%</span></div>
+            </div>
+            <div class="wp-fleet-card" data-vehicle="VEH037" data-chassis="van_freezer">
+              <div class="wp-flex-between"><span class="font-mono wp-label">S621</span><span class="wp-state-text wp-state-success">Route</span></div>
+              <span class="wp-chassis-chip wp-chassis-chip--van_freezer">Van + Freezer</span>
+              <div class="mini-rail"><div class="mini-box" style="width:70%"></div></div>
+              <div class="wp-flex-between"><span class="font-mono" style="font-size:0.75rem;font-weight:700">VEH037</span><span class="wp-subtext" style="font-size:0.7rem">61%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div data-wp-day-panel="today">
+        <!-- 2-Column SBB Reference Layout -->
+        <div class="wp-grid-2-1">
+          <!-- Wide Column: chassis layout variants -->
+          <section class="wp-canvas-inner wp-vehicle-stage" data-chassis="truck_freezer">
+            <div style="text-align:center;margin-bottom:1rem">
+              <span class="wp-label" style="font-size:0.75rem">Peliyagoda Loading Bay 04 · Active Chassis</span>
+              <p class="wp-subtext" style="font-size:0.75rem;margin:0.25rem 0 0">Layout changes by vehicle type, select a fleet card above</p>
+            </div>
+
+            <!-- Dry truck (ambient) -->
+            <div class="wp-chassis-body wp-chassis-body--truck">
+              <div class="wp-chassis-truck" aria-label="Dry truck with open cargo bays">
+                <div class="wp-chassis-truck__cab"></div>
+                <div class="wp-chassis-truck__bed">
+                  <div class="wp-chassis-truck__bay is-loaded">Style</div>
+                  <div class="wp-chassis-truck__bay is-loaded">Tech</div>
+                  <div class="wp-chassis-truck__bay">Empty</div>
+                </div>
+                <div class="wp-chassis-wheels"><span style="left:14%"></span><span style="left:22%"></span><span style="right:18%"></span><span style="right:10%"></span></div>
+              </div>
+              <p class="font-mono wp-subtext wp-chassis-caption">7.5T Ambient Rigid · Open bays · No cold chain</p>
+            </div>
+
+            <!-- Truck + freezer box -->
+            <div class="wp-chassis-body wp-chassis-body--truck_freezer">
+              <div class="wp-flatcar" style="margin-top:0.5rem">
+                <button type="button" class="wp-stage-nav prev" aria-label="Previous Vehicle"><i data-lucide="chevron-left"></i></button>
+                <button type="button" class="wp-stage-nav next" aria-label="Next Vehicle"><i data-lucide="chevron-right"></i></button>
+                <div class="wp-container-slot wp-container-filled wp-container-corrugated" style="left:6%;top:0;width:42%;height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff">
+                  <span class="wp-container-corner tl"></span><span class="wp-container-corner tr"></span>
+                  <span class="wp-container-corner bl"></span><span class="wp-container-corner br"></span>
+                  <div style="display:flex;align-items:center;gap:0.35rem;margin-bottom:0.2rem">
+                    <span style="font-size:0.7rem;letter-spacing:0.08em;font-weight:800">WAYPOINT</span>
+                    <span class="wp-label" style="font-size:0.55rem;color:#fff;opacity:0.9">Reefer</span>
+                  </div>
+                  <span class="font-mono" style="opacity:0.95;font-size:0.65rem">FSCU 423198 · 53CN</span>
+                </div>
+                <div class="wp-container-slot slot-active" id="empty-container-slot" style="right:8%;top:0;width:42%;height:90px">
+                  <div style="text-align:center">
+                    <i data-lucide="plus-circle" style="color:var(--wp-primary);margin-bottom:0.25rem"></i>
+                    <p class="wp-label" style="font-size:0.65rem;color:var(--wp-primary);margin:0">Staged Slot Ready</p>
+                    <p class="wp-subtext" style="font-size:0.65rem;margin:0">Click Assign to Mount</p>
+                  </div>
+                </div>
+                <svg viewBox="0 0 540 80" style="position:absolute;bottom:0;left:0;width:100%;height:46px" aria-hidden="true">
+                  <line x1="10" y1="68" x2="530" y2="68" stroke="#cbd5e1" stroke-width="4" stroke-dasharray="16 8"/>
+                  <rect x="24" y="24" width="492" height="14" rx="3" fill="#475569"/>
+                  <circle cx="70" cy="54" r="14" fill="#1e293b"/><circle cx="106" cy="54" r="14" fill="#1e293b"/>
+                  <circle cx="434" cy="54" r="14" fill="#1e293b"/><circle cx="470" cy="54" r="14" fill="#1e293b"/>
+                </svg>
+              </div>
+              <div class="wp-chassis-freezer-box" style="position:relative;margin-top:1rem;left:auto;right:auto;bottom:auto">
+                <span style="font-size:0.7rem;font-weight:800;letter-spacing:0.06em">REEFER BOX</span>
+                <span class="wp-chassis-temp"><i data-lucide="thermometer-snowflake"></i> −18°C to +4°C</span>
+              </div>
+              <p class="font-mono wp-subtext wp-chassis-caption">Reefer truck · Container mount + freezer box · Fresh 270 min budget</p>
+            </div>
+
+            <!-- Van + freezer -->
+            <div class="wp-chassis-body wp-chassis-body--van_freezer">
+              <div class="wp-chassis-van" aria-label="Reefer van with curb clearance">
+                <div class="wp-chassis-van__cab"></div>
+                <div class="wp-chassis-van__body">
+                  <span style="font-size:0.7rem;font-weight:800;letter-spacing:0.06em">REEFER VAN</span>
+                  <span class="wp-chassis-temp"><i data-lucide="thermometer-snowflake"></i> +2°C to +4°C</span>
+                </div>
+                <span class="wp-chassis-van__clearance">van_only · 3.2 m</span>
+                <div class="wp-chassis-wheels"><span style="left:18%"></span><span style="right:22%"></span></div>
+              </div>
+              <p class="font-mono wp-subtext wp-chassis-caption">Compact reefer van · van_only eligible · curb unload</p>
+            </div>
+          </section>
+
+          <!-- Right Column: Staged Cargo Queue -->
+          <aside>
+            <div class="wp-flex-between" style="margin-bottom:1rem">
+              <span class="wp-label">Staged Cargo Queue</span>
+              <span class="wp-flag wp-flag-warning">2 Unassigned</span>
+            </div>
+
+            <!-- Cargo Card 1: 40CN -->
+            <div class="wp-panel wp-cargo-card" style="padding:1.25rem">
+              <div class="wp-flex-between">
+                <span class="wp-headline-sm" style="font-size:1.1rem">40CN Reefer</span>
+                <span class="font-mono wp-subtext" style="font-size:0.7rem">12,192 × 2,438 mm</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem;margin:0.5rem 0">
+                <img src="assets/products/milk-bottle.jpg" class="wp-product-thumb" alt="Milk">
+                <div>
+                  <p class="wp-subtext" style="margin:0"><strong>OUT001</strong> · Fresh · Galle Road</p>
+                  <p class="wp-subtext" style="font-size:0.78rem;margin:0.15rem 0 0">
+                    <span class="wp-meta-stack-primary is-chilled">Chilled Reefer</span> · 4,850 kg
+                  </p>
+                </div>
+              </div>
+
+              <div style="margin:0.75rem 0 0.5rem">
+                <span class="wp-label" style="display:block;margin-bottom:0.35rem">Departure Window</span>
+                <div class="wp-select-btn">
+                  <span>05:00 – 07:30 SLST</span>
+                  <i data-lucide="chevron-down" style="width:0.85rem;height:0.85rem"></i>
+                </div>
+              </div>
+              <div style="margin-bottom:1.25rem">
+                <span class="wp-label" style="display:block;margin-bottom:0.35rem">Depot Bay</span>
+                <div class="wp-select-btn">
+                  <span>Peliyagoda Bay 04</span>
+                  <i data-lucide="chevron-down" style="width:0.85rem;height:0.85rem"></i>
+                </div>
+              </div>
+              <button type="button" class="wp-btn wp-btn-primary" id="btn-assign-container" style="width:100%;margin-bottom:0.5rem">
+                <i data-lucide="plus"></i>
+                <span>Assign to Vehicle</span>
+              </button>
+              <button type="button" class="wp-btn wp-btn-outline" style="width:100%" data-wp-drawer-open="defer-drawer">Quick defer drawer</button>
+              <a href="dispatcher-deferral.html" class="wp-btn wp-btn-outline" style="width:100%;margin-top:0.5rem">Open deferral panel</a>
+              <div class="decision-note" style="margin-top:0.75rem;font-size:0.72rem">
+                <strong>VEH014 trip 2 over weight.</strong> Move overflow to VEH037 trip 1 (−14 min Fresh budget) or defer OUT088 instead of OUT004 (OUT004 deferred yesterday).
+                <a href="dispatcher-validator.html" class="mc-link" style="display:inline-block;margin-top:0.35rem">Open validator →</a>
+              </div>
+              <a href="dispatcher-validator.html" class="wp-btn wp-btn-ghost" style="width:100%;margin-top:0.35rem;font-size:0.75rem">Constraint validator →</a>
+            </div>
+
+            <!-- Cargo Card 2: 53CN -->
+            <div class="wp-panel wp-cargo-card" style="padding:1.25rem">
+              <div class="wp-flex-between">
+                <span class="wp-headline-sm" style="font-size:1.1rem">53CN Dry Van</span>
+                <span class="font-mono wp-subtext" style="font-size:0.7rem">16,154 × 2,591 mm</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem;margin:0.5rem 0">
+                <img src="assets/products/retail-apparel.jpg" class="wp-product-thumb" alt="Apparel">
+                <div>
+                  <p class="wp-subtext" style="margin:0"><strong>OUT002</strong> · Style · Duplication Rd</p>
+                  <p class="wp-subtext" style="font-size:0.78rem;margin:0.15rem 0 0">
+                    Ambient · 2,100 kg · <span class="wp-meta-inline">Van only</span>
+                  </p>
+                </div>
+              </div>
+              <div style="margin-top:0.75rem">
+                <span class="wp-label" style="display:block;margin-bottom:0.35rem">Departure Window</span>
+                <div class="wp-select-btn">
+                  <span>05:30 – 08:00 SLST</span>
+                  <i data-lucide="chevron-down" style="width:0.85rem;height:0.85rem"></i>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+        </div>
+
+        <div data-wp-day-panel="tomorrow" hidden>
+          <div class="wp-panel" style="padding:1.5rem;margin-top:0.5rem">
+            <span class="wp-label">Evening planning · Post-cutoff 16:00 SLST</span>
+            <h2 class="wp-headline-sm" style="margin:0.5rem 0">Tomorrow: 142 orders · 48 chilled · 9 reefer trips available</h2>
+            <p class="wp-subtext">Load tomorrow's queue when evening planning starts. Today's live allocation stays on the Today tab.</p>
+            <div class="wp-kpi-row" style="margin-top:1.25rem">
+              <div class="wp-kpi"><span class="wp-label">Total orders</span><p class="wp-kpi-value">142</p></div>
+              <div class="wp-kpi"><span class="wp-label">Chilled</span><p class="wp-kpi-value" style="color:var(--wp-info)">48</p></div>
+              <div class="wp-kpi"><span class="wp-label">Reefer trips</span><p class="wp-kpi-value">9</p></div>
+              <div class="wp-kpi"><span class="wp-label">Est. deferrals</span><p class="wp-kpi-value" style="color:var(--wp-warning)">4</p></div>
+            </div>
+            <div style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:0.65rem">
+              <a href="dispatcher-queue.html" class="wp-btn wp-btn-primary">Open tomorrow queue</a>
+              <a href="dispatcher-deferral.html" class="wp-btn wp-btn-outline">Plan deferrals</a>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Stage Footer -->
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Right Slide-Out Vehicle Specs Sidebar -->
+  <div class="wp-drawer-backdrop" id="vehicle-specs-drawer" aria-hidden="true">
+    <div class="wp-drawer-right">
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Chassis Engineering</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Vehicle Specifications</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="vehicle-specs-drawer" aria-label="Close sidebar">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="wp-drawer-body">
+        <div class="wp-specs-drawer-grid">
+          <div class="wp-specs-drawer-col">
+            <section class="wp-specs-drawer-panel">
+              <div class="wp-specs-drawer-title-row">
+                <h3 class="wp-specs-drawer-title">Payload Stability Matrix</h3>
+                <span class="font-mono wp-specs-matrix-pct" id="matrix-pct">82%</span>
+              </div>
+              <div class="wp-specs-matrix-wrap">
+                <div class="wp-dot-matrix wp-dot-matrix-drawer" id="dot-matrix">
+                  <!-- cells dynamically generated -->
+                </div>
+                <div class="wp-dot-matrix-tooltip">
+                  <span style="color:var(--wp-success);font-weight:700">↑</span>
+                  <span>Stable Axis Center</span>
+                </div>
+              </div>
+              <div class="wp-specs-matrix-stats">
+                <span>Stability: Optimal</span>
+                <span>Speed: 65 km/h</span>
+                <span>Agility: Grade A</span>
+              </div>
+            </section>
+
+            <section class="wp-specs-drawer-panel">
+              <h3 class="wp-specs-drawer-title">Vehicle Profile</h3>
+              <ul class="wp-specs-drawer-list">
+                <li><span>Model</span><strong id="veh-model">Hino 700 Reefer</strong></li>
+                <li><span>Tare weight</span><strong id="veh-tare" class="font-mono">22,800 kg</strong></li>
+                <li><span>Max payload</span><strong id="veh-payload" class="font-mono">68,400 kg</strong></li>
+                <li><span>Status</span><strong id="veh-status">Available for loading</strong></li>
+                <li><span>Capacity</span><strong id="veh-capacity">2 × 40ft / 53ft Reefer</strong></li>
+              </ul>
+            </section>
+
+            <section class="wp-specs-drawer-panel">
+              <div class="wp-specs-drawer-title-row">
+                <h3 class="wp-specs-drawer-title">Axle Weight Distribution</h3>
+                <span class="wp-state-text wp-state-success">Optimal Balance</span>
+              </div>
+              <div class="wp-cog-scale wp-cog-scale-drawer">
+                <div class="wp-cog-track">
+                  <div class="wp-cog-pointer" id="cog-pointer" style="left:48%"></div>
+                </div>
+                <div class="wp-specs-cog-labels">
+                  <span>Front Axle Bias</span>
+                  <strong>Center</strong>
+                  <span>Rear Axle Bias</span>
+                </div>
+                <div class="wp-axle-grid">
+                  <div class="wp-axle-card">
+                    <span class="wp-label">Front Steer Axle</span>
+                    <div class="font-mono wp-specs-axle-val" id="front-axle-weight">11,400 kg</div>
+                    <span class="wp-subtext">Limit: 16,000 kg</span>
+                  </div>
+                  <div class="wp-axle-card">
+                    <span class="wp-label">Rear Drive Tandem</span>
+                    <div class="font-mono wp-specs-axle-val" id="rear-axle-weight">22,800 kg</div>
+                    <span class="wp-subtext">Limit: 32,000 kg</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="wp-specs-drawer-col">
+            <section class="wp-specs-drawer-panel">
+              <h3 class="wp-specs-drawer-title">Operating Constraints</h3>
+              <div class="wp-specs-constraint">
+                <div class="wp-specs-constraint-row" data-chassis-only="truck_freezer">
+                  <div class="wp-specs-constraint-label">
+                    <span>Cold chain temp</span>
+                    <span class="font-mono" id="veh-temp">−18°C to +4°C</span>
+                  </div>
+                </div>
+                <div class="wp-specs-constraint-row" data-chassis-only="van_freezer">
+                  <div class="wp-specs-constraint-label">
+                    <span>Van clearance</span>
+                    <span class="font-mono" id="veh-clearance">3.2 m curb</span>
+                  </div>
+                </div>
+                <div class="wp-specs-constraint-row" data-chassis-only="van_freezer">
+                  <div class="wp-specs-constraint-label">
+                    <span>van_only eligible</span>
+                    <span class="font-mono" id="veh-van-only">Yes</span>
+                  </div>
+                </div>
+                <div class="wp-specs-constraint-row" data-chassis-only="truck_freezer">
+                  <div class="wp-specs-constraint-label">
+                    <span>Fresh Shift Window</span>
+                    <span class="font-mono" id="veh-fresh">184 / 270 min</span>
+                  </div>
+                  <div class="wp-meter"><div class="wp-meter-fill warn" style="width:68%"></div></div>
+                </div>
+                <div class="wp-specs-constraint-row" data-chassis-only="truck">
+                  <div class="wp-specs-constraint-label">
+                    <span>Style + Tech Budget</span>
+                    <span class="font-mono" id="veh-style">312 / 480 min</span>
+                  </div>
+                  <div class="wp-meter"><div class="wp-meter-fill" style="width:65%"></div></div>
+                </div>
+                <div class="wp-specs-constraint-row">
+                  <div class="wp-specs-constraint-label">
+                    <span>Weight &amp; Volume</span>
+                    <span class="font-mono">82% Cap</span>
+                  </div>
+                  <div class="wp-meter"><div class="wp-meter-fill" id="veh-weight-meter" style="width:82%"></div></div>
+                </div>
+                <div class="wp-specs-constraint-row">
+                  <div class="wp-specs-constraint-label">
+                    <span>Weekly Fuel Allocation</span>
+                    <span class="font-mono" id="veh-fuel">430 L / week</span>
+                  </div>
+                  <div class="wp-meter"><div class="wp-meter-fill ok" style="width:72%"></div></div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Slide-Up Deferral Drawer (Offset from Left Nav) -->
+  <div class="wp-drawer-backdrop" id="defer-drawer" aria-hidden="true">
+    <div class="wp-drawer-bottom">
+      <div class="wp-drawer-grabber"></div>
+      <div class="wp-drawer-header">
+        <div>
+          <span class="wp-label">Policy Control Bottom Sheet</span>
+          <h2 class="wp-headline-sm" style="margin:0.25rem 0 0">Order Deferral Engine</h2>
+        </div>
+        <button type="button" class="wp-icon-btn" data-wp-drawer-close="defer-drawer" aria-label="Close drawer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="wp-drawer-body">
+        <p class="wp-subtext" style="margin:0 0 1.5rem">
+          Every deferral must be audited with a standard reason code and impact notification pushed to the affected store manager.
+        </p>
+
+        <div class="wp-split">
+          <div>
+            <div class="wp-field">
+              <label for="defer-reason">Standard Reason Code</label>
+              <select class="wp-select" id="defer-reason">
+                <option value="REEFER_CAPACITY">REEFER_CAPACITY: Refrigerated compartment unavailable</option>
+                <option value="VAN_ONLY">VAN_ONLY: Roadway restricts vehicle to van-only chassis</option>
+                <option value="WEIGHT_VOLUME">WEIGHT_VOLUME: Trip payload limit exceeded</option>
+                <option value="TIME_BUDGET">TIME_BUDGET: Exceeds 270m Fresh / 480m Style shift</option>
+                <option value="FUEL_QUOTA">FUEL_QUOTA: Weekly diesel quota exceeded</option>
+                <option value="MALL_WINDOW">MALL_WINDOW: Delivery window incompatible with mall dock</option>
+              </select>
+            </div>
+
+            <div class="wp-field">
+              <label for="defer-carrier">Alternative Rescheduling Cycle</label>
+              <select class="wp-select" id="defer-carrier">
+                <option value="cycle_2">Tomorrow 10:00 SLST Secondary Run (Trip 2)</option>
+                <option value="cycle_3">Day+2 05:00 SLST Morning Run</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <div class="wp-field">
+              <label for="defer-note">Audit &amp; Store Impact Log Note</label>
+              <textarea class="wp-textarea" id="defer-note" rows="4">Fresh order deferred because refrigerated compartment capacity was exhausted on tomorrow's 05:00 dispatch. Reassigned to Secondary Cycle.</textarea>
+            </div>
+
+            <div class="wp-subpanel" style="padding:1rem">
+              <span class="wp-label" style="display:block;margin-bottom:0.25rem">Contractual Impact</span>
+              <p class="wp-subtext" style="font-size:0.75rem;margin:0">
+                Store SLA remains compliant under Section 4.2 (Capacity Exclusion notice dispatched before 16:00 cutoff).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wp-drawer-footer">
+        <button type="button" class="wp-btn wp-btn-outline" data-wp-drawer-close="defer-drawer">Cancel</button>
+        <button type="button" class="wp-btn wp-btn-primary" data-wp-drawer-close="defer-drawer">Confirm &amp; Push Notice</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const matrix = document.getElementById('dot-matrix');
+      if (!matrix) return;
+
+      const hot = new Set([45,46,47,56,57,58,67,68,69,44,55,66,43,54,65,42,53,64]);
+      for (let i = 0; i < 144; i++) {
+        const cell = document.createElement('span');
+        cell.className = 'cell' + (hot.has(i) ? ' hot' : '');
+        matrix.appendChild(cell);
+      }
+
+      const marker = document.createElement('span');
+      marker.className = 'marker';
+      matrix.appendChild(marker);
+
+      function placeMarker() {
+        const hotCells = [...matrix.querySelectorAll('.cell.hot')];
+        if (!hotCells.length) return;
+
+        let x = 0;
+        let y = 0;
+        const centers = hotCells.map((cell) => {
+          const rect = cell.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          x += cx;
+          y += cy;
+          return { cx, cy };
+        });
+        x /= hotCells.length;
+        y /= hotCells.length;
+
+        // The cluster centroid falls between two dots. Snap onto the nearest
+        // orange cell, preferring the later cell when distances tie.
+        let best = 0;
+        let bestDist = Infinity;
+        centers.forEach((point, i) => {
+          const dist = (point.cx - x) ** 2 + (point.cy - y) ** 2;
+          if (dist <= bestDist) {
+            best = i;
+            bestDist = dist;
+          }
+        });
+
+        const cell = hotCells[best];
+        const cellRect = cell.getBoundingClientRect();
+        const matrixRect = matrix.getBoundingClientRect();
+        const size = Math.max(cell.offsetWidth, cellRect.width);
+        marker.style.width = `${size}px`;
+        marker.style.height = `${size}px`;
+        marker.style.left = `${((centers[best].cx - matrixRect.left) / matrixRect.width) * 100}%`;
+        marker.style.top = `${((centers[best].cy - matrixRect.top) / matrixRect.height) * 100}%`;
+      }
+
+      requestAnimationFrame(placeMarker);
+
+      const specsDrawer = document.getElementById('vehicle-specs-drawer');
+      if (specsDrawer) {
+        const observer = new MutationObserver(() => {
+          if (specsDrawer.classList.contains('open')) {
+            requestAnimationFrame(() => requestAnimationFrame(placeMarker));
+          }
+        });
+        observer.observe(specsDrawer, { attributes: true, attributeFilter: ['class'] });
+      }
+    })();
+  </script>
+<div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="wp-command-dialog">
+    <div class="wp-command-input-wrap">
+      <i data-lucide="search"></i>
+      <span class="wp-command-query">pay</span>
+    </div>
+    <div class="wp-command-hint">Search for pay</div>
+    <div class="wp-command-results">
+      <div class="wp-command-group-label">Pages</div>
+      <div class="wp-command-item selected">
+        <i data-lucide="home"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Mission Control</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="layout-grid"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Fleet Allocation</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gfa</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="list-ordered"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Order Queue</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">goq</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-circle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Exceptions</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gex</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="package-check"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Warehouse Dock</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gwd</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="truck"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Driver Route</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdr</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="store"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Store Portal</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsp</kbd>
+        </div>
+      </div>
+      <div class="wp-command-group-label">Actions</div>
+      <div class="wp-command-item">
+        <i data-lucide="check-circle-2"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Publish Daily Plan</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="plus"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">New Order</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gno</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="scan-barcode"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Scan Barcode</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsb</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="clock"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Deferral Rules</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdf</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-triangle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Report Shortfall</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grs</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="refresh-cw"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Refresh Telemetry</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grt</kbd>
+        </div>
+      </div>
+    </div>
+    <div class="wp-command-footer">
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↵</kbd> to select</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↑</kbd> <kbd class="wp-kbd">↓</kbd> to navigate</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+    </div>
+  </div>
+</div>
+  <script src="assets/site.js?v=15"></script>
+</body>
+</html>

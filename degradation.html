@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Degradation Scenarios</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=11">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+        <nav class="wp-sidebar-nav" data-wp-nav-root aria-label="Main Navigation"></nav>
+      </div>
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%"></div>
+      </div>
+    </aside>
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Degradation</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right">
+          <a href="driver-sync.html?state=offline" class="wp-btn wp-btn-primary" style="padding:0.45rem 0.85rem;font-size:0.75rem">Start offline demo</a>
+        </div>
+      </header>
+      <main class="wp-main">
+        <div class="screen-page-header">
+          <div>
+            <span class="wp-label">Page 11 · Section 8</span>
+            <h1 class="wp-headline-md" style="margin:0.35rem 0 0">Degradation scenarios</h1>
+          </div>
+        </div>
+
+        <section class="wp-panel deg-intro">
+          <h2 class="wp-headline-sm">Primary: Offline sync after Kandy hill-country blackout</h2>
+          <p class="wp-subtext" style="margin-top:0.5rem">
+            Mobile coverage drops in the Kandy corridor and rural hill districts. Kamal Silva on <span class="font-mono">VEH037</span> must keep completing stops without signal while the dispatcher and store manager still need accurate status. This scenario tests the offline queue, sync progress, and conflict resolution when the server deferred <span class="font-mono">OUT003</span> while the driver delivered offline.
+          </p>
+        </section>
+
+        <div class="screen-sync-states" style="margin-bottom:1rem">
+          <a href="driver-sync.html?state=offline" class="screen-sync-state">1 Offline</a>
+          <a href="driver-sync.html?state=queued" class="screen-sync-state">2 Queued</a>
+          <a href="driver-sync.html?state=syncing" class="screen-sync-state">3 Syncing</a>
+          <a href="driver-sync.html?state=synced" class="screen-sync-state">4 Synced</a>
+          <a href="driver-sync.html?state=conflict" class="screen-sync-state">5 Conflict</a>
+        </div>
+
+        <div class="deg-matrix-wrap">
+          <table class="deg-matrix">
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Driver (DRV-06)</th>
+                <th>Dispatcher (DISP-07)</th>
+                <th>Store (SM-07)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1 Offline</strong></td>
+                <td><a href="driver-sync.html?state=offline">Grey banner; complete stops locally</a></td>
+                <td><a href="dispatcher-exceptions.html?state=offline">Last sync 6:12 AM; pending stops</a></td>
+                <td><a href="store-tracking.html?state=offline">ETA frozen + offline note</a></td>
+              </tr>
+              <tr>
+                <td><strong>2 Queued</strong></td>
+                <td><a href="driver-sync.html?state=queued">POD ×2, issue ×1 queued</a></td>
+                <td>-</td>
+                <td><a href="store-tracking.html?state=queued">No change</a></td>
+              </tr>
+              <tr>
+                <td><strong>3 Syncing</strong></td>
+                <td><a href="driver-sync.html?state=syncing">Blue “Syncing 2 of 3…”</a></td>
+                <td><a href="dispatcher-exceptions.html?state=syncing">Spinner on route</a></td>
+                <td><a href="store-tracking.html?state=syncing">“Updating…”</a></td>
+              </tr>
+              <tr>
+                <td><strong>4 Synced</strong></td>
+                <td><a href="driver-sync.html?state=synced">Green + timestamps</a></td>
+                <td><a href="dispatcher-exceptions.html?state=synced">Checkmarks stops 2–3</a></td>
+                <td><a href="store-tracking.html?state=synced">Delivered 6:38 AM</a></td>
+              </tr>
+              <tr>
+                <td><strong>5 Conflict</strong></td>
+                <td><a href="driver-sync.html?state=conflict">Amber conflict banner</a></td>
+                <td><a href="dispatcher-exceptions.html?state=conflict">Accept delivery / Escalate</a></td>
+                <td><a href="store-tracking.html?state=resolved">Status corrected after resolve</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="wp-headline-sm" style="margin-bottom:1rem">Secondary scenarios (wireframe minimum)</h2>
+        <div class="deg-secondary-grid">
+          <article class="deg-wireframe-board">
+            <span class="wp-label">8.2 · Pre-departure chilled shortfall</span>
+            <h3>Loader flags stock before departure</h3>
+            <p class="wp-subtext" style="font-size:0.78rem;margin:0">“Chilled shortfall on VEH037 trip 1, adjust plan before 4:50 AM departure”</p>
+            <div class="deg-flow">
+              <a href="loader-shortfall.html">LOAD-04</a>
+              <span>→</span>
+              <a href="dispatcher-exceptions.html">DISP-07</a>
+              <span>→</span>
+              <a href="dispatcher-deferral.html">DISP-05</a>
+              <span>→</span>
+              <a href="store-deferral.html">SM-06</a>
+            </div>
+            <ul class="deg-states">
+              <li>Shortfall submitted</li>
+              <li>Plan amended</li>
+              <li>Loader checklist v2</li>
+            </ul>
+          </article>
+
+          <article class="deg-wireframe-board">
+            <span class="wp-label">8.3 · Reefer breakdown / workshop</span>
+            <h3>Mid-plan reefer loss</h3>
+            <p class="wp-subtext" style="font-size:0.78rem;margin:0">“VEH002 in workshop, 12 chilled orders need reassignment”</p>
+            <div class="deg-flow">
+              <a href="dispatcher-exceptions.html">DISP-07</a>
+              <span>→</span>
+              <a href="dispatcher-allocation.html">DISP-04</a>
+              <span>→</span>
+              <a href="dispatcher-deferral.html">DISP-05</a>
+              <span>→</span>
+              <a href="store-deferral.html">SM-06</a>
+            </div>
+            <ul class="deg-states">
+              <li>Alert</li>
+              <li>Replan draft</li>
+              <li>Deferrals published</li>
+            </ul>
+          </article>
+
+          <article class="deg-wireframe-board">
+            <span class="wp-label">8.4 · Festival demand spike</span>
+            <h3>S1-like capacity shortfall</h3>
+            <p class="wp-subtext" style="font-size:0.78rem;margin:0">“Deferred: REEFER_CAPACITY · Outlet skipped 2 days, cost note required”</p>
+            <div class="deg-flow">
+              <a href="dispatcher-queue.html">DISP-02</a>
+              <span>→</span>
+              <a href="dispatcher-deferral.html">DISP-05</a>
+              <span>→</span>
+              <a href="dispatcher-forecast.html">DISP-10</a>
+            </div>
+            <ul class="deg-states">
+              <li>Sort by priority</li>
+              <li>Defer with cost notes</li>
+            </ul>
+          </article>
+
+          <article class="deg-wireframe-board">
+            <span class="wp-label">8.6 · Waypoint Agent degradation</span>
+            <h3>Agent offline or model unavailable</h3>
+            <p class="wp-subtext" style="font-size:0.78rem;margin:0">“No connection — agent cannot reach the model” or “Model unavailable — retry to reconnect”</p>
+            <div class="deg-flow">
+              <a href="agent.html?state=offline">AGENT-01 Offline</a>
+              <span>→</span>
+              <a href="agent.html?state=unavailable">AGENT-01 Unavailable</a>
+              <span>→</span>
+              <a href="agent.html">AGENT-01 Ready</a>
+            </div>
+            <ul class="deg-states">
+              <li>Composer disabled</li>
+              <li>Voice prompts blocked</li>
+              <li>Retry returns to ready chat</li>
+            </ul>
+          </article>
+
+          <article class="deg-wireframe-board">
+            <span class="wp-label">8.5 · Late arrival at mall window</span>
+            <h3>Mall dock window missed</h3>
+            <p class="wp-subtext" style="font-size:0.78rem;margin:0">“Late for mall window, contact outlet receiving desk”</p>
+            <div class="deg-flow">
+              <a href="driver-stop.html">DRV-03</a>
+              <span>→</span>
+              <a href="driver-issue.html">DRV-05</a>
+              <span>→</span>
+              <a href="store-tracking.html">SM-07</a>
+              <span>→</span>
+              <a href="dispatcher-exceptions.html">DISP-07</a>
+            </div>
+            <ul class="deg-states">
+              <li>Amber window warning</li>
+              <li>Issue filed</li>
+              <li>Store “receiving delayed”</li>
+            </ul>
+          </article>
+        </div>
+      </main>
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+  <div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="wp-command-dialog">
+      <div class="wp-command-input-wrap">
+        <i data-lucide="search"></i>
+        <span class="wp-command-query">Search</span>
+      </div>
+      <div class="wp-command-hint">Jump to any screen</div>
+      <div class="wp-command-results" data-wp-command-results></div>
+      <div class="wp-command-footer">
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+      </div>
+    </div>
+  </div>
+  <script src="assets/site.js?v=11"></script>
+</body>
+</html>

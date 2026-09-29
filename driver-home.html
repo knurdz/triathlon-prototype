@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Driver Home</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=10">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+        <nav class="wp-sidebar-nav" data-wp-nav-root aria-label="Main Navigation"></nav>
+      </div>
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <div class="wp-profile-pill" style="width:100%"></div>
+      </div>
+    </aside>
+    <div class="wp-stage">
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Driver Home</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right"><a href="driver-route.html" class="wp-btn wp-btn-primary" style="padding:0.45rem 0.85rem;font-size:0.75rem">Full run sheet</a></div>
+      </header>
+      <main class="wp-main">
+
+        <div class="screen-page-header">
+          <div>
+            <span class="wp-label">DRV-01</span>
+            <h1 class="wp-headline-md" style="margin:0.35rem 0 0">Good morning, Kamal</h1>
+            <p class="wp-subtext">Today's assignment · Peliyagoda depot · Fresh Colombo</p>
+          </div>
+          <span class="wp-offline-banner online" id="network-banner" aria-live="polite">
+            <i data-lucide="wifi"></i>
+            <span data-network-label>Online</span>
+          </span>
+        </div>
+
+        <article class="wp-panel screen-panel">
+          <div class="wp-flex-between" style="flex-wrap:wrap;gap:0.75rem">
+            <div>
+              <span class="font-mono wp-label">Route R025229</span>
+              <h2 class="wp-headline-sm">VEH037 · 4 stops · reefer van</h2>
+              <span class="wp-chassis-chip wp-chassis-chip--van_freezer">Van + Freezer</span>
+            </div>
+            <a href="driver-pod.html" class="wp-btn wp-btn-primary">Capture POD · OUT002</a>
+          </div>
+
+          <div class="driver-home-route">
+            <div class="driver-home-stops">
+              <div class="driver-home-stop is-done">
+                <span class="driver-home-stop-seq">1</span>
+                <div>
+                  <strong>OUT001 · Fresh Galle Rd</strong>
+                  <span class="wp-access-chip wp-access-chip--van_only"><i data-lucide="truck"></i> van_only</span>
+                  <p class="wp-subtext" style="margin:0.2rem 0 0;font-size:0.75rem">Delivered 05:32</p>
+                </div>
+                <span class="wp-badge wp-badge-success">Done</span>
+              </div>
+              <div class="driver-home-stop is-now">
+                <span class="driver-home-stop-seq">2</span>
+                <div>
+                  <strong>OUT002 · Duplication Rd</strong>
+                  <span class="wp-access-chip wp-access-chip--van_only"><i data-lucide="truck"></i> van_only</span>
+                  <p class="wp-subtext" style="margin:0.2rem 0 0;font-size:0.75rem">14 min · window closes 08:00</p>
+                </div>
+                <span class="wp-badge wp-badge-info">Now</span>
+              </div>
+              <div class="driver-home-stop">
+                <span class="driver-home-stop-seq">3</span>
+                <div>
+                  <strong>OUT003 · Marine Drive</strong>
+                  <span class="wp-access-chip wp-access-chip--street"><i data-lucide="map-pin"></i> street</span>
+                  <p class="wp-subtext" style="margin:0.2rem 0 0;font-size:0.75rem">Planned 06:40</p>
+                </div>
+              </div>
+              <div class="driver-home-stop">
+                <span class="driver-home-stop-seq">4</span>
+                <div>
+                  <strong>OUT010 · Colombo 03</strong>
+                  <span class="wp-access-chip wp-access-chip--rear_dock"><i data-lucide="container"></i> rear_dock</span>
+                  <p class="wp-subtext" style="margin:0.2rem 0 0;font-size:0.75rem">Last stop · 07:15</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="wp-corridor-map wp-corridor-map--compact">
+              <svg viewBox="0 0 600 280" class="wp-corridor-map__svg" role="img" aria-label="Route map VEH037 approaching OUT002">
+                <rect width="600" height="280" fill="#EEF3F6"/>
+                <path d="M40,180 Q200,160 360,170 T560,185" fill="none" stroke="#C5D0D8" stroke-width="5" stroke-linecap="round"/>
+                <path d="M60,180 L180,175" stroke="#16A34A" stroke-width="4"/>
+                <path d="M180,175 Q280,168 360,172" stroke="#377a8b" stroke-width="4"/>
+                <path d="M360,172 Q480,178 540,185" stroke="#CBD5E1" stroke-width="4" stroke-dasharray="6 5"/>
+                <circle cx="180" cy="175" r="8" fill="#16A34A"/>
+                <circle cx="300" cy="170" r="10" fill="#377a8b"><animate attributeName="r" values="8;14;8" dur="2s" repeatCount="indefinite"/></circle>
+                <text x="300" y="155" fill="#377a8b" font-family="JetBrains Mono" font-size="9" font-weight="700" text-anchor="middle">VEH037</text>
+                <circle cx="420" cy="176" r="7" fill="#94A3B8"/>
+                <circle cx="520" cy="184" r="7" fill="#94A3B8"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="screen-page-actions" style="margin-top:1.25rem">
+            <a href="driver-route.html" class="wp-btn wp-btn-primary">Open full route</a>
+            <a href="driver-sync.html" class="wp-btn wp-btn-outline">Sync queue <span class="font-mono" id="sync-queue-count">0</span></a>
+          </div>
+        </article>
+
+        <aside class="wp-panel screen-panel" style="margin-top:1.25rem">
+          <span class="wp-label">Shift notes</span>
+          <div class="screen-list" style="margin-top:0.75rem">
+            <div class="screen-list-item"><span>Depot</span><strong>Peliyagoda</strong></div>
+            <div class="screen-list-item"><span>Brand</span><strong>Fresh · Colombo</strong></div>
+            <div class="screen-list-item"><span>Connectivity</span><span class="mc-status-chip mc-status-chip-ok">Automated status</span></div>
+          </div>
+        </aside>
+      </main>
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+    </div>
+  </div>
+  <div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="wp-command-dialog">
+      <div class="wp-command-input-wrap">
+        <i data-lucide="search"></i>
+        <span class="wp-command-query">Search</span>
+      </div>
+      <div class="wp-command-hint">Jump to any screen</div>
+      <div class="wp-command-results" data-wp-command-results></div>
+      <div class="wp-command-footer">
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+        <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+      </div>
+    </div>
+  </div>
+  
+  <script src="assets/site.js?v=10"></script>
+</body>
+</html>

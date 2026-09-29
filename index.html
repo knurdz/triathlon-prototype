@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{var t=localStorage.getItem('wp-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waypoint: Mission Control</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700&family=Rubik:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css?v=14">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body class="wp-site">
+  <div class="wp-layout">
+    <!-- Persistent Left Sidebar Navigation (250px) -->
+    <aside class="wp-sidebar" aria-label="Sidebar Navigation">
+      <div>
+        <div class="wp-sidebar-header">
+          <a href="index.html" class="wp-logo">
+            <span class="wp-logo-mark" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+            <div style="display:flex;align-items:center">
+              <span class="font-laro wp-title-md">Waypoint</span>
+              <span class="wp-logo-badge">Logistics</span>
+            </div>
+          </a>
+        </div>
+
+        <nav class="wp-sidebar-nav" aria-label="Main Navigation">
+          <div class="wp-sidebar-nav-group-title">Overview</div>
+          <a href="index.html" data-wp-nav class="wp-sidebar-nav-item active">
+            <i data-lucide="home"></i>
+            <span>Mission Control</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Dispatch & Planning</div>
+          <a href="dispatcher-allocation.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="layout-grid"></i>
+            <span>Fleet Allocation</span>
+          </a>
+          <a href="dispatcher-queue.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="list-ordered"></i>
+            <span>Order Queue</span>
+          </a>
+          <a href="dispatcher-exceptions.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="alert-circle"></i>
+            <span>Exceptions</span>
+            <span class="nav-badge">3</span>
+          </a>
+
+          <div class="wp-sidebar-nav-group-title">Field Operations</div>
+          <a href="loader-dock.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="package-check"></i>
+            <span>Warehouse Dock</span>
+          </a>
+          <a href="driver-route.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="truck"></i>
+            <span>Driver Route</span>
+          </a>
+          <a href="store-portal.html" data-wp-nav class="wp-sidebar-nav-item">
+            <i data-lucide="store"></i>
+            <span>Store Portal</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="wp-sidebar-footer">
+        <div>
+          <div class="wp-flex-between" style="margin-bottom:0.35rem">
+            <span class="wp-label" style="font-size:0.65rem">Cutoff 16:00 SLST</span>
+            <span class="wp-status-pulse"></span>
+          </div>
+          <div class="font-mono" style="font-size:1.15rem;font-weight:700;color:var(--wp-primary)" data-wp-cutoff>00:00:00</div>
+        </div>
+        <a href="dispatcher-allocation.html" class="wp-profile-pill" style="width:100%">
+          <span class="wp-avatar">OP</span>
+          <div style="overflow:hidden">
+            <div class="wp-title-md" style="font-size:0.8rem;white-space:nowrap;text-overflow:ellipsis;overflow:hidden">Operations HQ</div>
+            <div class="wp-subtext" style="font-size:0.7rem">Peliyagoda Hub</div>
+          </div>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Stage -->
+    <div class="wp-stage">
+      <!-- Minimal Sticky Topbar -->
+      <header class="wp-topbar">
+        <div class="wp-topbar-left">
+          <span class="wp-topbar-title">Mission Control</span>
+        </div>
+        <div class="wp-topbar-center">
+          <button type="button" class="wp-search-trigger" data-wp-command-open aria-label="Search pages and actions">
+            <i data-lucide="search"></i>
+            <span class="wp-search-trigger-text">Search pages and actions</span>
+            <kbd class="wp-kbd">⌘K</kbd>
+          </button>
+        </div>
+        <div class="wp-topbar-right">
+          <a href="dispatcher-exceptions.html" class="wp-icon-btn" title="System alerts" aria-label="Notifications" style="position:relative">
+            <i data-lucide="bell"></i>
+            <span style="position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--wp-error);border-radius:50%"></span>
+          </a>
+          <a href="dispatcher-queue.html" class="wp-btn wp-btn-primary" style="padding:0.45rem 0.85rem;font-size:0.75rem">
+            <i data-lucide="plus-circle"></i>
+            <span>Review Queue (142)</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- Main Stage Content -->
+      <main class="wp-main mc-board" data-wp-day-scope>
+        <div class="mc-board-toolbar">
+          <div class="wp-day-switcher" data-wp-day-switcher>
+            <button type="button" class="wp-day-btn active" data-day="today" aria-pressed="true">Today <span class="wp-day-badge">Live ops</span></button>
+            <button type="button" class="wp-day-btn" data-day="tomorrow" aria-pressed="false">Tomorrow <span class="wp-day-badge">Evening</span></button>
+          </div>
+          <button type="button" class="wp-btn wp-btn-outline mc-board-toolbar__customize" data-mc-customize-toggle aria-pressed="false">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Customize</span>
+          </button>
+          <a href="dispatcher-map.html" class="wp-btn wp-btn-outline mc-board-toolbar__map"><i data-lucide="map"></i> Fleet map</a>
+        </div>
+
+        <div data-wp-day-panel="today" data-mc-board>
+        <!-- KPI row -->
+        <div class="mc-stat-grid" data-mc-zone="metrics">
+          <div class="mc-widget" data-mc-widget="stat-orders" data-mc-zone="metrics" data-mc-group="metrics" data-mc-name="Orders Today">
+          <article class="mc-stat-card wp-panel">
+            <div class="mc-stat-head">
+              <span class="mc-stat-label">Orders Today</span>
+              <span class="mc-pill mc-pill-up"><i data-lucide="trending-up"></i> +6.2%</span>
+            </div>
+            <p class="mc-stat-value">142</p>
+            <p class="mc-stat-foot">138 Confirmed · 4 Pending Deferrals</p>
+          </article>
+          </div>
+
+          <div class="mc-widget" data-mc-widget="stat-fleet" data-mc-zone="metrics" data-mc-group="metrics" data-mc-name="Active Fleet">
+          <article class="mc-stat-card wp-panel">
+            <div class="mc-stat-head">
+              <span class="mc-stat-label">Active Fleet</span>
+              <span class="mc-pill mc-pill-ok">100% Ready</span>
+            </div>
+            <p class="mc-stat-value">32</p>
+            <p class="mc-stat-foot">28 Peliyagoda Hub · 4 Kandy Terminal</p>
+          </article>
+          </div>
+
+          <div class="mc-widget" data-mc-widget="stat-sla" data-mc-zone="metrics" data-mc-group="metrics" data-mc-name="On-Time SLA">
+          <article class="mc-stat-card wp-panel">
+            <div class="mc-stat-head">
+              <span class="mc-stat-label">On-Time Delivery SLA</span>
+              <span class="mc-pill mc-pill-up"><i data-lucide="check"></i> Target 92%</span>
+            </div>
+            <p class="mc-stat-value mc-stat-value-success">94.2%</p>
+            <p class="mc-stat-foot">+2.2% above contractual benchmark</p>
+          </article>
+          </div>
+
+          <div class="mc-widget" data-mc-widget="stat-exceptions" data-mc-zone="metrics" data-mc-group="metrics" data-mc-name="Exceptions">
+          <a href="dispatcher-exceptions.html" class="mc-stat-card wp-panel mc-stat-card-alert">
+            <div class="mc-stat-head">
+              <span class="mc-stat-label">Exceptions</span>
+              <span class="mc-pill mc-pill-danger">3 Pending</span>
+            </div>
+            <p class="mc-stat-value mc-stat-value-danger">3</p>
+            <p class="mc-stat-foot">1 Shortfall · 1 Sync Conflict · 1 Window</p>
+          </a>
+          </div>
+        </div>
+
+        <!-- Main operations band -->
+        <div class="mc-body">
+          <div class="mc-main-col" data-mc-zone="main">
+          <div class="mc-widget" data-mc-widget="chart-sla" data-mc-zone="main" data-mc-group="charts" data-mc-name="7-Day SLA">
+          <section class="wp-panel mc-ops-card">
+            <div class="mc-card-head">
+              <div>
+                <span class="mc-card-eyebrow">Performance Trend</span>
+                <h2 class="mc-card-title">7-Day On-Time SLA</h2>
+              </div>
+              <div class="mc-sla-legend">
+                <span class="mc-sla-legend-item"><span class="mc-sla-legend-line"></span>On-Time SLA</span>
+                <span class="mc-sla-legend-item"><span class="mc-sla-legend-target"></span>Target 92%</span>
+              </div>
+            </div>
+            <div class="mc-sla-chart" role="img" aria-label="Seven-day on-time delivery SLA trend ending at 94.2 percent today, above 92 percent target">
+              <svg viewBox="0 0 560 130" class="mc-sla-svg" preserveAspectRatio="xMidYMid meet">
+                <line x1="44" y1="18" x2="44" y2="98" stroke="var(--wp-border-sub)" />
+                <line x1="44" y1="98" x2="536" y2="98" stroke="var(--wp-border-sub)" />
+                <line x1="44" y1="74" x2="536" y2="74" stroke="var(--wp-muted)" stroke-dasharray="5 4" stroke-opacity="0.45" />
+                <text x="40" y="78" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--wp-muted)" text-anchor="end">92%</text>
+                <text x="40" y="22" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--wp-muted)" text-anchor="end">95%</text>
+                <text x="40" y="100" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--wp-muted)" text-anchor="end">90%</text>
+                <path d="M50,84.8 L135,77.6 L220,63.2 L305,54.2 L390,47 L475,39.8 L536,34.4 L536,98 L50,98 Z" fill="var(--wp-primary-wash)" />
+                <path d="M50,84.8 L135,77.6 L220,63.2 L305,54.2 L390,47 L475,39.8 L536,34.4" fill="none" stroke="var(--wp-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="50" cy="84.8" r="3.5" fill="var(--wp-primary)" />
+                <circle cx="135" cy="77.6" r="3.5" fill="var(--wp-primary)" />
+                <circle cx="220" cy="63.2" r="3.5" fill="var(--wp-primary)" />
+                <circle cx="305" cy="54.2" r="3.5" fill="var(--wp-primary)" />
+                <circle cx="390" cy="47" r="3.5" fill="var(--wp-primary)" />
+                <circle cx="475" cy="39.8" r="3.5" fill="var(--wp-primary)" />
+                <circle cx="536" cy="34.4" r="4.5" fill="var(--wp-primary)" stroke="#fff" stroke-width="2" />
+                <text x="50" y="114" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-muted)" text-anchor="middle">Mon</text>
+                <text x="135" y="114" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-muted)" text-anchor="middle">Tue</text>
+                <text x="220" y="114" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-muted)" text-anchor="middle">Wed</text>
+                <text x="305" y="114" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-muted)" text-anchor="middle">Thu</text>
+                <text x="390" y="114" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-muted)" text-anchor="middle">Fri</text>
+                <text x="475" y="114" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-muted)" text-anchor="middle">Sat</text>
+                <text x="536" y="114" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-primary)" font-weight="700" text-anchor="middle">Today</text>
+              </svg>
+            </div>
+          </section>
+          </div>
+
+          <div class="mc-widget" data-mc-widget="ops-dock" data-mc-zone="main" data-mc-group="operations" data-mc-name="Dock Stage">
+          <section class="wp-panel mc-ops-card">
+            <div class="mc-bay wp-canvas-inner" aria-label="Peliyagoda Bay 04 loading stage with VEH004 gate hold and VEH037 in transit">
+              <div class="mc-bay-head">
+                <div>
+                  <span class="mc-card-eyebrow">Dock Stage</span>
+                  <h3 class="mc-bay-title">Peliyagoda Bay 04 · Active Chassis</h3>
+                </div>
+                <a href="dispatcher-allocation.html" class="mc-link">Fleet Allocation</a>
+              </div>
+              <div class="mc-bay-flatcar wp-flatcar">
+                <a href="loader-shortfall.html" class="wp-container-slot wp-container-filled wp-container-corrugated mc-bay-slot mc-bay-slot-hold" aria-label="VEH004 gate hold shortfall">
+                  <span class="wp-container-corner tl"></span><span class="wp-container-corner tr"></span>
+                  <span class="wp-container-corner bl"></span><span class="wp-container-corner br"></span>
+                  <div class="mc-bay-slot-main">
+                    <div class="mc-bay-slot-brand">
+                      <span class="mc-bay-slot-mark">WAYPOINT</span>
+                      <span class="mc-bay-slot-type">Reefer</span>
+                    </div>
+                    <span class="font-mono mc-bay-slot-id">VEH004 · FSCU 423198</span>
+                  </div>
+                  <span class="mc-bay-slot-chip">Gate Hold</span>
+                </a>
+                <a href="driver-route.html" class="wp-container-slot wp-container-filled wp-container-corrugated mc-bay-slot mc-bay-slot-route" aria-label="VEH037 in transit on R025229">
+                  <span class="wp-container-corner tl"></span><span class="wp-container-corner tr"></span>
+                  <span class="wp-container-corner bl"></span><span class="wp-container-corner br"></span>
+                  <div class="mc-bay-slot-main">
+                    <div class="mc-bay-slot-brand">
+                      <span class="mc-bay-slot-mark">WAYPOINT</span>
+                      <span class="mc-bay-slot-type">Route</span>
+                    </div>
+                    <span class="font-mono mc-bay-slot-id">VEH037 · R025229</span>
+                  </div>
+                  <span class="mc-bay-slot-chip">In Transit</span>
+                </a>
+                <svg viewBox="0 0 540 80" class="mc-bay-chassis" aria-hidden="true">
+                  <line x1="10" y1="68" x2="530" y2="68" stroke="#cbd5e1" stroke-width="4" stroke-dasharray="16 8"/>
+                  <rect x="24" y="24" width="492" height="14" rx="3" fill="#475569"/>
+                  <rect x="40" y="16" width="460" height="9" rx="2" fill="#64748b"/>
+                  <circle cx="70" cy="54" r="14" fill="#1e293b"/>
+                  <circle cx="70" cy="54" r="6" fill="#94a3b8"/>
+                  <circle cx="106" cy="54" r="14" fill="#1e293b"/>
+                  <circle cx="106" cy="54" r="6" fill="#94a3b8"/>
+                  <circle cx="434" cy="54" r="14" fill="#1e293b"/>
+                  <circle cx="434" cy="54" r="6" fill="#94a3b8"/>
+                  <circle cx="470" cy="54" r="14" fill="#1e293b"/>
+                  <circle cx="470" cy="54" r="6" fill="#94a3b8"/>
+                  <rect x="12" y="27" width="12" height="8" rx="2" fill="#334155"/>
+                  <rect x="516" y="27" width="12" height="8" rx="2" fill="#334155"/>
+                </svg>
+              </div>
+              <p class="mc-bay-foot font-mono">6/7 docks active · Colombo coastal sequence · Priya Fernando loading checklist</p>
+            </div>
+          </section>
+          </div>
+
+          <div class="mc-widget" data-mc-widget="chart-cutoff" data-mc-zone="main" data-mc-group="charts" data-mc-name="Cutoff Allocation">
+          <section class="wp-panel mc-ops-card">
+              <div class="mc-readiness-block">
+                <div class="mc-readiness-head">
+                  <span class="mc-readiness-label">Cutoff Allocation</span>
+                  <span class="mc-readiness-value font-mono">138 / 142</span>
+                </div>
+                <div class="mc-meter"><div class="mc-meter-fill" style="width:97.2%"></div></div>
+                <span class="mc-readiness-foot">4 pending deferrals · Cutoff 16:00 SLST <span class="font-mono" data-wp-cutoff>00:00:00</span></span>
+              </div>
+          </section>
+          </div>
+
+          <div class="mc-widget" data-mc-widget="chart-intake" data-mc-zone="main" data-mc-group="charts" data-mc-name="Intake Split">
+          <section class="wp-panel mc-ops-card">
+              <div class="mc-readiness-block">
+                <div class="mc-readiness-head">
+                  <span class="mc-readiness-label">142-Order Intake Split</span>
+                  <a href="dispatcher-queue.html" class="mc-link">Order Queue</a>
+                </div>
+                <div class="mc-stack-bar" role="img" aria-label="Order intake: 48 reefer, 94 ambient, 26 van-only, 18 mall windows">
+                  <span class="mc-stack-seg mc-stack-seg-1" style="width:25.8%" title="Reefer 48"></span>
+                  <span class="mc-stack-seg mc-stack-seg-2" style="width:50.5%" title="Ambient 94"></span>
+                  <span class="mc-stack-seg mc-stack-seg-3" style="width:14.0%" title="Van-Only 26"></span>
+                  <span class="mc-stack-seg mc-stack-seg-4" style="width:9.7%" title="Mall Windows 18"></span>
+                </div>
+                <div class="mc-stack-legend">
+                  <span><span class="mc-stack-dot mc-stack-dot-1"></span>Reefer 48</span>
+                  <span><span class="mc-stack-dot mc-stack-dot-2"></span>Ambient 94</span>
+                  <span><span class="mc-stack-dot mc-stack-dot-3"></span>Van 26</span>
+                  <span><span class="mc-stack-dot mc-stack-dot-4"></span>Mall 18</span>
+                </div>
+              </div>
+          </section>
+          </div>
+
+          <div class="mc-widget" data-mc-widget="chart-fleet-util" data-mc-zone="main" data-mc-group="charts" data-mc-name="Fleet Utilization">
+          <section class="wp-panel mc-ops-card">
+              <div class="mc-readiness-block mc-readiness-fleet">
+                <span class="mc-readiness-label">Fleet Load Utilization</span>
+                <div class="mc-fleet-meters">
+                  <div class="mc-fleet-meter">
+                    <div class="mc-fleet-meter-head">
+                      <span class="wp-meta-stack-primary is-chilled"><i data-lucide="snowflake"></i> Chilled Reefer</span>
+                      <span class="font-mono">84%</span>
+                    </div>
+                    <div class="mc-meter"><div class="mc-meter-fill" style="width:84%"></div></div>
+                    <span class="mc-readiness-foot">16 / 19 trucks loaded</span>
+                  </div>
+                  <div class="mc-fleet-meter">
+                    <div class="mc-fleet-meter-head">
+                      <span class="wp-meta-stack-primary is-ambient">Ambient Dry</span>
+                      <span class="font-mono">68%</span>
+                    </div>
+                    <div class="mc-meter"><div class="mc-meter-fill mc-meter-fill-soft" style="width:68%"></div></div>
+                    <span class="mc-readiness-foot">9 / 13 trucks loaded</span>
+                  </div>
+                  <div class="mc-fleet-meter">
+                    <div class="mc-fleet-meter-head">
+                      <span>Van Restrictive Access</span>
+                      <span class="font-mono">92%</span>
+                    </div>
+                    <div class="mc-meter"><div class="mc-meter-fill warn" style="width:92%"></div></div>
+                    <span class="mc-readiness-foot">11 / 12 assigned · Colombo 03 corridor</span>
+                  </div>
+                </div>
+              </div>
+          </section>
+          </div>
+
+          <div class="mc-widget mc-widget--hidden" data-mc-widget="metric-cutoff" data-mc-zone="main" data-mc-group="metrics" data-mc-name="Cutoff Countdown">
+          <section class="wp-panel mc-ops-card mc-cutoff-widget">
+            <div class="mc-card-head">
+              <div>
+                <span class="mc-card-eyebrow">Live Countdown</span>
+                <h2 class="mc-card-title">Cutoff Window</h2>
+              </div>
+              <span class="wp-status-pulse" aria-label="Live"></span>
+            </div>
+            <p class="mc-cutoff-widget-time font-mono" data-wp-cutoff>00:00:00</p>
+            <p class="mc-cutoff-widget-meta wp-subtext">16:00 SLST cutoff · 4 pending deferrals before lock</p>
+            <a href="dispatcher-cutoff.html" class="mc-link">Cutoff rules</a>
+          </section>
+          </div>
+
+          <div class="mc-widget mc-widget--hidden" data-mc-widget="chart-deferral" data-mc-zone="main" data-mc-group="operations" data-mc-name="Deferral Summary">
+          <section class="wp-panel mc-ops-card">
+            <div class="mc-card-head">
+              <div>
+                <span class="mc-card-eyebrow">Deferral Queue</span>
+                <h2 class="mc-card-title">Pending Deferrals</h2>
+              </div>
+              <a href="dispatcher-deferral.html" class="mc-link">Plan deferrals</a>
+            </div>
+            <div class="mc-deferral-summary">
+              <div class="mc-deferral-stat">
+                <span class="mc-stat-value" style="font-size:1.75rem;color:var(--wp-warning)">4</span>
+                <span class="wp-subtext">Awaiting decision</span>
+              </div>
+              <ul class="mc-deferral-list">
+                <li><span class="font-mono">OUT088</span> · Reefer · Colombo 07</li>
+                <li><span class="font-mono">OUT091</span> · Ambient · Kandy</li>
+                <li><span class="font-mono">OUT102</span> · Van-only · Dehiwala</li>
+                <li><span class="font-mono">OUT115</span> · Mall window · Galle Face</li>
+              </ul>
+            </div>
+          </section>
+          </div>
+
+          <div class="mc-widget mc-widget--hidden" data-mc-widget="chart-forecast" data-mc-zone="main" data-mc-group="charts" data-mc-name="Order Forecast">
+          <section class="wp-panel mc-ops-card">
+            <div class="mc-card-head">
+              <div>
+                <span class="mc-card-eyebrow">Planning Signal</span>
+                <h2 class="mc-card-title">3-Day Order Forecast</h2>
+              </div>
+            </div>
+            <div class="mc-sla-chart" role="img" aria-label="Three-day order forecast trending upward">
+              <svg viewBox="0 0 400 100" class="mc-sla-svg" preserveAspectRatio="xMidYMid meet">
+                <line x1="32" y1="12" x2="32" y2="72" stroke="var(--wp-border-sub)" />
+                <line x1="32" y1="72" x2="380" y2="72" stroke="var(--wp-border-sub)" />
+                <path d="M48,58 L140,52 L232,44 L324,36 L372,30 L372,72 L48,72 Z" fill="var(--wp-primary-wash)" />
+                <path d="M48,58 L140,52 L232,44 L324,36 L372,30" fill="none" stroke="var(--wp-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                <text x="48" y="88" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-muted)" text-anchor="middle">Tue</text>
+                <text x="140" y="88" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-muted)" text-anchor="middle">Wed</text>
+                <text x="232" y="88" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-muted)" text-anchor="middle">Thu</text>
+                <text x="324" y="88" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-muted)" text-anchor="middle">Fri</text>
+                <text x="372" y="88" font-family="'Nunito Sans', sans-serif" font-size="9" fill="var(--wp-primary)" font-weight="700" text-anchor="middle">Sat</text>
+              </svg>
+            </div>
+            <p class="mc-stat-foot">Projected 156 orders Saturday · +9.8% vs today</p>
+          </section>
+          </div>
+          </div>
+
+          <aside class="mc-rail" data-mc-zone="rail">
+            <div class="mc-widget" data-mc-widget="ops-incidents" data-mc-zone="rail" data-mc-group="operations" data-mc-name="Open Incidents">
+            <section class="wp-panel mc-rail-card">
+              <div class="mc-card-head">
+                <div>
+                  <span class="mc-card-eyebrow">Exception Triage</span>
+                  <h2 class="mc-card-title">Open Incidents</h2>
+                </div>
+                <a href="degradation.html" class="mc-link" style="margin-right:0.75rem">Degradation</a>
+                <a href="dispatcher-exceptions.html" class="mc-link">View all</a>
+              </div>
+              <div class="mc-priority-list">
+                <a href="dispatcher-exceptions.html" class="mc-priority-item">
+                  <div class="mc-priority-top">
+                    <span class="mc-pill mc-pill-danger">Shortfall</span>
+                    <span class="font-mono mc-priority-id">EX-0042</span>
+                  </div>
+                  <strong class="mc-priority-title">Pre-Departure Shortfall</strong>
+                  <span class="mc-priority-meta">OUT004 Fresh Cinnamon Gardens · VEH004 · Bay 04</span>
+                  <span class="mc-status-chip mc-status-chip-danger">Critical</span>
+                </a>
+                <a href="dispatcher-exceptions.html?state=conflict" class="mc-priority-item">
+                  <div class="mc-priority-top">
+                    <span class="mc-pill mc-pill-warn">Sync Conflict</span>
+                    <span class="font-mono mc-priority-id">EX-4092</span>
+                  </div>
+                  <strong class="mc-priority-title">Offline POD vs. Server Replan</strong>
+                  <span class="mc-priority-meta">OUT003 Fresh Marine Drive · VEH037 · Kamal Silva</span>
+                  <span class="mc-status-chip mc-status-chip-warn">High</span>
+                </a>
+                <a href="dispatcher-exceptions.html" class="mc-priority-item">
+                  <div class="mc-priority-top">
+                    <span class="mc-pill mc-pill-info">Window Risk</span>
+                    <span class="font-mono mc-priority-id">EX-0015</span>
+                  </div>
+                  <strong class="mc-priority-title">Mall Dock Window Breach</strong>
+                  <span class="mc-priority-meta">OUT015 Style One Galle Face · Dock A003 · ETA +22 min</span>
+                  <span class="mc-status-chip mc-status-chip-muted">Medium</span>
+                </a>
+              </div>
+            </section>
+            </div>
+
+            <div class="mc-widget" data-mc-widget="ops-feed" data-mc-zone="rail" data-mc-group="operations" data-mc-name="Activity Feed">
+            <section class="wp-panel mc-rail-card">
+              <div class="mc-card-head">
+                <div>
+                  <span class="mc-card-eyebrow">Live Operations</span>
+                  <h2 class="mc-card-title">Activity Feed</h2>
+                </div>
+                <span class="wp-status-pulse" aria-label="Live"></span>
+              </div>
+              <div class="mc-feed">
+                <div class="mc-feed-item">
+                  <span class="mc-feed-dot mc-feed-dot-error"></span>
+                  <div class="mc-feed-body">
+                    <div class="mc-feed-head">
+                      <strong>Dock Shortfall Reported</strong>
+                      <span class="font-mono wp-subtext">05:42 SLST</span>
+                    </div>
+                    <p class="wp-subtext">Bay 04: 3 chilled cases missing on Stop 2 (OUT004 Colombo 07).</p>
+                    <a href="dispatcher-exceptions.html" class="mc-feed-link">Triage Exception</a>
+                  </div>
+                </div>
+                <div class="mc-feed-item">
+                  <span class="mc-feed-dot mc-feed-dot-info"></span>
+                  <div class="mc-feed-body">
+                    <div class="mc-feed-head">
+                      <strong>Delivery Completed (Stop 1)</strong>
+                      <span class="font-mono wp-subtext">05:32 SLST</span>
+                    </div>
+                    <p class="wp-subtext">Driver Kamal Silva delivered to OUT001 Fresh Galle Rd. Customer digital POD signed.</p>
+                  </div>
+                </div>
+                <div class="mc-feed-item">
+                  <span class="mc-feed-dot mc-feed-dot-success"></span>
+                  <div class="mc-feed-body">
+                    <div class="mc-feed-head">
+                      <strong>Route Dispatched (R025229)</strong>
+                      <span class="font-mono wp-subtext">05:00 SLST</span>
+                    </div>
+                    <p class="wp-subtext">VEH037 departed Peliyagoda Dock on multi-stop Colombo coastal sequence.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+            </div>
+          </aside>
+        </div>
+
+        <div class="mc-fullwidth-stack" data-mc-zone="fullwidth">
+        <div class="mc-widget" data-mc-widget="ops-runs" data-mc-zone="fullwidth" data-mc-group="operations" data-mc-name="Active Runs">
+        <section class="wp-panel mc-table-card">
+          <div class="mc-card-head">
+            <div>
+              <span class="mc-card-eyebrow">Morning Dispatch Wave</span>
+              <h2 class="mc-card-title">Today&rsquo;s Active Runs</h2>
+            </div>
+            <span class="mc-status-chip mc-status-chip-info">05:00 – 08:00 Window</span>
+          </div>
+          <div class="wp-table-wrap">
+            <table class="wp-table mc-dispatch-table">
+              <thead>
+                <tr>
+                  <th>Run</th>
+                  <th>Detail</th>
+                  <th>Status</th>
+                  <th style="width:120px">Open</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong class="font-mono">VEH037 · R025229</strong></td>
+                  <td>Kamal Silva · Stop 1 delivered · En route to OUT002 Duplication Rd</td>
+                  <td><span class="mc-status-chip mc-status-chip-ok">In Transit</span></td>
+                  <td><a href="driver-route.html" class="mc-table-link">Driver Route</a></td>
+                </tr>
+                <tr>
+                  <td><strong class="font-mono">Bay 04 · VEH004</strong></td>
+                  <td>Priya Fernando · Pre-departure checklist · 6/7 bays active at Peliyagoda</td>
+                  <td><span class="mc-status-chip mc-status-chip-warn">Loading</span></td>
+                  <td><a href="loader-dock.html" class="mc-table-link">Warehouse Dock</a></td>
+                </tr>
+                <tr>
+                  <td><strong class="font-mono">Bay 04 Shortfall</strong></td>
+                  <td>3 chilled cases missing at pick face · OUT004 Cinnamon Gardens</td>
+                  <td><span class="mc-status-chip mc-status-chip-danger">Gate Hold</span></td>
+                  <td><a href="loader-shortfall.html" class="mc-table-link">Shortfall</a></td>
+                </tr>
+                <tr>
+                  <td><strong class="font-mono">Validator</strong></td>
+                  <td>VEH014 Trip 2 over weight cap · publish blocked</td>
+                  <td><span class="mc-status-chip mc-status-chip-danger">Red</span></td>
+                  <td><a href="dispatcher-validator.html" class="mc-table-link">Validator</a></td>
+                </tr>
+                <tr>
+                  <td><strong class="font-mono">Intake Split</strong></td>
+                  <td>48 reefer orders · 94 ambient · 26 van-only · 18 mall dock windows · 142 total</td>
+                  <td><span class="mc-status-chip mc-status-chip-muted">Staged</span></td>
+                  <td><a href="dispatcher-queue.html" class="mc-table-link">Order Queue</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        </div>
+
+        <div class="mc-widget" data-mc-widget="ops-hubs" data-mc-zone="fullwidth" data-mc-group="operations" data-mc-name="Hub Status">
+        <section class="wp-panel mc-hub-strip">
+          <div class="mc-hub-col">
+            <div class="mc-hub-head">
+              <strong>Peliyagoda Central DC</strong>
+              <span class="mc-status-chip mc-status-chip-ok">Primary</span>
+            </div>
+            <div class="mc-hub-metrics">
+              <span><strong class="font-mono">28</strong> vehicles</span>
+              <span><strong class="font-mono">118</strong> orders</span>
+              <span><strong class="font-mono">85%</strong> docks (6/7)</span>
+            </div>
+          </div>
+          <div class="mc-hub-divider" aria-hidden="true"></div>
+          <div class="mc-hub-col">
+            <div class="mc-hub-head">
+              <strong>Kandy Regional Hub</strong>
+              <span class="mc-status-chip mc-status-chip-ok">Highland</span>
+            </div>
+            <div class="mc-hub-metrics">
+              <span><strong class="font-mono">4</strong> vehicles</span>
+              <span><strong class="font-mono">24</strong> orders</span>
+              <span><strong class="font-mono">50%</strong> docks (1/2)</span>
+            </div>
+          </div>
+        </section>
+        </div>
+        </div>
+        </div>
+
+        <div data-wp-day-panel="tomorrow" hidden>
+          <div class="wp-panel" style="padding:1.5rem;margin-bottom:1.25rem">
+            <span class="wp-label">Evening planning · Post-cutoff 16:00 SLST</span>
+            <h2 class="wp-headline-md" style="margin:0.5rem 0">Tomorrow: 142 orders · 48 chilled · 9 reefer trips available</h2>
+            <p class="wp-subtext">Switch here after cutoff to plan tomorrow's dispatch. Live exceptions and fleet map stay on Today.</p>
+            <div class="mc-stat-grid" style="margin-top:1.25rem">
+              <article class="mc-stat-card wp-panel">
+                <span class="mc-stat-label">Total orders</span>
+                <p class="mc-stat-value">142</p>
+              </article>
+              <article class="mc-stat-card wp-panel">
+                <span class="mc-stat-label">Chilled</span>
+                <p class="mc-stat-value" style="color:var(--wp-info)">48</p>
+              </article>
+              <article class="mc-stat-card wp-panel">
+                <span class="mc-stat-label">Reefer trips</span>
+                <p class="mc-stat-value">9</p>
+              </article>
+              <article class="mc-stat-card wp-panel">
+                <span class="mc-stat-label">Est. deferrals</span>
+                <p class="mc-stat-value" style="color:var(--wp-warning)">4</p>
+              </article>
+            </div>
+            <div style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:0.65rem">
+              <a href="dispatcher-queue.html" class="wp-btn wp-btn-primary">Open tomorrow queue</a>
+              <a href="dispatcher-allocation.html" class="wp-btn wp-btn-outline">Fleet allocation</a>
+              <a href="dispatcher-deferral.html" class="wp-btn wp-btn-outline">Plan deferrals</a>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Minimal Stage Footer -->
+      <footer class="wp-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="wp-logo-mark" style="width:1.5rem;height:1.5rem" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></span>
+        </div>
+        <span class="wp-subtext font-mono" style="font-size:0.75rem">SLST TIMEZONE (UTC+05:30)</span>
+      </footer>
+
+      <div class="mc-widget-library-backdrop" data-mc-library-backdrop hidden></div>
+      <aside class="mc-widget-library" data-mc-library aria-label="Widget library" aria-hidden="true">
+        <div class="mc-widget-library-head">
+          <div>
+            <h2 class="mc-widget-library-title">Widget Library</h2>
+            <p class="mc-widget-library-sub">Add, remove, and reorder board cards</p>
+          </div>
+          <button type="button" class="wp-icon-btn mc-widget-library-close" data-mc-library-close aria-label="Close widget library">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="mc-widget-library-body" data-mc-library-body></div>
+        <div class="mc-widget-library-foot">
+          <button type="button" class="wp-btn wp-btn-outline" data-mc-reset style="width:100%">
+            <i data-lucide="rotate-ccw"></i>
+            <span>Reset layout</span>
+          </button>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+<div class="wp-command-backdrop" id="wp-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="wp-command-dialog">
+    <div class="wp-command-input-wrap">
+      <i data-lucide="search"></i>
+      <span class="wp-command-query">pay</span>
+    </div>
+    <div class="wp-command-hint">Search for pay</div>
+    <div class="wp-command-results">
+      <div class="wp-command-group-label">Pages</div>
+      <div class="wp-command-item selected">
+        <i data-lucide="home"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Mission Control</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="layout-grid"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Fleet Allocation</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gfa</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="list-ordered"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Order Queue</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">goq</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-circle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Exceptions</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gex</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="package-check"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Warehouse Dock</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gwd</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="truck"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Driver Route</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdr</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="store"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Go to Store Portal</span>
+          <span class="wp-command-item-meta">in Pages</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsp</kbd>
+        </div>
+      </div>
+      <div class="wp-command-group-label">Actions</div>
+      <div class="wp-command-item">
+        <i data-lucide="check-circle-2"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Publish Daily Plan</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Select</span>
+          <i data-lucide="corner-down-left" style="width:0.85rem;height:0.85rem"></i>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="plus"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">New Order</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gno</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="scan-barcode"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Scan Barcode</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gsb</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="clock"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Deferral Rules</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">gdf</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="alert-triangle"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Report Shortfall</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grs</kbd>
+        </div>
+      </div>
+      <div class="wp-command-item">
+        <i data-lucide="refresh-cw"></i>
+        <div class="wp-command-item-body">
+          <span class="wp-command-item-title">Refresh Telemetry</span>
+          <span class="wp-command-item-meta">in Actions</span>
+        </div>
+        <div class="wp-command-item-action">
+          <span class="wp-command-item-action-label">Shortcut</span>
+          <kbd class="wp-kbd">grt</kbd>
+        </div>
+      </div>
+    </div>
+    <div class="wp-command-footer">
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↵</kbd> to select</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">↑</kbd> <kbd class="wp-kbd">↓</kbd> to navigate</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">esc</kbd> to close</span>
+      <span class="wp-command-footer-hint"><kbd class="wp-kbd">⌘</kbd> <kbd class="wp-kbd">K</kbd> to toggle</span>
+    </div>
+  </div>
+</div>
+  <script src="assets/site.js?v=13"></script>
+</body>
+</html>
