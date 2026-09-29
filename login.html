@@ -27,9 +27,96 @@
 
         <div class="wp-login-card">
           <h2>Sign In</h2>
-          <p class="wp-login-subtitle">Welcome back! Please enter your details</p>
+          <p class="wp-login-subtitle">Select a demo persona to explore role-specific workflows, or enter credentials below:</p>
 
-          <form class="wp-login-form" onsubmit="return false">
+          <!-- 4 Personas Selector -->
+          <div class="wp-persona-selector-wrap">
+            <div class="wp-persona-selector-header">
+              <span class="wp-persona-selector-title">
+                <i data-lucide="users" style="width:0.85rem;height:0.85rem;color:var(--wp-primary)"></i>
+                Demo Personas
+              </span>
+              <span class="wp-persona-badge">4 Roles Available</span>
+            </div>
+            <p class="wp-persona-selector-desc">Choose a persona to load profile credentials, or double-click to launch directly:</p>
+
+            <div class="wp-persona-grid" role="radiogroup" aria-label="Demo Personas">
+              <!-- Persona 1: Dispatcher -->
+              <button type="button" class="wp-persona-card is-active" data-persona="dispatcher" role="radio" aria-checked="true" tabindex="0">
+                <div class="wp-persona-card-header">
+                  <span class="wp-avatar wp-persona-avatar persona-disp">NP</span>
+                  <div class="wp-persona-meta">
+                    <div class="wp-persona-role">Dispatcher</div>
+                    <div class="wp-persona-name">Nimal Perera</div>
+                  </div>
+                  <span class="wp-persona-check" aria-hidden="true"><i data-lucide="check"></i></span>
+                </div>
+                <div class="wp-persona-card-footer">
+                  <span class="wp-persona-dest"><i data-lucide="home"></i> Mission Control</span>
+                  <span class="wp-persona-scope">HQ · 142 Orders</span>
+                </div>
+              </button>
+
+              <!-- Persona 2: Warehouse Loader -->
+              <button type="button" class="wp-persona-card" data-persona="loader" role="radio" aria-checked="false" tabindex="0">
+                <div class="wp-persona-card-header">
+                  <span class="wp-avatar wp-persona-avatar persona-load">PF</span>
+                  <div class="wp-persona-meta">
+                    <div class="wp-persona-role">Warehouse Loader</div>
+                    <div class="wp-persona-name">Priya Fernando</div>
+                  </div>
+                  <span class="wp-persona-check" aria-hidden="true"><i data-lucide="check"></i></span>
+                </div>
+                <div class="wp-persona-card-footer">
+                  <span class="wp-persona-dest"><i data-lucide="package-check"></i> Warehouse Dock</span>
+                  <span class="wp-persona-scope">Dock 04 · LIFO</span>
+                </div>
+              </button>
+
+              <!-- Persona 3: Delivery Driver -->
+              <button type="button" class="wp-persona-card" data-persona="driver" role="radio" aria-checked="false" tabindex="0">
+                <div class="wp-persona-card-header">
+                  <span class="wp-avatar wp-persona-avatar persona-drv">KS</span>
+                  <div class="wp-persona-meta">
+                    <div class="wp-persona-role">Delivery Driver</div>
+                    <div class="wp-persona-name">Kamal Silva</div>
+                  </div>
+                  <span class="wp-persona-check" aria-hidden="true"><i data-lucide="check"></i></span>
+                </div>
+                <div class="wp-persona-card-footer">
+                  <span class="wp-persona-dest"><i data-lucide="truck"></i> Driver Route</span>
+                  <span class="wp-persona-scope">VEH037 · POD</span>
+                </div>
+              </button>
+
+              <!-- Persona 4: Store Manager -->
+              <button type="button" class="wp-persona-card" data-persona="store" role="radio" aria-checked="false" tabindex="0">
+                <div class="wp-persona-card-header">
+                  <span class="wp-avatar wp-persona-avatar persona-store">AJ</span>
+                  <div class="wp-persona-meta">
+                    <div class="wp-persona-role">Store Manager</div>
+                    <div class="wp-persona-name">Anjali Jayawardena</div>
+                  </div>
+                  <span class="wp-persona-check" aria-hidden="true"><i data-lucide="check"></i></span>
+                </div>
+                <div class="wp-persona-card-footer">
+                  <span class="wp-persona-dest"><i data-lucide="store"></i> Store Portal</span>
+                  <span class="wp-persona-scope">OUT001 Galle Rd</span>
+                </div>
+              </button>
+            </div>
+
+            <div class="wp-persona-hint">
+              <span><i data-lucide="mouse-pointer-click"></i> Click to select persona · Double-click to launch</span>
+              <span class="font-mono">1-Click Sign In</span>
+            </div>
+          </div>
+
+          <div class="wp-login-divider">
+            <span>or sign in with credentials</span>
+          </div>
+
+          <form class="wp-login-form" id="login-form">
             <div class="wp-login-field">
               <label class="wp-label" for="email">Email</label>
               <input class="wp-input" id="email" type="email" placeholder="Enter your email" value="nimal.perera@waypoint.lk" autocomplete="username">
@@ -45,6 +132,14 @@
               </div>
             </div>
 
+            <!-- Dynamic Persona Destination Notice -->
+            <div class="wp-persona-banner" id="persona-banner">
+              <span class="wp-persona-banner-icon"><i data-lucide="shield-check"></i></span>
+              <div class="wp-persona-banner-text" id="persona-banner-text">
+                Signing in as <strong>Nimal Perera</strong> (Dispatcher) &rarr; Redirects to <span class="wp-persona-banner-dest">Mission Control</span>
+              </div>
+            </div>
+
             <div class="wp-login-options">
               <label class="wp-login-remember">
                 <input type="checkbox" name="remember" checked>
@@ -53,7 +148,10 @@
               <a class="wp-login-forgot" href="forgot-password.html">Forgot password</a>
             </div>
 
-            <button type="button" class="wp-btn wp-btn-primary wp-login-submit" onclick="location.href='index.html'">Sign in</button>
+            <button type="submit" class="wp-btn wp-btn-primary wp-login-submit" id="submit-btn">
+              <span id="submit-label">Sign in as Dispatcher</span>
+              <i data-lucide="arrow-right"></i>
+            </button>
           </form>
 
           <p class="wp-login-footer">
@@ -67,6 +165,13 @@
       <div class="wp-login-brand-inner">
         <h1>Welcome back! Please sign in to your <span class="wp-login-highlight">Waypoint</span> account</h1>
         <p>Intelligent enterprise logistics for Fresh, Style+Tech, and chilled distribution across Sri Lanka.</p>
+
+        <div class="wp-login-persona-pills" style="position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:0.45rem;margin:1.15rem 0 0.25rem">
+          <span style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.25rem 0.65rem;border-radius:999px;font-size:0.75rem;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.2);color:#fff"><i data-lucide="layout-grid" style="width:0.75rem;height:0.75rem"></i>Dispatcher HQ</span>
+          <span style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.25rem 0.65rem;border-radius:999px;font-size:0.75rem;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.2);color:#fff"><i data-lucide="package-check" style="width:0.75rem;height:0.75rem"></i>Dock Loader</span>
+          <span style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.25rem 0.65rem;border-radius:999px;font-size:0.75rem;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.2);color:#fff"><i data-lucide="truck" style="width:0.75rem;height:0.75rem"></i>Fleet Driver</span>
+          <span style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.25rem 0.65rem;border-radius:999px;font-size:0.75rem;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.2);color:#fff"><i data-lucide="store" style="width:0.75rem;height:0.75rem"></i>Store Manager</span>
+        </div>
 
         <div class="wp-login-visuals">
           <div class="wp-login-chart-card">
@@ -178,19 +283,187 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof lucide !== 'undefined') lucide.createIcons();
 
-      var toggle = document.getElementById('password-toggle');
-      var password = document.getElementById('password');
-      if (!toggle || !password) return;
+      var PERSONAS = {
+        dispatcher: {
+          role: 'dispatcher',
+          label: 'Dispatcher',
+          name: 'Nimal Perera',
+          email: 'nimal.perera@waypoint.lk',
+          password: '••••••••',
+          home: 'index.html',
+          destName: 'Mission Control',
+          unit: 'Operations HQ · Peliyagoda',
+          avatar: 'NP'
+        },
+        loader: {
+          role: 'loader',
+          label: 'Warehouse Loader',
+          name: 'Priya Fernando',
+          email: 'priya.fernando@waypoint.lk',
+          password: '••••••••',
+          home: 'loader-dock.html',
+          destName: 'Warehouse Dock',
+          unit: 'Peliyagoda Dock 04',
+          avatar: 'PF'
+        },
+        driver: {
+          role: 'driver',
+          label: 'Delivery Driver',
+          name: 'Kamal Silva',
+          email: 'kamal.silva@waypoint.lk',
+          password: '••••••••',
+          home: 'driver-route.html',
+          destName: 'Driver Route',
+          unit: 'Route R025229 · VEH037',
+          avatar: 'KS'
+        },
+        store: {
+          role: 'store',
+          label: 'Store Manager',
+          name: 'Anjali Jayawardena',
+          email: 'anjali.jayawardena@waypoint.lk',
+          password: '••••••••',
+          home: 'store-portal.html',
+          destName: 'Store Portal',
+          unit: 'OUT001 Fresh Galle Rd',
+          avatar: 'AJ'
+        }
+      };
 
-      toggle.addEventListener('click', function () {
-        var showing = password.type === 'text';
-        password.type = showing ? 'password' : 'text';
-        toggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
-        toggle.innerHTML = showing
-          ? '<i data-lucide="eye-off"></i>'
-          : '<i data-lucide="eye"></i>';
+      var activeRole = 'dispatcher';
+      var emailInput = document.getElementById('email');
+      var passwordInput = document.getElementById('password');
+      var toggle = document.getElementById('password-toggle');
+      var submitBtn = document.getElementById('submit-btn');
+      var submitLabel = document.getElementById('submit-label');
+      var bannerText = document.getElementById('persona-banner-text');
+      var personaCards = document.querySelectorAll('.wp-persona-card');
+      var loginForm = document.getElementById('login-form');
+
+      function applyPersona(roleKey, autoRedirect) {
+        if (!PERSONAS[roleKey]) roleKey = 'dispatcher';
+        activeRole = roleKey;
+        var p = PERSONAS[roleKey];
+
+        personaCards.forEach(function (card) {
+          var isCurrent = card.getAttribute('data-persona') === roleKey;
+          card.classList.toggle('is-active', isCurrent);
+          card.setAttribute('aria-checked', isCurrent ? 'true' : 'false');
+        });
+
+        if (emailInput) emailInput.value = p.email;
+        if (passwordInput) passwordInput.value = p.password;
+        if (submitLabel) submitLabel.textContent = 'Sign in as ' + p.label;
+        if (bannerText) {
+          bannerText.innerHTML = 'Signing in as <strong>' + p.name + '</strong> (' + p.label + ') &rarr; Redirects to <span class="wp-persona-banner-dest">' + p.destName + '</span>';
+        }
+
+        try {
+          localStorage.setItem('wp-role', roleKey);
+        } catch (e) {}
+
         if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        if (autoRedirect) {
+          window.location.href = p.home;
+        }
+      }
+
+      personaCards.forEach(function (card) {
+        var role = card.getAttribute('data-persona');
+
+        card.addEventListener('click', function (e) {
+          e.preventDefault();
+          applyPersona(role, false);
+        });
+
+        card.addEventListener('dblclick', function (e) {
+          e.preventDefault();
+          applyPersona(role, true);
+        });
+
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            applyPersona(role, false);
+          }
+        });
       });
+
+      if (emailInput) {
+        emailInput.addEventListener('input', function () {
+          var val = (emailInput.value || '').toLowerCase().trim();
+          var matchedKey = null;
+
+          Object.keys(PERSONAS).forEach(function (k) {
+            var item = PERSONAS[k];
+            if (val === item.email.toLowerCase() ||
+                (val.length >= 4 && item.name.toLowerCase().indexOf(val) !== -1) ||
+                (val.length >= 4 && item.role.toLowerCase().indexOf(val) !== -1)) {
+              matchedKey = k;
+            }
+          });
+
+          if (matchedKey && matchedKey !== activeRole) {
+            activeRole = matchedKey;
+            var p = PERSONAS[matchedKey];
+            personaCards.forEach(function (card) {
+              var isCurrent = card.getAttribute('data-persona') === matchedKey;
+              card.classList.toggle('is-active', isCurrent);
+              card.setAttribute('aria-checked', isCurrent ? 'true' : 'false');
+            });
+            if (submitLabel) submitLabel.textContent = 'Sign in as ' + p.label;
+            if (bannerText) {
+              bannerText.innerHTML = 'Signing in as <strong>' + p.name + '</strong> (' + p.label + ') &rarr; Redirects to <span class="wp-persona-banner-dest">' + p.destName + '</span>';
+            }
+            try {
+              localStorage.setItem('wp-role', matchedKey);
+            } catch (e) {}
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+          }
+        });
+      }
+
+      if (loginForm) {
+        loginForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var p = PERSONAS[activeRole] || PERSONAS.dispatcher;
+          try {
+            localStorage.setItem('wp-role', p.role);
+          } catch (err) {}
+          window.location.href = p.home;
+        });
+      }
+
+      if (toggle && passwordInput) {
+        toggle.addEventListener('click', function () {
+          var showing = passwordInput.type === 'text';
+          passwordInput.type = showing ? 'password' : 'text';
+          toggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+          toggle.innerHTML = showing
+            ? '<i data-lucide="eye-off"></i>'
+            : '<i data-lucide="eye"></i>';
+          if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+      }
+
+      // Initial persona resolution from URL parameter or localStorage
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var requested = params.get('persona') || params.get('role');
+        if (requested && PERSONAS[requested]) {
+          applyPersona(requested, false);
+        } else {
+          var stored = localStorage.getItem('wp-role');
+          if (stored && PERSONAS[stored]) {
+            applyPersona(stored, false);
+          } else {
+            applyPersona('dispatcher', false);
+          }
+        }
+      } catch (e) {
+        applyPersona('dispatcher', false);
+      }
     });
   </script>
 </body>
